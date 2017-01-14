@@ -6,7 +6,7 @@
 #include "smartdashboard/smartdashboard.h"
 #include <Timer.h>
 #include <Talon.h>
-#include <CanTalon.h>
+#include "CanTalon.h"
 #include <Encoder.h>
 #include <cmath>
 

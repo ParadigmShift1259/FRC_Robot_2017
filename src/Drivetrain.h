@@ -10,6 +10,7 @@
 #include <driverstation.h>
 #include <SpeedController.h>
 #include <timer.h>
+#include "CanTalon.h"
 
 
 class Drivetrain
