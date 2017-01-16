@@ -1,32 +1,28 @@
 /*
  * Shooter.h
  *
- *  Created on: Jan 11, 2017
+ *  Created on: Jan 14, 2017
  *      Author: Developer
  */
+
 
 #ifndef SRC_SHOOTER_H_
 #define SRC_SHOOTER_H_
 
-#include <Spark.h>
-#include "OperatorInputs.h"
+#include <CANTalon.h>
+
 
 using namespace frc;
 
-
 class Shooter {
 public:
-	Shooter(OperatorInputs *opIn);
-	void AdjustSpeed();
+	Shooter();
+	~Shooter();
+	void Init();
+	void Stop();
 	void Loop();
-	virtual ~Shooter();
-
 protected:
-	Spark *m_shooterMotor;
-	OperatorInputs *input;
-
-	double dashNum;
-
+	CANTalon *m_shootermotor;
 
 };
 

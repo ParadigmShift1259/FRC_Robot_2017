@@ -10,7 +10,7 @@
 #include <driverstation.h>
 #include <SpeedController.h>
 #include <timer.h>
-#include "CanTalon.h"
+#include <cantalon.h>
 
 
 class Drivetrain
@@ -60,6 +60,7 @@ protected:
 	//Encoder *m_leftencoder;
 	//Encoder *m_rightencoder;
 	Timer *m_timerencoder;
+	Timer *m_timerramp;
 
 	double m_leftpow;
 	double m_rightpow;

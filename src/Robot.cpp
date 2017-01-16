@@ -11,12 +11,18 @@ void Robot::RobotInit()
 	m_lw = LiveWindow::GetInstance();
 	m_autonamedefault = "Default";
 	m_autonamecustom = "My Auto";
+	//m_chooser = new SendableChooser();
+	//m_chooser->AddDefault(m_autonamedefault, (void*)&m_autonamedefault);
+	//m_chooser->AddObject(m_autonamecustom, (void*)&m_autonamecustom);
+	//SmartDashboard::PutData("Auto Modes", m_chooser);
+
 	// class inits
 	m_inputs = new OperatorInputs();
-	m_shooter = new Shooter(m_inputs);
 	m_drivetrain = new Drivetrain(m_inputs, &m_ds);
-
-
+	m_compressor = new Compressor(PCM_COMPRESSOR_SOLENOID);
+	m_climber = new Climber(m_inputs);
+	m_rangefinder = new RangeFinder();
+	m_shooter = new Shooter();
 }
 
 
@@ -32,45 +38,63 @@ void Robot::RobotInit()
 void Robot::AutonomousInit()
 {
 	DriverStation::ReportError("Autonomous Init");
-
+	m_compressor->Start();
+	m_drivetrain->Init();
+	m_climber->Init();
+	m_rangefinder->Init();
 }
 
 
 void Robot::AutonomousPeriodic()
 {
-
 }
 
 
 void Robot::TeleopInit()
 {
-
+	DriverStation::ReportError("Teleop Init");
+	m_compressor->Start();
+	m_drivetrain->Init();
+	m_climber->Init();
+	m_rangefinder->Init();
+	m_shooter->Init();
 }
 
 
 void Robot::TeleopPeriodic()
 {
-	m_shooter->Loop();
 	m_drivetrain->Loop();
-
+	m_climber->Loop();
+	m_rangefinder->Loop();
+	m_shooter->Loop();
 }
 
 
 void Robot::TestInit()
 {
-
+	DriverStation::ReportError("Test Init");
+	m_compressor->Start();
+	m_drivetrain->Init();
+	m_climber->Init();
+	m_rangefinder->Init();
 }
 
 
 void Robot::TestPeriodic()
 {
-
+	m_drivetrain->Loop();
+	m_climber->Loop();
+	m_rangefinder->Loop();
 }
 
 
 void Robot::DisabledInit()
 {
-
+	DriverStation::ReportError("Disabled Init");
+	m_compressor->Stop();
+	m_drivetrain->Stop();
+	m_climber->Stop();
+	m_shooter->Stop();
 }
 
 

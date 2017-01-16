@@ -9,13 +9,17 @@
 #define SRC_ROBOT_H_
 
 
-#include <WPILib.h>
+#include "WPILib.h"
 #include "OperatorInputs.h"
 #include "const.h"
 #include "drivetrain.h"
+#include "compressor.h"
+#include "climber.h"
+#include "rangefinder.h"
 #include "shooter.h"
 
 using namespace std;
+using namespace frc;
 
 
 class Robot: public IterativeRobot
@@ -23,14 +27,17 @@ class Robot: public IterativeRobot
 private:
 	// live window variables
 	LiveWindow *m_lw;
+	//SendableChooser *m_chooser;
 	string m_autonamedefault;
 	string m_autonamecustom;
 	string m_autoselected;
 
 	OperatorInputs *m_inputs;
 	Drivetrain *m_drivetrain;
+	Compressor *m_compressor;
+	Climber *m_climber;
+	RangeFinder *m_rangefinder;
 	Shooter *m_shooter;
-
 
 	virtual void RobotInit();
 	virtual void AutonomousInit();

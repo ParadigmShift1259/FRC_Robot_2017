@@ -6,7 +6,7 @@
 #include "smartdashboard/smartdashboard.h"
 #include <Timer.h>
 #include <Talon.h>
-#include "CanTalon.h"
+#include <CanTalon.h>
 #include <Encoder.h>
 #include <cmath>
 
@@ -85,6 +85,7 @@ Drivetrain::Drivetrain(OperatorInputs *inputs, DriverStation *ds)
 	m_direction = DT_DEFAULT_DIRECTION;
 
 	m_timerencoder = new Timer();
+	m_timerramp = new Timer();
 }
 
 
@@ -98,6 +99,7 @@ Drivetrain::~Drivetrain()
 	//delete m_rightEncoder;
 	delete m_shifter;
 	delete m_timerencoder;
+	delete m_timerramp;
 }
 
 
@@ -152,6 +154,8 @@ void Drivetrain::Init()
 	m_righttalonlead->Set(0);
 	//m_righttalonfollow->Set(0);
 	m_timerencoder->Reset();
+	m_timerramp->Reset();
+	m_timerramp->Start();
 	m_ishighgear = false;
 	// Starts in low gear
 	m_shifter->Set(FLIP_HIGH_GEAR ^ m_ishighgear);
@@ -331,18 +335,24 @@ void Drivetrain::LowSpeedDriving()
 double Drivetrain::Ramp(double previous, double desired, double rampmin, double rampmax)
 {
 	double newpow = previous;
-	double delta = abs(desired - previous);
 
-	// Makes it so that robot can't go stop to full
-	if (delta <= rampmin)
-		newpow = desired;
-	else
-	if (previous < desired)
-		newpow += max((delta*rampmax), rampmin);
-	else
-	if (previous > desired)
-		newpow -= max((delta*rampmax), rampmin);
-	//leftTalons1->Set(-previousLeftPow);
+	bool timepassed = m_timerramp->HasPeriodPassed(RAMPING_RATE_PERIOD);
+
+	if (timepassed)
+	{
+		double delta = abs(desired - previous);
+
+		// Makes it so that robot can't go stop to full
+		if (delta <= rampmin)
+			newpow = desired;
+		else
+		if (previous < desired)
+			newpow += max((delta*rampmax), rampmin);
+		else
+		if (previous > desired)
+			newpow -= max((delta*rampmax), rampmin);
+		//leftTalons1->Set(-previousLeftPow);
+	}
 	return newpow;
 }
 
