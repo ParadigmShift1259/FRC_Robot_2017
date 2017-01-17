@@ -27,8 +27,8 @@ Shooter::~Shooter()
 void Shooter::Init()
 {
 	m_shootermotor->SetFeedbackDevice(CANTalon::FeedbackDevice::QuadEncoder);
-	//m_shootermotor->SetControlMode(CANSpeedController::ControlMode::kSpeed);
-	m_shootermotor->SetControlMode(CANSpeedController::ControlMode::kPercentVbus);
+	m_shootermotor->SetControlMode(CANSpeedController::ControlMode::kSpeed);
+	//m_shootermotor->SetControlMode(CANSpeedController::ControlMode::kPercentVbus);
 	m_shootermotor->SetPID(CAN_SHOOTER_P, CAN_SHOOTER_I, CAN_SHOOTER_D, CAN_SHOOTER_F);
 	m_shootermotor->ConfigEncoderCodesPerRev(CAN_SHOOTER_ENCODER_TICKS);
 	//m_shootermotor->EnableControl();
@@ -47,7 +47,6 @@ void Shooter::Loop()
 	double slidervalue = SmartDashboard::GetNumber("DB/Slider 0", SD_SHOOTER_SLIDER_DEFAULT);
 	double newrpm = (slidervalue - SD_SHOOTER_SLIDER_DEFAULT) * SHOOTER_SLIDER_TO_RPM;
 	m_shootermotor->Set(newrpm);
-	m_shootermotor->Set(0.25);
 	SmartDashboard::PutString("DB/String 0", "Input RPM: " + std::to_string(newrpm));
 	double encodervalue = m_shootermotor->GetSpeed();
 	SmartDashboard::PutString("DB/String 5", "Output RPM: " + std::to_string(encodervalue));
