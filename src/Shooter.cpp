@@ -31,14 +31,13 @@ void Shooter::Init()
 	//m_shootermotor->SetControlMode(CANSpeedController::ControlMode::kPercentVbus);
 	m_shootermotor->SetPID(CAN_SHOOTER_P, CAN_SHOOTER_I, CAN_SHOOTER_D, CAN_SHOOTER_F);
 	m_shootermotor->ConfigEncoderCodesPerRev(CAN_SHOOTER_ENCODER_TICKS);
-	//m_shootermotor->EnableControl();
+	m_shootermotor->EnableControl();
 	m_shootermotor->Enable();
 	SmartDashboard::PutNumber("DB/Slider 0", SD_SHOOTER_SLIDER_DEFAULT);
 }
 
 void Shooter::Stop()
 {
-	//m_shootermotor->DisableControl();
 	m_shootermotor->Disable();
 }
 

@@ -162,6 +162,7 @@ void Drivetrain::Init()
 	m_isdownshifting = false;
 	m_lowspeedmode = false;
 	m_shift = false;
+	m_direction = DT_DEFAULT_DIRECTION;
 }
 
 

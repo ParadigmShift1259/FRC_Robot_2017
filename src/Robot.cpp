@@ -20,6 +20,7 @@ void Robot::RobotInit()
 	m_inputs = new OperatorInputs();
 	m_drivetrain = new Drivetrain(m_inputs, &m_ds);
 	m_compressor = new Compressor(PCM_COMPRESSOR_SOLENOID);
+	m_camera = new Camera();
 	m_climber = new Climber(m_inputs);
 	m_rangefinder = new RangeFinder();
 	m_shooter = new Shooter();
@@ -40,6 +41,7 @@ void Robot::AutonomousInit()
 	DriverStation::ReportError("Autonomous Init");
 	m_compressor->Start();
 	m_drivetrain->Init();
+	m_camera->Init();
 	m_climber->Init();
 	m_rangefinder->Init();
 }
@@ -55,6 +57,7 @@ void Robot::TeleopInit()
 	DriverStation::ReportError("Teleop Init");
 	m_compressor->Start();
 	m_drivetrain->Init();
+	m_camera->Init();
 	m_climber->Init();
 	m_rangefinder->Init();
 	m_shooter->Init();
@@ -75,6 +78,7 @@ void Robot::TestInit()
 	DriverStation::ReportError("Test Init");
 	m_compressor->Start();
 	m_drivetrain->Init();
+	m_camera->Init();
 	m_climber->Init();
 	m_rangefinder->Init();
 }

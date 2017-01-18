@@ -14,6 +14,7 @@
 #include "const.h"
 #include "drivetrain.h"
 #include "compressor.h"
+#include "camera.h"
 #include "climber.h"
 #include "rangefinder.h"
 #include "shooter.h"
@@ -35,6 +36,7 @@ private:
 	OperatorInputs *m_inputs;
 	Drivetrain *m_drivetrain;
 	Compressor *m_compressor;
+	Camera *m_camera;
 	Climber *m_climber;
 	RangeFinder *m_rangefinder;
 	Shooter *m_shooter;
