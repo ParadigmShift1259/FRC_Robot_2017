@@ -35,7 +35,7 @@ private:
 
 	OperatorInputs *m_inputs;
 	Drivetrain *m_drivetrain;
-	Compressor *m_compressor;
+	//Compressor *m_compressor;
 	Camera *m_camera;
 	Climber *m_climber;
 	RangeFinder *m_rangefinder;

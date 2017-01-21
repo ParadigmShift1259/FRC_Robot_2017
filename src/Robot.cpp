@@ -19,7 +19,7 @@ void Robot::RobotInit()
 	// class inits
 	m_inputs = new OperatorInputs();
 	m_drivetrain = new Drivetrain(m_inputs, &m_ds);
-	m_compressor = new Compressor(PCM_COMPRESSOR_SOLENOID);
+	//m_compressor = new Compressor(PCM_COMPRESSOR_SOLENOID);
 	m_camera = new Camera();
 	m_climber = new Climber(m_inputs);
 	m_rangefinder = new RangeFinder();
@@ -39,7 +39,7 @@ void Robot::RobotInit()
 void Robot::AutonomousInit()
 {
 	DriverStation::ReportError("Autonomous Init");
-	m_compressor->Start();
+	//m_compressor->Start();
 	m_drivetrain->Init();
 	m_camera->Init();
 	m_climber->Init();
@@ -55,7 +55,7 @@ void Robot::AutonomousPeriodic()
 void Robot::TeleopInit()
 {
 	DriverStation::ReportError("Teleop Init");
-	m_compressor->Start();
+	//m_compressor->Start();
 	m_drivetrain->Init();
 	m_camera->Init();
 	m_climber->Init();
@@ -76,7 +76,7 @@ void Robot::TeleopPeriodic()
 void Robot::TestInit()
 {
 	DriverStation::ReportError("Test Init");
-	m_compressor->Start();
+	//m_compressor->Start();
 	m_drivetrain->Init();
 	m_camera->Init();
 	m_climber->Init();
@@ -95,7 +95,7 @@ void Robot::TestPeriodic()
 void Robot::DisabledInit()
 {
 	DriverStation::ReportError("Disabled Init");
-	m_compressor->Stop();
+	//m_compressor->Stop();
 	m_drivetrain->Stop();
 	m_climber->Stop();
 	m_shooter->Stop();
