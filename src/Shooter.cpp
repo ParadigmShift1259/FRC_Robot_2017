@@ -9,18 +9,23 @@
 #include <const.h>
 #include <driverstation.h>
 #include <string>
+#include <ctime>
 
-Shooter::Shooter()
+
+
+Shooter::Shooter(OperatorInputs *operatorinputs)
 {
 	// TODO Auto-generated constructor stub
 	m_shootermotor = new CANTalon (CAN_SHOOTER_MOTOR);
-
+	m_inputs = operatorinputs;
+	m_feedmotor = new Talon(1);
 }
 
 Shooter::~Shooter()
 {
 	// TODO Auto-generated destructor stub
 	delete m_shootermotor;
+	delete m_feedmotor;
 
 }
 
@@ -35,6 +40,8 @@ void Shooter::Init()
 	m_shootermotor->EnableControl();
 	m_shootermotor->Enable();
 	SmartDashboard::PutNumber("DB/Slider 0", SD_SHOOTER_SLIDER_DEFAULT);
+	m_feedmotor->Set(0);
+
 }
 
 void Shooter::Stop()
@@ -45,9 +52,12 @@ void Shooter::Stop()
 
 void Shooter::Loop()
 {
+	bool shootertogglebutton = m_inputs->xBoxAButton(OperatorInputs::ToggleChoice::kHold);
+	SmartDashboard::PutString("DB/String 1", std::to_string(shootertogglebutton));
 	double slidervalue = SmartDashboard::GetNumber("DB/Slider 0", SD_SHOOTER_SLIDER_DEFAULT);
 	//double newrpm = (slidervalue - SD_SHOOTER_SLIDER_DEFAULT) * (1.0 / 2.5);
 	double newrpm = (slidervalue - SD_SHOOTER_SLIDER_DEFAULT) * SHOOTER_SLIDER_TO_RPM;
+	//m_feedmotor->Set(newrpm);
 	m_shootermotor->Set(newrpm);
 	SmartDashboard::PutString("DB/String 0", "Input RPM: " + std::to_string(newrpm));
 	double encodervalue = m_shootermotor->GetSpeed();
@@ -57,4 +67,8 @@ void Shooter::Loop()
 	SmartDashboard::PutString("DB/String 8", "Velocity: " + std::to_string(velocity));
 	double outputvoltage = m_shootermotor->GetOutputVoltage();
 	SmartDashboard::PutString("DB/String 2", "Output Voltage: "+ std::to_string(outputvoltage));
+	if (shootertogglebutton == 1)
+	{
+		m_shootermotor->Set(newrpm);
+	}
 }

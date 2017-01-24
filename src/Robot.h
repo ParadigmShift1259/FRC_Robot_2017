@@ -9,12 +9,18 @@
 #define SRC_ROBOT_H_
 
 
-#include "WPILib.h"
-#include "OperatorInputs.h"
+#include <IterativeRobot.h>
+#include <LiveWindow/LiveWindow.h>
+#include <SmartDashboard/SendableChooser.h>
+#include <SmartDashboard/SmartDashboard.h>
+
+
 #include "const.h"
+#include "operatorinputs.h"
 #include "drivetrain.h"
 #include "compressor.h"
 #include "camera.h"
+#include "autonomous.h"
 #include "climber.h"
 #include "rangefinder.h"
 #include "shooter.h"
@@ -28,15 +34,14 @@ class Robot: public IterativeRobot
 private:
 	// live window variables
 	LiveWindow *m_lw;
-	//SendableChooser *m_chooser;
-	string m_autonamedefault;
-	string m_autonamecustom;
+	SendableChooser<string> m_chooser;
 	string m_autoselected;
 
 	OperatorInputs *m_inputs;
 	Drivetrain *m_drivetrain;
 	//Compressor *m_compressor;
 	Camera *m_camera;
+	Autonomous *m_autonomous;
 	Climber *m_climber;
 	RangeFinder *m_rangefinder;
 	Shooter *m_shooter;

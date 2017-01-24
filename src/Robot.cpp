@@ -4,26 +4,27 @@
 #include "Robot.h"
 
 
+const string kAutoDefault = "Default";
+
+
 void Robot::RobotInit()
 {
 	NetworkTable::GlobalDeleteAll();
+
 	// live window inits
 	m_lw = LiveWindow::GetInstance();
-	m_autonamedefault = "Default";
-	m_autonamecustom = "My Auto";
-	//m_chooser = new SendableChooser();
-	//m_chooser->AddDefault(m_autonamedefault, (void*)&m_autonamedefault);
-	//m_chooser->AddObject(m_autonamecustom, (void*)&m_autonamecustom);
-	//SmartDashboard::PutData("Auto Modes", m_chooser);
+	m_chooser.AddDefault(kAutoDefault, kAutoDefault);
+	SmartDashboard::PutData("Auto Modes", &m_chooser);
 
 	// class inits
 	m_inputs = new OperatorInputs();
 	m_drivetrain = new Drivetrain(m_inputs, &m_ds);
 	//m_compressor = new Compressor(PCM_COMPRESSOR_SOLENOID);
 	m_camera = new Camera();
+	m_autonomous = new Autonomous(&m_ds, m_drivetrain, m_inputs);
 	m_climber = new Climber(m_inputs);
 	m_rangefinder = new RangeFinder();
-	m_shooter = new Shooter();
+	m_shooter = new Shooter(m_inputs);
 }
 
 
@@ -39,9 +40,11 @@ void Robot::RobotInit()
 void Robot::AutonomousInit()
 {
 	DriverStation::ReportError("Autonomous Init");
+	m_autoselected = m_chooser.GetSelected();
 	//m_compressor->Start();
 	m_drivetrain->Init();
-	m_camera->Init();
+	m_autonomous->Init();
+	//m_camera->Init();
 	m_climber->Init();
 	m_rangefinder->Init();
 }
@@ -49,6 +52,7 @@ void Robot::AutonomousInit()
 
 void Robot::AutonomousPeriodic()
 {
+	m_autonomous->Loop();
 }
 
 
@@ -57,7 +61,7 @@ void Robot::TeleopInit()
 	DriverStation::ReportError("Teleop Init");
 	//m_compressor->Start();
 	m_drivetrain->Init();
-	m_camera->Init();
+	//m_camera->Init();
 	m_climber->Init();
 	m_rangefinder->Init();
 	m_shooter->Init();
@@ -78,7 +82,7 @@ void Robot::TestInit()
 	DriverStation::ReportError("Test Init");
 	//m_compressor->Start();
 	m_drivetrain->Init();
-	m_camera->Init();
+	//m_camera->Init();
 	m_climber->Init();
 	m_rangefinder->Init();
 }
@@ -97,6 +101,7 @@ void Robot::DisabledInit()
 	DriverStation::ReportError("Disabled Init");
 	//m_compressor->Stop();
 	m_drivetrain->Stop();
+	m_autonomous->Stop();
 	m_climber->Stop();
 	m_shooter->Stop();
 }

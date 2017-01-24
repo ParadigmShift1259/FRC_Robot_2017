@@ -10,7 +10,6 @@ class Camera
 public:
 	Camera();
 	~Camera();
-	void Init();
 	static void VisionThread();
 };
 
