@@ -8,20 +8,21 @@
 #include <DriverStation.h>
 #include "Drivetrain.h"
 #include "OperatorInputs.h"
+#include "const.h"
 
 
 class Autonomous
 {
 public:
-	enum Stage { kIdle, kStage1, kStage2, kStage3, kStage4, kStage5 };
+	enum Stage { kIdle, kStart, kStage1, kStage2, kStage3, kDeploy };
 
 	Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, OperatorInputs *operatorinputs);
 	~Autonomous();
 	void Init();
-	void Loop();
 	void Stop();
-	void EnablePID(double kP, double kI, double kPosLeft, double kPosRight);
-	void DisablePID();
+	bool GoStraight(double feet, double power);
+	bool TurnDegree(double degrees);
+	void Loop(Auto autoselected);
 
 protected:
 	DriverStation *m_driverstation;
@@ -29,6 +30,8 @@ protected:
 	OperatorInputs *m_inputs;
 	Timer m_timer;
 	Stage m_stage;
+	double m_leftposition;
+	double m_rightposition;
 };
 
 

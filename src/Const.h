@@ -5,6 +5,10 @@
 #define SRC_CONST_H_
 
 
+// autonomous modes
+enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoStraight };
+
+
 //OperatorInputs
 //	Controllers
 #define JOYSTICK_NUMBER 0
@@ -66,7 +70,7 @@
 #define RAMPING_RATE_MAX 1.5
 #define X_SCALING 0.5
 #define Y_SCALING 1.0
-#define LEFT_MOTOR_SCALING 1
+#define LEFT_MOTOR_SCALING .97
 #define RIGHT_MOTOR_SCALING 1
 #define LOWSPEED_MODIFIER_X 0.75
 #define LOWSPEED_MODIFIER_Y 0.25

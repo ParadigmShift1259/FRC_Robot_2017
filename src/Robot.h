@@ -35,11 +35,12 @@ private:
 	// live window variables
 	LiveWindow *m_lw;
 	SendableChooser<string> m_chooser;
-	string m_autoselected;
+	string m_chooserselected;
+	Auto m_autoselected;
 
 	OperatorInputs *m_inputs;
 	Drivetrain *m_drivetrain;
-	//Compressor *m_compressor;
+	Compressor *m_compressor;
 	Camera *m_camera;
 	Autonomous *m_autonomous;
 	Climber *m_climber;
@@ -54,6 +55,8 @@ private:
 	virtual void TestInit();
 	virtual void TestPeriodic();
 	virtual void DisabledInit();
+
+	Auto Chooser2Auto(string selected);
 };
 
 

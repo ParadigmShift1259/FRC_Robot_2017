@@ -4,7 +4,12 @@
 #include "Robot.h"
 
 
-const string kAutoDefault = "Default";
+const string strAutoDefault = "Left Gear";
+const string strAutoLeftGear = "Left Gear";
+const string strAutoRightGear = "Right Gear";
+const string strAutoRedShoot = "Red Shoot";
+const string strAutoBlueShoot = "Blue Shoot";
+const string strAutoStraight = "Straight";
 
 
 void Robot::RobotInit()
@@ -13,13 +18,18 @@ void Robot::RobotInit()
 
 	// live window inits
 	m_lw = LiveWindow::GetInstance();
-	m_chooser.AddDefault(kAutoDefault, kAutoDefault);
+	m_chooser.AddDefault(strAutoDefault, strAutoDefault);
+	m_chooser.AddObject(strAutoLeftGear, strAutoRightGear);
+	m_chooser.AddObject(strAutoRightGear, strAutoRightGear);
+	m_chooser.AddObject(strAutoRedShoot, strAutoRedShoot);
+	m_chooser.AddObject(strAutoBlueShoot, strAutoBlueShoot);
+	m_chooser.AddObject(strAutoStraight, strAutoStraight);
 	SmartDashboard::PutData("Auto Modes", &m_chooser);
 
 	// class inits
 	m_inputs = new OperatorInputs();
 	m_drivetrain = new Drivetrain(m_inputs, &m_ds);
-	//m_compressor = new Compressor(PCM_COMPRESSOR_SOLENOID);
+	m_compressor = new Compressor(PCM_COMPRESSOR_SOLENOID);
 	m_camera = new Camera();
 	m_autonomous = new Autonomous(&m_ds, m_drivetrain, m_inputs);
 	m_climber = new Climber(m_inputs);
@@ -40,8 +50,9 @@ void Robot::RobotInit()
 void Robot::AutonomousInit()
 {
 	DriverStation::ReportError("Autonomous Init");
-	m_autoselected = m_chooser.GetSelected();
-	//m_compressor->Start();
+	m_chooserselected = m_chooser.GetSelected();
+	m_autoselected = Chooser2Auto(m_chooserselected);
+	m_compressor->Start();
 	m_drivetrain->Init();
 	m_autonomous->Init();
 	//m_camera->Init();
@@ -52,14 +63,14 @@ void Robot::AutonomousInit()
 
 void Robot::AutonomousPeriodic()
 {
-	m_autonomous->Loop();
+	m_autonomous->Loop(m_autoselected);
 }
 
 
 void Robot::TeleopInit()
 {
 	DriverStation::ReportError("Teleop Init");
-	//m_compressor->Start();
+	m_compressor->Start();
 	m_drivetrain->Init();
 	//m_camera->Init();
 	m_climber->Init();
@@ -80,7 +91,7 @@ void Robot::TeleopPeriodic()
 void Robot::TestInit()
 {
 	DriverStation::ReportError("Test Init");
-	//m_compressor->Start();
+	m_compressor->Start();
 	m_drivetrain->Init();
 	//m_camera->Init();
 	m_climber->Init();
@@ -99,11 +110,27 @@ void Robot::TestPeriodic()
 void Robot::DisabledInit()
 {
 	DriverStation::ReportError("Disabled Init");
-	//m_compressor->Stop();
+	m_compressor->Stop();
 	m_drivetrain->Stop();
 	m_autonomous->Stop();
 	m_climber->Stop();
 	m_shooter->Stop();
+}
+
+
+Auto Robot::Chooser2Auto(string selected)
+{
+	if (selected == strAutoLeftGear)
+		return kAutoLeftGear;
+	if (selected == strAutoRightGear)
+		return kAutoRightGear;
+	if (selected == strAutoRedShoot)
+		return kAutoRedShoot;
+	if (selected == strAutoBlueShoot)
+		return kAutoBlueShoot;
+	if (selected == strAutoStraight)
+		return kAutoStraight;
+	return kAutoLeftGear;
 }
 
 

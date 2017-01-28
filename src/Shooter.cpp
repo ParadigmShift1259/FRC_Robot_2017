@@ -52,7 +52,7 @@ void Shooter::Stop()
 
 void Shooter::Loop()
 {
-	bool shootertogglebutton = m_inputs->xBoxAButton(OperatorInputs::ToggleChoice::kHold);
+	bool shootertogglebutton = m_inputs->joystickTrigger(OperatorInputs::ToggleChoice::kToggle);
 	SmartDashboard::PutString("DB/String 1", std::to_string(shootertogglebutton));
 	double slidervalue = SmartDashboard::GetNumber("DB/Slider 0", SD_SHOOTER_SLIDER_DEFAULT);
 	//double newrpm = (slidervalue - SD_SHOOTER_SLIDER_DEFAULT) * (1.0 / 2.5);
@@ -67,7 +67,7 @@ void Shooter::Loop()
 	SmartDashboard::PutString("DB/String 8", "Velocity: " + std::to_string(velocity));
 	double outputvoltage = m_shootermotor->GetOutputVoltage();
 	SmartDashboard::PutString("DB/String 2", "Output Voltage: "+ std::to_string(outputvoltage));
-	if (shootertogglebutton == 1)
+	if (shootertogglebutton)
 	{
 		m_shootermotor->Set(newrpm);
 	}
