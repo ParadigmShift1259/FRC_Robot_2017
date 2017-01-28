@@ -27,10 +27,10 @@ void Autonomous::Init()
 	m_timer.Reset();
 	m_leftposition = 0;
 	m_rightposition = 0;
-	if (m_driverstation->IsAutonomous())
+//	if (m_driverstation->IsAutonomous())
 		m_stage = kStart;
-	else
-		m_stage = kIdle;
+//	else
+//		m_stage = kIdle;
 }
 
 
@@ -49,8 +49,10 @@ bool Autonomous::GoStraight(double feet, double power)
 	SmartDashboard::PutNumber("AU6_kSFoot", kSFoot);
 
 	double distancepos = feet * kSFoot;
+	SmartDashboard::PutNumber("AU8_distancepos", distancepos);
+
 	m_drivetrain->Drive(0, power, true);
-	if ((m_leftposition > distancepos) || (-m_rightposition > distancepos))
+	if ((-m_leftposition > distancepos) || (m_rightposition > distancepos))
 	{
 		m_drivetrain->Drive(0, 0);
 		m_drivetrain->LeftTalon()->SetPosition(0);
@@ -61,37 +63,27 @@ bool Autonomous::GoStraight(double feet, double power)
 }
 
 
-bool Autonomous::TurnDegree(double degrees)
-{
-	double kSDegree = SmartDashboard::GetNumber("DB/Slider 1", 0);
-	if (kSDegree == 0) {kSDegree = 0.027;}
-	SmartDashboard::PutNumber("AU7_kSDegree", kSDegree);
+bool Autonomous::TurnDegree(double degrees){
+	//double Conversion = degrees *  SmartDashboard::GetNumber("DB/Slider 3", 0);
+	double Conversion = degrees * 0.0444;
+	if (degrees < 0) {
+		m_drivetrain->Drive(-0.5, 0); //right turn
+		if((m_leftposition < Conversion) || (-m_rightposition < Conversion))
+			{
+				m_drivetrain->Drive(0, 0);
+				return true;
+			}
+	} else {
+		m_drivetrain->Drive(0.5, 0); //left turn
+		if((m_leftposition > Conversion) || (-m_rightposition > Conversion))
+			{
+				m_drivetrain->Drive(0, 0);
+				return true;
+			}
+	}
 
-	double distancepos = degrees * kSDegree;
-	if (degrees > 0.0)
-	{
-		m_drivetrain->Drive(-0.5, 0);
-		if ((m_leftposition > distancepos) || (-m_rightposition > distancepos))
-		{
-			m_drivetrain->Drive(0, 0);
-			m_drivetrain->LeftTalon()->SetPosition(0);
-			m_drivetrain->RightTalon()->SetPosition(0);
-			return true;
-		}
-		return false;
-	}
-	else
-	{
-		m_drivetrain->Drive(0.5, 0);
-		if ((-m_leftposition > distancepos) || (m_rightposition > distancepos))
-		{
-			m_drivetrain->Drive(0, 0);
-			m_drivetrain->LeftTalon()->SetPosition(0);
-			m_drivetrain->RightTalon()->SetPosition(0);
-			return true;
-		}
-		return false;
-	}
+
+	return false;
 }
 
 
@@ -106,11 +98,11 @@ void Autonomous::Loop(Auto autoselected)
 	SmartDashboard::PutNumber("AU2_rightvolts", rightvolts);
 	SmartDashboard::PutNumber("AU3_leftpos", m_leftposition);
 	SmartDashboard::PutNumber("AU4_rightpos", m_rightposition);
+	SmartDashboard::PutNumber("AU9_auto", autoselected);
 
 	switch (autoselected)
 	{
 	case kAutoLeftGear:
-
 		switch (m_stage)
 		{
 		case kIdle:
@@ -121,30 +113,30 @@ void Autonomous::Loop(Auto autoselected)
 			DriverStation::ReportError("start");
 			m_drivetrain->LeftTalon()->SetPosition(0);
 			m_drivetrain->RightTalon()->SetPosition(0);
-			Wait(0.1);
 			m_stage = kStage1;
 			break;
 
 		case kStage1:
 			DriverStation::ReportError("stage1");
+			Wait(0.1);
 			if (GoStraight(6.0, -1.0))
 			{
 				m_stage = kStage2;
-				Wait(0.1);
 			}
 			break;
 
 		case kStage2:
 			DriverStation::ReportError("stage2");
-			if (TurnDegree(60))
+			Wait(0.1);
+			if (TurnDegree(-60))
 			{
 				m_stage = kStage3;
-				Wait(0.1);
 			}
 			break;
 
 		case kStage3:
 			DriverStation::ReportError("stage3");
+			Wait(0.1);
 			if (GoStraight(6.0, -1.0))
 				m_stage = kDeploy;
 			break;
@@ -157,15 +149,171 @@ void Autonomous::Loop(Auto autoselected)
 		break;
 
 	case kAutoRightGear:
+		switch (m_stage)
+		{
+		case kIdle:
+			m_drivetrain->Drive(0, 0);
+			break;
+
+		case kStart:
+			DriverStation::ReportError("start");
+			m_drivetrain->LeftTalon()->SetPosition(0);
+			m_drivetrain->RightTalon()->SetPosition(0);
+			m_stage = kStage1;
+			break;
+
+		case kStage1:
+			DriverStation::ReportError("stage1");
+			Wait(0.1);
+			if (GoStraight(6.0, 1.0))
+			{
+				m_stage = kStage2;
+			}
+			break;
+
+		case kStage2:
+			DriverStation::ReportError("stage2");
+			Wait(0.1);
+			if (TurnDegree(60))
+			{
+				m_stage = kStage3;
+			}
+			break;
+
+		case kStage3:
+			DriverStation::ReportError("stage3");
+			Wait(0.1);
+			if (GoStraight(6.0, -1.0))
+				m_stage = kDeploy;
+			break;
+
+		case kDeploy:
+			DriverStation::ReportError("deploy");
+			m_stage = kIdle;
+			break;
+		}
 		break;
 
 	case kAutoRedShoot:
+		switch (m_stage)
+		{
+		case kIdle:
+			m_drivetrain->Drive(0, 0);
+			break;
+
+		case kStart:
+			DriverStation::ReportError("start");
+			m_drivetrain->LeftTalon()->SetPosition(0);
+			m_drivetrain->RightTalon()->SetPosition(0);
+			m_stage = kStage1;
+			break;
+
+		case kStage1:
+			DriverStation::ReportError("stage1");
+			Wait(0.1);
+			if (GoStraight(7.15, -1.0))
+			{
+				m_stage = kStage2;
+			}
+			break;
+
+		case kStage2:
+			DriverStation::ReportError("stage2");
+			Wait(0.1);
+			if (TurnDegree(-90))
+			{
+				m_stage = kStage3;
+			}
+			break;
+
+		case kStage3:
+			DriverStation::ReportError("stage3");
+			Wait(0.1);
+			if (GoStraight(3.5, -1.0))
+				m_stage = kDeploy;
+			break;
+
+		case kDeploy:
+			DriverStation::ReportError("deploy");
+			m_stage = kIdle;
+			break;
+		}
 		break;
 
+
 	case kAutoBlueShoot:
+		switch (m_stage)
+		{
+		case kIdle:
+			m_drivetrain->Drive(0, 0);
+			break;
+
+		case kStart:
+			DriverStation::ReportError("start");
+			m_drivetrain->LeftTalon()->SetPosition(0);
+			m_drivetrain->RightTalon()->SetPosition(0);
+			m_stage = kStage1;
+			break;
+
+		case kStage1:
+			DriverStation::ReportError("stage1");
+			Wait(0.1);
+			if (GoStraight(7.15, -1.0))
+			{
+				m_stage = kStage2;
+			}
+			break;
+
+		case kStage2:
+			DriverStation::ReportError("stage2");
+			Wait(0.1);
+			if (TurnDegree(90))
+			{
+				m_stage = kStage3;
+			}
+			break;
+
+		case kStage3:
+			DriverStation::ReportError("stage3");
+			Wait(0.1);
+			if (GoStraight(3.5, -1.0))
+				m_stage = kDeploy;
+			break;
+
+		case kDeploy:
+			DriverStation::ReportError("deploy");
+			m_stage = kIdle;
+			break;
+		}
 		break;
 
 	case kAutoStraight:
+		switch (m_stage)
+		{
+		case kIdle:
+			m_drivetrain->Drive(0, 0);
+			break;
+
+		case kStart:
+			DriverStation::ReportError("start");
+			m_drivetrain->LeftTalon()->SetPosition(0);
+			m_drivetrain->RightTalon()->SetPosition(0);
+			m_stage = kStage1;
+			break;
+
+		case kStage1:
+			DriverStation::ReportError("stage1");
+			Wait(0.1);
+			if (GoStraight(6.625, -1.0))
+			{
+				m_stage = kDeploy;
+			}
+			break;
+		case kDeploy:
+			break;
+		default:
+			break;
 		break;
+		}
 	}
 }

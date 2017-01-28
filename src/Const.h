@@ -50,7 +50,7 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 
 
 // Drivetrain
-#define DT_DEFAULT_DIRECTION 1.0
+#define DT_DEFAULT_DIRECTION -1.0
 // Inverts
 #define INVERT_LEFT -1.0
 #define INVERT_RIGHT 1.0
@@ -100,19 +100,14 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 #define PWM_PICKER_MOTOR 4
 
 // Shooter
-//#define PCM_SHOOTER_SOLENOID 2
-#define CAN_SHOOTER_MOTOR 4
-/*#define DIO_SHOOTER_LIMIT_DOWN 2
+#define PCM_SHOOTER_SOLENOID 2
+#define PWM_SHOOTER_MOTOR 4
+#define DIO_SHOOTER_LIMIT_DOWN 2
 #define DIO_SHOOTER_MOTOR_A 3
-#define DIO_SHOOTER_MOTOR_B 4*/
-#define CAN_SHOOTER_P 0.02
-#define CAN_SHOOTER_I 0.0001
-#define CAN_SHOOTER_D 0
-#define CAN_SHOOTER_F 0.0254
-#define CAN_SHOOTER_ENCODER_TICKS 4096
-#define SD_SHOOTER_SLIDER_DEFAULT 2.5
-#define SHOOTER_SLIDER_TO_RPM -600.0
-#define SHOOTER_RADIUS 0.0508
+#define DIO_SHOOTER_MOTOR_B 4
+#define PWM_SHOOTER_P 0.1
+#define PWM_SHOOTER_I 0
+#define PWM_SHOOTER_D 0
 
 
 // Climber
