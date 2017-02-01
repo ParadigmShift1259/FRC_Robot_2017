@@ -13,7 +13,7 @@
 #include <LiveWindow/LiveWindow.h>
 #include <SmartDashboard/SendableChooser.h>
 #include <SmartDashboard/SmartDashboard.h>
-
+#include <networkTables/NetworkTable.h>
 
 #include "const.h"
 #include "operatorinputs.h"
@@ -34,7 +34,7 @@ class Robot: public IterativeRobot
 private:
 	// live window variables
 	LiveWindow *m_lw;
-	SendableChooser<string> m_chooser;
+	//SendableChooser<string> m_chooser;
 	string m_autoselected;
 
 	OperatorInputs *m_inputs;
@@ -45,6 +45,7 @@ private:
 	Climber *m_climber;
 	RangeFinder *m_rangefinder;
 	Shooter *m_shooter;
+	NetworkTable * netTable;
 
 	virtual void RobotInit();
 	virtual void AutonomousInit();

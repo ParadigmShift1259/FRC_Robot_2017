@@ -10,11 +10,12 @@ const string kAutoDefault = "Default";
 void Robot::RobotInit()
 {
 	NetworkTable::GlobalDeleteAll();
+	netTable = NetworkTable::GetTable("OpenCV").get();
 
 	// live window inits
 	m_lw = LiveWindow::GetInstance();
-	m_chooser.AddDefault(kAutoDefault, kAutoDefault);
-	SmartDashboard::PutData("Auto Modes", &m_chooser);
+	//m_chooser.AddDefault(kAutoDefault, kAutoDefault);
+	//SmartDashboard::PutData("Auto Modes", &m_chooser);
 
 	// class inits
 	m_inputs = new OperatorInputs();
@@ -40,7 +41,7 @@ void Robot::RobotInit()
 void Robot::AutonomousInit()
 {
 	DriverStation::ReportError("Autonomous Init");
-	m_autoselected = m_chooser.GetSelected();
+	//m_autoselected = m_chooser.GetSelected();
 	//m_compressor->Start();
 	m_drivetrain->Init();
 	m_autonomous->Init();
