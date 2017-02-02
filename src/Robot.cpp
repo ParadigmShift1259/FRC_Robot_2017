@@ -58,7 +58,7 @@ void Robot::AutonomousPeriodic()
 	switch (gearStage)
 	{
 	case disabled:
-
+		//everyone else shove stuff you want to do here
 		m_autonomous->Loop();
 		break;
 
@@ -103,7 +103,7 @@ void Robot::TeleopPeriodic()
 	switch (gearStage)
 	{
 	case disabled:
-
+		//everyone else shove stuff you want to do here
 		m_drivetrain->Loop();
 		m_climber->Loop();
 		m_shooter->Loop();
