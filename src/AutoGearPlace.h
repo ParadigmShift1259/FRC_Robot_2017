@@ -11,22 +11,22 @@
 #include <networktables/NetworkTable.h>
 #include <Commands/PIDSubsystem.h>
 #include <nt_Value.h>
+#include "Drivetrain.h"
 
 class AutoGearPlace: public PIDSubsystem {
 public:
 
-	NetworkTable * netTable;
-	AutoGearPlace(NetworkTable *newTable);
+	NetworkTable * m_netTable;
+	AutoGearPlace(NetworkTable *newTable, Drivetrain *drive);
 	double ReturnPIDInput();
+	void changeActive(bool newState);
+	bool isDone();
 	void UsePIDOutput(double output);
 	virtual ~AutoGearPlace();
-	double output;
 
-private:
-
-	PIDController* pid;
 
 protected:
+	Drivetrain* m_drivetrain;
 
 
 };

@@ -11,24 +11,40 @@
 #define I_VALUE 0.001
 #define D_VALUE 0.0001
 
-AutoGearPlace::AutoGearPlace(NetworkTable *newTable) : PIDSubsystem("AutoGearPlace",P_VALUE,0,0)
+AutoGearPlace::AutoGearPlace(NetworkTable *newTable, Drivetrain *drive) : PIDSubsystem("AutoGearPlace",P_VALUE,I_VALUE,D_VALUE)
 {
-	netTable = newTable;
-
+	m_drivetrain = drive;
+	m_netTable = newTable;
 }
 
 double AutoGearPlace::ReturnPIDInput()
 {
-	return netTable->GetNumber("xPos",0);
+	return m_netTable->GetNumber("xPos",0);
 }
 
+void AutoGearPlace::changeActive(bool newState)
+{
+	if(newState)
+	{
+		Enable();
+	}
+	else
+	{
+		Disable();
+	}
+}
+
+bool AutoGearPlace::isDone()
+{
+	return (m_netTable->GetNumber("xSpread", 0) > 100);
+}
 
 void AutoGearPlace::UsePIDOutput(double output)
 {
-
+	m_drivetrain->Drive(output, .5, false);
 }
 
 AutoGearPlace::~AutoGearPlace() {
-	// TODO Auto-generated destructor stub
+
 }
 

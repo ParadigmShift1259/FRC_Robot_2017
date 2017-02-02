@@ -22,8 +22,8 @@
 #include "camera.h"
 #include "autonomous.h"
 #include "climber.h"
-#include "rangefinder.h"
 #include "shooter.h"
+#include "AutoGearPlace.h"
 
 using namespace std;
 using namespace frc;
@@ -43,10 +43,13 @@ private:
 	Camera *m_camera;
 	Autonomous *m_autonomous;
 	Climber *m_climber;
-	RangeFinder *m_rangefinder;
 	Shooter *m_shooter;
 	NetworkTable * netTable;
+	AutoGearPlace * m_gearPlace;
+	bool isTargetingGear;
 
+	enum GearStage {disabled, enabling, enabled, disabling};
+	GearStage gearStage;
 	virtual void RobotInit();
 	virtual void AutonomousInit();
 	virtual void AutonomousPeriodic();

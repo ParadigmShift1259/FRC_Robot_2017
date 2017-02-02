@@ -16,7 +16,7 @@ void Robot::RobotInit()
 	m_lw = LiveWindow::GetInstance();
 	//m_chooser.AddDefault(kAutoDefault, kAutoDefault);
 	//SmartDashboard::PutData("Auto Modes", &m_chooser);
-
+	isTargetingGear = false;
 	// class inits
 	m_inputs = new OperatorInputs();
 	m_drivetrain = new Drivetrain(m_inputs, &m_ds);
@@ -24,8 +24,8 @@ void Robot::RobotInit()
 	m_camera = new Camera();
 	m_autonomous = new Autonomous(&m_ds, m_drivetrain, m_inputs);
 	m_climber = new Climber(m_inputs);
-	m_rangefinder = new RangeFinder();
 	m_shooter = new Shooter(m_inputs);
+	m_gearPlace = new AutoGearPlace(netTable, m_drivetrain);
 }
 
 
@@ -43,38 +43,96 @@ void Robot::AutonomousInit()
 	DriverStation::ReportError("Autonomous Init");
 	//m_autoselected = m_chooser.GetSelected();
 	//m_compressor->Start();
+	gearStage = disabled;
 	m_drivetrain->Init();
 	m_autonomous->Init();
 	//m_camera->Init();
 	m_climber->Init();
-	m_rangefinder->Init();
+	m_gearPlace->changeActive(false);
 }
 
 
 void Robot::AutonomousPeriodic()
 {
-	m_autonomous->Loop();
+
+	switch (gearStage)
+	{
+	case disabled:
+
+		m_autonomous->Loop();
+		break;
+
+	case enabling:
+
+		m_gearPlace->changeActive(true);
+		gearStage = enabled;
+		break;
+
+	case enabled:
+		if(m_gearPlace->isDone())
+				{
+					gearStage = disabling;
+				}
+		break;
+
+	case disabling:
+			m_gearPlace->changeActive(false);
+			gearStage = disabled;
+		break;
+	}
+
 }
 
 
 void Robot::TeleopInit()
 {
+	gearStage = disabled;
+	m_gearPlace->changeActive(false);
 	DriverStation::ReportError("Teleop Init");
 	//m_compressor->Start();
 	m_drivetrain->Init();
 	//m_camera->Init();
 	m_climber->Init();
-	m_rangefinder->Init();
 	m_shooter->Init();
+
 }
 
 
 void Robot::TeleopPeriodic()
 {
-	m_drivetrain->Loop();
-	m_climber->Loop();
-	m_rangefinder->Loop();
-	m_shooter->Loop();
+	switch (gearStage)
+	{
+	case disabled:
+
+		m_drivetrain->Loop();
+		m_climber->Loop();
+		m_shooter->Loop();
+		/*if(undecided button)
+		{
+			GearStage = enabling;
+		}
+		else
+		{*/
+		break;
+		//}
+	case enabling:
+
+		m_gearPlace->changeActive(true);
+		gearStage = enabled;
+		break;
+
+	case enabled:
+		if(m_gearPlace->isDone() /* || other undecided button */)
+				{
+					gearStage = disabling;
+				}
+		break;
+
+	case disabling:
+			m_gearPlace->changeActive(false);
+			gearStage = disabled;
+		break;
+	}
 }
 
 
@@ -85,7 +143,6 @@ void Robot::TestInit()
 	m_drivetrain->Init();
 	//m_camera->Init();
 	m_climber->Init();
-	m_rangefinder->Init();
 }
 
 
@@ -93,7 +150,6 @@ void Robot::TestPeriodic()
 {
 	m_drivetrain->Loop();
 	m_climber->Loop();
-	m_rangefinder->Loop();
 }
 
 
