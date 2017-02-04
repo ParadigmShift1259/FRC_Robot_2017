@@ -22,6 +22,7 @@
 #include "camera.h"
 #include "autonomous.h"
 #include "climber.h"
+#include "picker.h"
 
 
 using namespace std;
@@ -43,6 +44,7 @@ private:
 	Camera *m_camera;
 	Autonomous *m_autonomous;
 	Climber *m_climber;
+	Picker *m_picker;
 
 	virtual void RobotInit();
 	virtual void AutonomousInit();

@@ -70,7 +70,7 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 #define RAMPING_RATE_MAX 1.5
 #define X_SCALING 0.5
 #define Y_SCALING 1.0
-#define LEFT_MOTOR_SCALING .97
+#define LEFT_MOTOR_SCALING .96
 #define RIGHT_MOTOR_SCALING 1
 #define LOWSPEED_MODIFIER_X 0.75
 #define LOWSPEED_MODIFIER_Y 0.25
@@ -94,20 +94,23 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 
 
 // Picker
-#define PCM_PICKER_SOLENOID_A 5
-#define PCM_PICKER_SOLENOID_B 1
-#define PCM_PICKER_VENT 4
 #define PWM_PICKER_MOTOR 4
 
+
 // Shooter
-#define PCM_SHOOTER_SOLENOID 2
-#define PWM_SHOOTER_MOTOR 4
-#define DIO_SHOOTER_LIMIT_DOWN 2
+//#define PCM_SHOOTER_SOLENOID 2
+#define CAN_SHOOTER_MOTOR 4
+/*#define DIO_SHOOTER_LIMIT_DOWN 2
 #define DIO_SHOOTER_MOTOR_A 3
-#define DIO_SHOOTER_MOTOR_B 4
-#define PWM_SHOOTER_P 0.1
-#define PWM_SHOOTER_I 0
-#define PWM_SHOOTER_D 0
+#define DIO_SHOOTER_MOTOR_B 4*/
+#define CAN_SHOOTER_P 0.02
+#define CAN_SHOOTER_I 0.0001
+#define CAN_SHOOTER_D 0
+#define CAN_SHOOTER_F 0.0254
+#define CAN_SHOOTER_ENCODER_TICKS 4096
+#define SD_SHOOTER_SLIDER_DEFAULT 2.5
+#define SHOOTER_SLIDER_TO_RPM -600.0
+#define SHOOTER_RADIUS 0.0508
 
 
 // Climber

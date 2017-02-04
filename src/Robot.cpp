@@ -33,6 +33,7 @@ void Robot::RobotInit()
 	m_camera = new Camera();
 	m_autonomous = new Autonomous(&m_ds, m_drivetrain, m_inputs);
 	m_climber = new Climber(m_inputs);
+	m_picker = new Picker(m_inputs);
 }
 
 
@@ -53,6 +54,7 @@ void Robot::AutonomousInit()
 	m_drivetrain->Init();
 	m_autonomous->Init();
 	m_climber->Init();
+	m_picker->Init();
 }
 
 
@@ -68,6 +70,7 @@ void Robot::TeleopInit()
 	m_compressor->Start();
 	m_drivetrain->Init();
 	m_climber->Init();
+	m_picker->Init();
 }
 
 
@@ -75,6 +78,7 @@ void Robot::TeleopPeriodic()
 {
 	m_drivetrain->Loop();
 	m_climber->Loop();
+	m_picker->Loop();
 }
 
 
@@ -84,6 +88,7 @@ void Robot::TestInit()
 	m_compressor->Start();
 	m_drivetrain->Init();
 	m_climber->Init();
+	m_picker->Init();
 }
 
 
@@ -91,6 +96,7 @@ void Robot::TestPeriodic()
 {
 	m_drivetrain->Loop();
 	m_climber->Loop();
+	m_picker->Loop();
 }
 
 
@@ -101,6 +107,7 @@ void Robot::DisabledInit()
 	m_drivetrain->Stop();
 	m_autonomous->Stop();
 	m_climber->Stop();
+	m_picker->Stop();
 }
 
 
