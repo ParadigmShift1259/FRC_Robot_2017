@@ -16,8 +16,8 @@
 class AutoGearPlace: public PIDSubsystem {
 public:
 
-	NetworkTable * m_netTable;
-	AutoGearPlace(NetworkTable *newTable, Drivetrain *drive);
+	std::shared_ptr<NetworkTable> m_netTable;
+	AutoGearPlace(std::shared_ptr<NetworkTable> newTable, Drivetrain *drive);
 	double ReturnPIDInput();
 	void changeActive(bool newState);
 	bool isDone();
@@ -27,6 +27,7 @@ public:
 
 protected:
 	Drivetrain* m_drivetrain;
+	bool isActive;
 
 
 };

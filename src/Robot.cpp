@@ -10,7 +10,7 @@ const string kAutoDefault = "Default";
 void Robot::RobotInit()
 {
 	NetworkTable::GlobalDeleteAll();
-	netTable = NetworkTable::GetTable("OpenCV").get();
+	netTable = NetworkTable::GetTable("OpenCV");
 
 	// live window inits
 	m_lw = LiveWindow::GetInstance();
@@ -43,7 +43,7 @@ void Robot::AutonomousInit()
 	DriverStation::ReportError("Autonomous Init");
 	//m_autoselected = m_chooser.GetSelected();
 	//m_compressor->Start();
-	gearStage = disabled;
+	gearStage = GearStage::enabling;
 	m_drivetrain->Init();
 	m_autonomous->Init();
 	//m_camera->Init();
@@ -54,30 +54,36 @@ void Robot::AutonomousInit()
 
 void Robot::AutonomousPeriodic()
 {
-
 	switch (gearStage)
 	{
-	case disabled:
+	case GearStage::disabled:
+		netTable->PutString("R_gearStage","disabled");
 		//everyone else shove stuff you want to do here
-		m_autonomous->Loop();
+		//m_autonomous->Loop();
+		gearStage = enabling;
 		break;
 
-	case enabling:
-
+	case GearStage::enabling:
+		netTable->PutString("R_gearStage","enabling");
+		//SmartDashboard::PutString("DB/String 4",std::to_string(netTable->GetNumber("xPos",0)));
 		m_gearPlace->changeActive(true);
 		gearStage = enabled;
 		break;
 
-	case enabled:
+	case GearStage::enabled:
+		netTable->PutNumber("AGP_setpoint",m_gearPlace->GetSetpoint());
+		netTable->PutString("R_gearStage","enabled");
 		if(m_gearPlace->isDone())
 				{
 					gearStage = disabling;
 				}
+
 		break;
 
-	case disabling:
+	case GearStage::disabling:
+		netTable->PutString("R_gearStage","disabling");
 			m_gearPlace->changeActive(false);
-			gearStage = disabled;
+		gearStage = disabled;
 		break;
 	}
 
@@ -103,36 +109,43 @@ void Robot::TeleopPeriodic()
 	switch (gearStage)
 	{
 	case disabled:
+		netTable->PutString("R_gearStage","disabled");
 		//everyone else shove stuff you want to do here
 		m_drivetrain->Loop();
 		m_climber->Loop();
-		m_shooter->Loop();
 		/*if(undecided button)
 		{
-			GearStage = enabling;
+			gearStage = enabling;
 		}
 		else
 		{*/
 		break;
 		//}
 	case enabling:
+		netTable->PutString("R_gearStage","enabling");
 
 		m_gearPlace->changeActive(true);
 		gearStage = enabled;
 		break;
 
 	case enabled:
+		netTable->PutString("R_gearStage","enabled");
 		if(m_gearPlace->isDone() /* || other undecided button */)
 				{
 					gearStage = disabling;
 				}
 		break;
 
-	case disabling:
+			case disabling:
+		netTable->PutString("R_gearStage","disabling");
 			m_gearPlace->changeActive(false);
 			gearStage = disabled;
 		break;
 	}
+//	m_drivetrain->Loop();
+//	m_climber->Loop();
+//	m_shooter->Loop();
+
 }
 
 
@@ -161,6 +174,7 @@ void Robot::DisabledInit()
 	m_autonomous->Stop();
 	m_climber->Stop();
 	m_shooter->Stop();
+	//m_gearPlace->changeActive(false);
 }
 
 

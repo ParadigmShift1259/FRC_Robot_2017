@@ -6,15 +6,18 @@
  */
 
 #include <AutoGearPlace.h>
+#include <math.h>
 
-#define P_VALUE 0.01
-#define I_VALUE 0.001
-#define D_VALUE 0.0001
+#define P_VALUE 0.005
+#define I_VALUE 0.0
+#define D_VALUE 0.0
 
-AutoGearPlace::AutoGearPlace(NetworkTable *newTable, Drivetrain *drive) : PIDSubsystem("AutoGearPlace",P_VALUE,I_VALUE,D_VALUE)
+AutoGearPlace::AutoGearPlace(std::shared_ptr<NetworkTable> newTable, Drivetrain *drive) : PIDSubsystem("AutoGearPlace",P_VALUE,I_VALUE,D_VALUE)
 {
+	isActive = false;
 	m_drivetrain = drive;
 	m_netTable = newTable;
+	SetSetpoint(0);
 }
 
 double AutoGearPlace::ReturnPIDInput()
@@ -26,22 +29,31 @@ void AutoGearPlace::changeActive(bool newState)
 {
 	if(newState)
 	{
+		isActive = true;
 		Enable();
 	}
-	else
+	else if (!newState)
 	{
+		isActive = false;
 		Disable();
 	}
 }
 
 bool AutoGearPlace::isDone()
 {
-	return (m_netTable->GetNumber("xSpread", 0) > 100);
+	bool retval = m_netTable->GetNumber("xSpread", 0) > 400;
+	m_netTable->PutBoolean("AGP_isDone", retval);
+	return retval;
 }
 
 void AutoGearPlace::UsePIDOutput(double output)
 {
-	m_drivetrain->Drive(output, .5, false);
+	m_netTable->PutNumber("output", output);
+	if (isActive)
+	{
+		output = std::abs(output) > 0.25 ? output : 0.25 * output / std::abs(output);
+		m_drivetrain->Drive(-output, 0, false);
+	}
 }
 
 AutoGearPlace::~AutoGearPlace() {

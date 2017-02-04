@@ -21,7 +21,7 @@ public:
 	~Shooter();
 	void Init();
 	void Stop();
-	void Loop();
+	void Shoot(double rpm);
 protected:
 	OperatorInputs *m_inputs;
 	CANTalon *m_shootermotor;

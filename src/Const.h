@@ -109,6 +109,14 @@
 #define SD_SHOOTER_SLIDER_DEFAULT 2.5
 #define SHOOTER_SLIDER_TO_RPM -600.0
 #define SHOOTER_RADIUS 0.0508
+#define AUGUR_CHANNEL 16 //Augur
+#define AUGUR_POWER 1
+#define AUGUR_RAMP 0.1
+#define AUGUR_ON_TIME 1
+#define AUGUR_OFF_TIME .5
+#define FEEDER_CHANNEL 15
+#define FEEDER_POWER 1
+#define FEEDER_RAMP 0.1
 
 
 // Climber

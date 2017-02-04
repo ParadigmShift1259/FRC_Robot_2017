@@ -44,7 +44,7 @@ private:
 	Autonomous *m_autonomous;
 	Climber *m_climber;
 	Shooter *m_shooter;
-	NetworkTable * netTable;
+	std::shared_ptr<NetworkTable> netTable;
 	AutoGearPlace * m_gearPlace;
 	bool isTargetingGear;
 
