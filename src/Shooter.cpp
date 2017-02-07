@@ -10,7 +10,7 @@
 #include <driverstation.h>
 #include <string>
 #include <ctime>
-
+#include <Commands/PIDSubsystem.h>
 
 
 Shooter::Shooter(OperatorInputs *operatorinputs)

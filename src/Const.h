@@ -50,7 +50,7 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 
 
 // Drivetrain
-#define DT_DEFAULT_DIRECTION 1.0
+#define DT_DEFAULT_DIRECTION -1.0
 // Inverts
 #define INVERT_LEFT -1.0
 #define INVERT_RIGHT 1.0
@@ -70,7 +70,7 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 #define RAMPING_RATE_MAX 1.5
 #define X_SCALING 0.5
 #define Y_SCALING 1.0
-#define LEFT_MOTOR_SCALING .97
+#define LEFT_MOTOR_SCALING 0.95
 #define RIGHT_MOTOR_SCALING 1
 #define LOWSPEED_MODIFIER_X 0.75
 #define LOWSPEED_MODIFIER_Y 0.25
@@ -94,10 +94,8 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 
 
 // Picker
-#define PCM_PICKER_SOLENOID_A 5
-#define PCM_PICKER_SOLENOID_B 1
-#define PCM_PICKER_VENT 4
 #define PWM_PICKER_MOTOR 4
+
 
 // Shooter
 //#define PCM_SHOOTER_SOLENOID 2

@@ -24,7 +24,7 @@ void Robot::RobotInit()
 	m_chooser.AddObject(strAutoRedShoot, strAutoRedShoot);
 	m_chooser.AddObject(strAutoBlueShoot, strAutoBlueShoot);
 	m_chooser.AddObject(strAutoStraight, strAutoStraight);
-	SmartDashboard::PutData("Auto Modes", &m_chooser);
+	SmartDashboard::PutData("Auto Selector", &m_chooser);
 
 	// class inits
 	m_inputs = new OperatorInputs();
@@ -33,8 +33,7 @@ void Robot::RobotInit()
 	m_camera = new Camera();
 	m_autonomous = new Autonomous(&m_ds, m_drivetrain, m_inputs);
 	m_climber = new Climber(m_inputs);
-	m_rangefinder = new RangeFinder();
-	m_shooter = new Shooter(m_inputs);
+	m_picker = new Picker(m_inputs);
 }
 
 
@@ -50,14 +49,12 @@ void Robot::RobotInit()
 void Robot::AutonomousInit()
 {
 	DriverStation::ReportError("Autonomous Init");
-	m_chooserselected = m_chooser.GetSelected();
-	m_autoselected = Chooser2Auto(m_chooserselected);
+	m_autoselected = kAutoLeftGear;
 	m_compressor->Start();
 	m_drivetrain->Init();
 	m_autonomous->Init();
-	//m_camera->Init();
 	m_climber->Init();
-	m_rangefinder->Init();
+	m_picker->Init();
 }
 
 
@@ -72,10 +69,8 @@ void Robot::TeleopInit()
 	DriverStation::ReportError("Teleop Init");
 	m_compressor->Start();
 	m_drivetrain->Init();
-	//m_camera->Init();
 	m_climber->Init();
-	m_rangefinder->Init();
-	m_shooter->Init();
+	m_picker->Init();
 }
 
 
@@ -83,8 +78,7 @@ void Robot::TeleopPeriodic()
 {
 	m_drivetrain->Loop();
 	m_climber->Loop();
-	m_rangefinder->Loop();
-	m_shooter->Loop();
+	m_picker->Loop();
 }
 
 
@@ -93,9 +87,8 @@ void Robot::TestInit()
 	DriverStation::ReportError("Test Init");
 	m_compressor->Start();
 	m_drivetrain->Init();
-	//m_camera->Init();
 	m_climber->Init();
-	m_rangefinder->Init();
+	m_picker->Init();
 }
 
 
@@ -103,7 +96,7 @@ void Robot::TestPeriodic()
 {
 	m_drivetrain->Loop();
 	m_climber->Loop();
-	m_rangefinder->Loop();
+	m_picker->Loop();
 }
 
 
@@ -114,23 +107,7 @@ void Robot::DisabledInit()
 	m_drivetrain->Stop();
 	m_autonomous->Stop();
 	m_climber->Stop();
-	m_shooter->Stop();
-}
-
-
-Auto Robot::Chooser2Auto(string selected)
-{
-	if (selected == strAutoLeftGear)
-		return kAutoLeftGear;
-	if (selected == strAutoRightGear)
-		return kAutoRightGear;
-	if (selected == strAutoRedShoot)
-		return kAutoRedShoot;
-	if (selected == strAutoBlueShoot)
-		return kAutoBlueShoot;
-	if (selected == strAutoStraight)
-		return kAutoStraight;
-	return kAutoLeftGear;
+	m_picker->Stop();
 }
 
 

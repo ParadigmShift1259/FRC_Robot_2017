@@ -1,9 +1,4 @@
-/*
- * Shooter.h
- *
- *  Created on: Jan 14, 2017
- *      Author: Developer
- */
+// Shooter.cpp
 
 
 #ifndef SRC_SHOOTER_H_

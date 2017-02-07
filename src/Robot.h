@@ -22,8 +22,8 @@
 #include "camera.h"
 #include "autonomous.h"
 #include "climber.h"
-#include "rangefinder.h"
-#include "shooter.h"
+#include "picker.h"
+
 
 using namespace std;
 using namespace frc;
@@ -44,8 +44,7 @@ private:
 	Camera *m_camera;
 	Autonomous *m_autonomous;
 	Climber *m_climber;
-	RangeFinder *m_rangefinder;
-	Shooter *m_shooter;
+	Picker *m_picker;
 
 	virtual void RobotInit();
 	virtual void AutonomousInit();
@@ -55,8 +54,6 @@ private:
 	virtual void TestInit();
 	virtual void TestPeriodic();
 	virtual void DisabledInit();
-
-	Auto Chooser2Auto(string selected);
 };
 
 
