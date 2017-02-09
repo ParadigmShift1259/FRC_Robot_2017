@@ -10,7 +10,8 @@
 #include <driverstation.h>
 #include <string>
 #include <ctime>
-
+#include <cmath>
+#include <Joystick.h>
 
 
 Shooter::Shooter(OperatorInputs *operatorinputs)
@@ -31,6 +32,7 @@ Shooter::~Shooter()
 
 void Shooter::Init()
 {
+	m_shootermotor->ConfigNeutralMode(CANSpeedController::NeutralMode::kNeutralMode_Coast);
 	m_shootermotor->SetFeedbackDevice(CANTalon::FeedbackDevice::QuadEncoder);
 	m_shootermotor->SetControlMode(CANSpeedController::ControlMode::kSpeed);
 	//m_shootermotor->SetControlMode(CANSpeedController::ControlMode::kPercentVbus);
@@ -52,23 +54,36 @@ void Shooter::Stop()
 
 void Shooter::Loop()
 {
-	bool shootertogglebutton = m_inputs->joystickTrigger(OperatorInputs::ToggleChoice::kToggle);
-	SmartDashboard::PutString("DB/String 1", std::to_string(shootertogglebutton));
+	bool shootertogglebutton = m_inputs->joystickTrigger(OperatorInputs::ToggleChoice::kHold);
+	//SmartDashboard::PutString("DB/String 1", "Shooter On: " + std::to_string(!shootertogglebutton));
+	if (!shootertogglebutton == 1)
+	{
+		SmartDashboard::PutString("DB/String 1", "Shooter On: Yes");
+	}
+		else
+		{
+			SmartDashboard::PutString("DB/String 1", "Shooter On: No");
+		}
+
 	double slidervalue = SmartDashboard::GetNumber("DB/Slider 0", SD_SHOOTER_SLIDER_DEFAULT);
 	//double newrpm = (slidervalue - SD_SHOOTER_SLIDER_DEFAULT) * (1.0 / 2.5);
 	double newrpm = (slidervalue - SD_SHOOTER_SLIDER_DEFAULT) * SHOOTER_SLIDER_TO_RPM;
 	//m_feedmotor->Set(newrpm);
 	m_shootermotor->Set(newrpm);
-	SmartDashboard::PutString("DB/String 0", "Input RPM: " + std::to_string(newrpm));
+	SmartDashboard::PutString("DB/String 0", "Input RPM: " + std::to_string(abs(newrpm)));
 	double encodervalue = m_shootermotor->GetSpeed();
-	SmartDashboard::PutString("DB/String 5", "Output RPM: " + std::to_string(encodervalue));
-	SmartDashboard::PutString("DB/String 6", std::to_string(encodervalue));
+	SmartDashboard::PutString("DB/String 5", "Output RPM: " /*+ std::to_string(encodervalue)*/);
+	SmartDashboard::PutString("DB/String 6", std::to_string(abs(encodervalue)));
 	double velocity = encodervalue * 2 * 3.14159265359 * SHOOTER_RADIUS * (1/60.0); //60 secs per minute
-	SmartDashboard::PutString("DB/String 8", "Velocity: " + std::to_string(velocity));
+	SmartDashboard::PutString("DB/String 4", "Velocity: " + std::to_string(abs(velocity)));
 	double outputvoltage = m_shootermotor->GetOutputVoltage();
-	SmartDashboard::PutString("DB/String 2", "Output Voltage: "+ std::to_string(outputvoltage));
-	if (shootertogglebutton)
+	SmartDashboard::PutString("DB/String 2", "Output Voltage: "); //+ std::to_string(abs(outputvoltage)));
+	SmartDashboard::PutString("DB/String 3", std::to_string(abs(outputvoltage)));
+	SmartDashboard::PutString("DB/String 7", "                    Do                    ");
+	SmartDashboard::PutString("DB/String 8", "               Or Do Not                ");
+	SmartDashboard::PutString("DB/String 9", "           There is No Try             ");
+	if (shootertogglebutton == 1)
 	{
-		m_shootermotor->Set(newrpm);
+		m_shootermotor->Set(0);
 	}
 }
