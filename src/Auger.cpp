@@ -7,53 +7,53 @@
 
 #include "Auger.h"
 
-Augur::Augur() {
-	m_augurmotor = new Spark(AUGUR_CHANNEL);
-
+Auger::Auger() {
+	m_augermotor = new Spark(AUGER_CHANNEL);
+	m_augertimer = 0;
 }
 
-Augur::~Augur() {
+Auger::~Auger() {
 	// TODO Auto-generated destructor stub
 }
 
-void Augur::RunAugur(){
-	if( m_augurmotor->Get()<AUGUR_POWER){
-		m_augurmotor->Set(m_augurmotor->Get()+AUGUR_RAMP);
+void Auger::RunAuger(){
+	if( m_augermotor->Get()<AUGER_POWER){
+		m_augermotor->Set(m_augermotor->Get()+AUGER_RAMP);
 	} else {
-		m_augurmotor->Set(AUGUR_POWER);
+		m_augermotor->Set(AUGER_POWER);
 	}
 
 }
 
-void Augur::StopAugur(){
-	if( m_augurmotor->Get()>0){
-		m_augurmotor->Set(m_augurmotor->Get()-AUGUR_RAMP);
+void Auger::StopAuger(){
+	if( m_augermotor->Get()>0){
+		m_augermotor->Set(m_augermotor->Get()-AUGER_RAMP);
 	} else {
-		m_augurmotor->Set(0);
+		m_augermotor->Set(0);
 	}
 }
 
-void Augur::InitPulse(){
-	m_augurtimer->Start();
-	m_augurtimer->Reset();
-	m_timetillchange = AUGUR_ON_TIME;
-	m_auguron = true;
+void Auger::InitPulse(){
+	m_augertimer->Start();
+	m_augertimer->Reset();
+	m_timetillchange = AUGER_ON_TIME;
+	m_augeron = true;
 }
 
-void Augur::PulseAugur(){
-	if( m_augurtimer->HasPeriodPassed(m_timetillchange) && m_auguron == true){
-		m_auguron = false;
-		m_timetillchange = AUGUR_OFF_TIME;
-		m_augurtimer->Reset();
-	} else if( m_augurtimer->HasPeriodPassed(m_timetillchange) && m_auguron == false) {
-		m_auguron = true;
-		m_timetillchange = AUGUR_ON_TIME;
-		m_augurtimer->Reset();
+void Auger::PulseAuger(){
+	if( m_augertimer->HasPeriodPassed(m_timetillchange) && m_augeron == true){
+		m_augeron = false;
+		m_timetillchange = AUGER_OFF_TIME;
+		m_augertimer->Reset();
+	} else if( m_augertimer->HasPeriodPassed(m_timetillchange) && m_augeron == false) {
+		m_augeron = true;
+		m_timetillchange = AUGER_ON_TIME;
+		m_augertimer->Reset();
 	}
-	if (m_auguron) {
-		RunAugur();
+	if (m_augeron) {
+		RunAuger();
 	} else {
-		StopAugur();
+		StopAuger();
 	}
 
 }

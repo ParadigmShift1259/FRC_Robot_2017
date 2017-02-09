@@ -15,19 +15,19 @@
 
 using namespace frc;
 
-class Augur {
+class Auger {
 public:
-	Augur();
-	virtual ~Augur();
-	void RunAugur();
-	void StopAugur();
-	void PulseAugur();
+	Auger();
+	virtual ~Auger();
+	void RunAuger();
+	void StopAuger();
+	void PulseAuger();
 	void InitPulse();
 protected:
-	PWMSpeedController *m_augurmotor;
-	Timer *m_augurtimer;
-	bool m_auguron; //Returns if the Augur is on or not
-	double m_timetillchange; //Time until the Augur changes direction
+	PWMSpeedController *m_augermotor;
+	Timer *m_augertimer;
+	bool m_augeron; //Returns if the Auger is on or not
+	double m_timetillchange; //Time until the Auger changes direction
 
 };
 

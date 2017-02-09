@@ -128,11 +128,11 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 
 
 // Auger
-#define AUGUR_CHANNEL 16 //Augur
-#define AUGUR_POWER 1
-#define AUGUR_RAMP 0.1
-#define AUGUR_ON_TIME 1
-#define AUGUR_OFF_TIME .5
+#define AUGER_CHANNEL 16 //Augur
+#define AUGER_POWER 1
+#define AUGER_RAMP 0.1
+#define AUGER_ON_TIME 1
+#define AUGER_OFF_TIME .5
 
 
 #endif /* SRC_CONST_H_ */
