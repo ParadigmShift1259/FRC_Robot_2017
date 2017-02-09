@@ -1,11 +1,11 @@
 /*
- * Augur.cpp
+ * Auger.cpp
  *
  *  Created on: Feb 4, 2017
  *      Author: Developer
  */
 
-#include "Augur.h"
+#include "Auger.h"
 
 Augur::Augur() {
 	m_augurmotor = new Spark(AUGUR_CHANNEL);

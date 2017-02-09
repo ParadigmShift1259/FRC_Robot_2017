@@ -1,12 +1,12 @@
 /*
- * Augur.h
+ * Auger.h
  *
  *  Created on: Feb 4, 2017
  *      Author: Developer
  */
 
-#ifndef AUGUR_H_
-#define AUGUR_H_
+#ifndef AUGER_H_
+#define AUGER_H_
 
 #include <PWMSpeedController.h>
 #include <Spark.h>
@@ -31,4 +31,4 @@ protected:
 
 };
 
-#endif /* AUGUR_H_ */
+#endif /* AUGER_H_ */
