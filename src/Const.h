@@ -114,7 +114,7 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 
 
 // Climber
-#define PWM_CLIMBER_MOTOR 2
+#define PWM_CLIMBER_MOTOR 0
 
 
 // Autonomous
@@ -130,7 +130,7 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 
 
 //Flipper
-#define PWM_FLIPPER_SOLENOID 0
+#define PWM_FLIPPER_SOLENOID 1
 
 
 #endif /* SRC_CONST_H_ */

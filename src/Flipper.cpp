@@ -26,8 +26,8 @@ void Flipper::Init()
 
 void Flipper::Loop()
 {
-	bool flipupbutton = m_inputs->xBoxAButton();
-	bool flipdownbutton = m_inputs->xBoxBButton();
+	bool flipupbutton = m_inputs->xBoxBButton();
+	bool flipdownbutton = m_inputs->xBoxAButton();
 
 	if (flipupbutton)
 	{
