@@ -10,6 +10,8 @@ Autonomous::Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, Ope
 	m_drivetrain = drivetrain;
 	m_inputs = operatorinputs;
 	m_stage = kIdle;
+	m_leftposition = 0;
+	m_rightposition = 0;
 }
 
 
@@ -21,8 +23,6 @@ Autonomous::~Autonomous()
 
 void Autonomous::Init()
 {
-	m_timer.Stop();
-	m_timer.Reset();
 //	if (m_driverstation->IsAutonomous())
 		m_stage = kStart;
 //	else
@@ -32,8 +32,6 @@ void Autonomous::Init()
 
 void Autonomous::Stop()
 {
-	m_timer.Stop();
-	m_timer.Reset();
 	m_stage = kIdle;
 }
 
@@ -44,20 +42,38 @@ bool Autonomous::GoStraight(double feet, double power)
 	double rightposition = m_drivetrain->RightTalon()->GetPosition();
 
 	double kSFoot = SmartDashboard::GetNumber("DB/Slider 0", 0);
-	if (kSFoot == 0) {kSFoot = 2.24;}
+	if (kSFoot == 0) {kSFoot = 0.95;}
 	SmartDashboard::PutNumber("AU6_kSFoot", kSFoot);
 
-	double distancepos = feet * kSFoot;
-	SmartDashboard::PutNumber("AU8_distancepos", distancepos);
-
-	m_drivetrain->Drive(0, power, true);
-	if ((-leftposition > distancepos) || (rightposition > distancepos))
+	if (feet > 0)
 	{
-		m_drivetrain->Drive(0, 0);
-		m_drivetrain->LeftTalon()->SetPosition(0);
-		m_drivetrain->RightTalon()->SetPosition(0);
-		Wait(0.1);
-		return true;
+		double distancepos = feet * kSFoot;
+		SmartDashboard::PutNumber("AU8_distancepos", distancepos);
+
+		m_drivetrain->Drive(0, power, true);
+		if ((leftposition > distancepos) || (-rightposition > distancepos))
+		{
+			m_drivetrain->Drive(0, 0);
+			m_drivetrain->LeftTalon()->SetPosition(0);
+			m_drivetrain->RightTalon()->SetPosition(0);
+			Wait(0.1);
+			return true;
+		}
+	}
+	else
+	{
+		double distancepos = -feet * kSFoot;
+		SmartDashboard::PutNumber("AU8_distancepos", distancepos);
+
+		m_drivetrain->Drive(0, power, true);
+		if ((-leftposition > distancepos) || (rightposition > distancepos))
+		{
+			m_drivetrain->Drive(0, 0);
+			m_drivetrain->LeftTalon()->SetPosition(0);
+			m_drivetrain->RightTalon()->SetPosition(0);
+			Wait(0.1);
+			return true;
+		}
 	}
 	return false;
 }
@@ -69,7 +85,7 @@ bool Autonomous::TurnDegree(double degrees)
 	double rightposition = m_drivetrain->RightTalon()->GetPosition();
 
 	double kSDegree = SmartDashboard::GetNumber("DB/Slider 1", 0);
-	if (kSDegree == 0) {kSDegree = 0.0444;}
+	if (kSDegree == 0) {kSDegree = 0.0188;}
 	SmartDashboard::PutNumber("AU7_kSDegree", kSDegree);
 
 	if (degrees < 0)
@@ -79,7 +95,7 @@ bool Autonomous::TurnDegree(double degrees)
 		//SmartDashboard::PutNumber("AUA_leftpos", leftposition);
 		//SmartDashboard::PutNumber("AUB_rightpos", rightposition);
 		//DriverStation::ReportError("here 1");
-		m_drivetrain->Drive(0.5, 0); //left turn
+		m_drivetrain->Drive(0.375, 0); //left turn
 		if ((leftposition > Conversion) || (rightposition > Conversion))
 		{
 			//DriverStation::ReportError("here 2");
@@ -97,7 +113,7 @@ bool Autonomous::TurnDegree(double degrees)
 		//SmartDashboard::PutNumber("AUA_leftpos", leftposition);
 		//SmartDashboard::PutNumber("AUB_rightpos", rightposition);
 		//DriverStation::ReportError("here 3");
-		m_drivetrain->Drive(-0.5, 0); //right turn
+		m_drivetrain->Drive(-0.375, 0); //right turn
 		if ((-leftposition > Conversion) || (-rightposition > Conversion))
 		{
 			//DriverStation::ReportError("here 4");
@@ -140,7 +156,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStage1:
 			DriverStation::ReportError("stage1");
-			if (GoStraight(6.0, -1.0))
+			if (GoStraight(6.0, -0.625))
 				m_stage = kStage2;
 			break;
 
@@ -153,7 +169,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStage3:
 			DriverStation::ReportError("stage3");
-			if (GoStraight(6.0, -1.0))
+			if (GoStraight(6.0, -0.625))
 				m_stage = kDeploy;
 			break;
 

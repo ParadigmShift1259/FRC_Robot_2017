@@ -28,7 +28,6 @@ protected:
 	DriverStation *m_driverstation;
 	Drivetrain *m_drivetrain;
 	OperatorInputs *m_inputs;
-	Timer m_timer;
 	Stage m_stage;
 	double m_leftposition;
 	double m_rightposition;

@@ -24,6 +24,7 @@
 #include "climber.h"
 #include "picker.h"
 #include "shooter.h"
+#include "flipper.h"
 
 
 using namespace std;
@@ -47,6 +48,7 @@ private:
 	Climber *m_climber;
 	Picker *m_picker;
 	Shooter *m_shooter;
+	Flipper *m_flipper;
 
 	virtual void RobotInit();
 	virtual void AutonomousInit();

@@ -50,7 +50,7 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 
 
 // Drivetrain
-#define DT_DEFAULT_DIRECTION -1.0
+#define DT_DEFAULT_DIRECTION 1.0
 // Inverts
 #define INVERT_LEFT -1.0
 #define INVERT_RIGHT 1.0
@@ -114,13 +114,7 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 
 
 // Climber
-#define PCM_CLIMBER_SOLENOID 3
 #define PWM_CLIMBER_MOTOR 2
-
-
-// Portcullis
-//#define PWM_PORTCULLIS_MOTOR 3
-//#define DIO_PORTCULLIS_LIMIT 0
 
 
 // Autonomous
@@ -133,6 +127,10 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 #define AUGER_RAMP 0.1
 #define AUGER_ON_TIME 1
 #define AUGER_OFF_TIME .5
+
+
+//Flipper
+#define PWM_FLIPPER_SOLENOID 0
 
 
 #endif /* SRC_CONST_H_ */
