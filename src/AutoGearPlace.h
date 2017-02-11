@@ -10,24 +10,31 @@
 #include "WPILib.h"
 #include <networktables/NetworkTable.h>
 #include <Commands/PIDSubsystem.h>
+#include <Const.h>
 #include <nt_Value.h>
 #include "Drivetrain.h"
+#include "OperatorInputs.h"
 
 class AutoGearPlace: public PIDSubsystem {
 public:
 
 	std::shared_ptr<NetworkTable> m_netTable;
-	AutoGearPlace(std::shared_ptr<NetworkTable> newTable, Drivetrain *drive);
+	AutoGearPlace(std::shared_ptr<NetworkTable> newTable, Drivetrain *drive, OperatorInputs *oi);
 	double ReturnPIDInput();
-	void changeActive(bool newState);
-	bool isDone();
+	void ChangeActive(bool newState);
+	bool IsDone();
+	void SetNewRelativeSetpoint(double newSetpoint);
 	void UsePIDOutput(double output);
 	virtual ~AutoGearPlace();
-
+	double ReturnCurrentPosition();
+	void CheckPIDValues();
+	bool isInitialized;
 
 protected:
 	Drivetrain* m_drivetrain;
+	OperatorInputs *m_inputs;
 	bool isActive;
+
 
 
 };

@@ -51,6 +51,8 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 
 // Drivetrain
 #define DT_DEFAULT_DIRECTION 1.0
+#define WHEEL_CIRCUMFERENCE 4
+#define WHEEL_BASE 28.825
 // Inverts
 #define INVERT_LEFT -1.0
 #define INVERT_RIGHT 1.0
@@ -63,18 +65,20 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 #define PCM_SHIFT_PORT_LOW 0
 #define PCM_SHIFT_MODULE 0
 #define CHILD_PROOF_SPEED 0.75
-#define FLIP_HIGH_GEAR true
+#define FLIP_HIGH_GEAR false
 // Ramping
 #define RAMPING_RATE_PERIOD 0.10
 #define RAMPING_RATE_MIN 0.6
 #define RAMPING_RATE_MAX 1.5
 #define X_SCALING 0.5
 #define Y_SCALING 1.0
-#define LEFT_MOTOR_SCALING 0.96
-#define RIGHT_MOTOR_SCALING 1
+//#define LEFT_MOTOR_SCALING 0.96
+#define LEFT_MOTOR_SCALING 1
+#define RIGHT_MOTOR_SCALING 0.92
 #define LOWSPEED_MODIFIER_X 0.75
 #define LOWSPEED_MODIFIER_Y 0.25
 // Encoders
+#define CODES_PER_REV 1126
 #define ENCODER_TOP_SPEED 0.6
 #define ENCODER_WAIT_TIME 168
 #define CAN_DISTANCE_PER_PULSE 0.0006708

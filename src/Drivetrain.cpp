@@ -35,13 +35,13 @@ Drivetrain::Drivetrain(OperatorInputs *inputs, DriverStation *ds)
 	m_righttalonfollow->Set(CAN_RIGHT_PORT);
 
 	m_lefttalonlead->SetFeedbackDevice(CANTalon::QuadEncoder);
-	m_lefttalonlead->ConfigEncoderCodesPerRev(1024);
+	m_lefttalonlead->ConfigEncoderCodesPerRev(CODES_PER_REV);
 	m_lefttalonlead->SetSensorDirection(false);
 	m_lefttalonlead->SetPosition(0);
 	m_lefttalonlead->ConfigNeutralMode(CANTalon::kNeutralMode_Brake);
 
 	m_righttalonlead->SetFeedbackDevice(CANTalon::QuadEncoder);
-	m_righttalonlead->ConfigEncoderCodesPerRev(1024);
+	m_righttalonlead->ConfigEncoderCodesPerRev(CODES_PER_REV);
 	m_righttalonlead->SetSensorDirection(false);
 	m_righttalonlead->SetPosition(0);
 	m_righttalonlead->ConfigNeutralMode(CANTalon::kNeutralMode_Brake);
@@ -121,13 +121,13 @@ void Drivetrain::Init()
 	m_righttalonfollow->Set(CAN_RIGHT_PORT);
 
 	m_lefttalonlead->SetFeedbackDevice(CANTalon::QuadEncoder);
-	m_lefttalonlead->ConfigEncoderCodesPerRev(1024);
+	m_lefttalonlead->ConfigEncoderCodesPerRev(CODES_PER_REV);
 	m_lefttalonlead->SetSensorDirection(false);
 	m_lefttalonlead->SetPosition(0);
 	m_lefttalonlead->ConfigNeutralMode(CANTalon::kNeutralMode_Brake);
 
 	m_righttalonlead->SetFeedbackDevice(CANTalon::QuadEncoder);
-	m_righttalonlead->ConfigEncoderCodesPerRev(1024);
+	m_righttalonlead->ConfigEncoderCodesPerRev(CODES_PER_REV);
 	m_righttalonlead->SetSensorDirection(false);
 	m_righttalonlead->SetPosition(0);
 	m_righttalonlead->ConfigNeutralMode(CANTalon::kNeutralMode_Brake);
@@ -233,7 +233,7 @@ void Drivetrain::Loop()
 void Drivetrain::Stop()
 {
 	m_ishighgear = false;
-	m_shifter->Set(true ^ m_ishighgear);
+	m_shifter->Set(FLIP_HIGH_GEAR ^ m_ishighgear);
 }
 
 

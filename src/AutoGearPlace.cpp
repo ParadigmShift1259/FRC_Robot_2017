@@ -8,24 +8,26 @@
 #include <AutoGearPlace.h>
 #include <math.h>
 
-#define P_VALUE 0.005
-#define I_VALUE 0.0
-#define D_VALUE 0.0
 
-AutoGearPlace::AutoGearPlace(std::shared_ptr<NetworkTable> newTable, Drivetrain *drive) : PIDSubsystem("AutoGearPlace",P_VALUE,I_VALUE,D_VALUE)
+
+AutoGearPlace::AutoGearPlace(std::shared_ptr<NetworkTable> newTable, Drivetrain *drive, OperatorInputs * oi) : PIDSubsystem("AutoGearPlace", 0, 0, 0)
 {
 	isActive = false;
 	m_drivetrain = drive;
 	m_netTable = newTable;
-	SetSetpoint(0);
+	m_inputs = oi;
+	isInitialized = false;
+	ChangeActive(false);
+	SetAbsoluteTolerance(3);
+
 }
 
 double AutoGearPlace::ReturnPIDInput()
 {
-	return m_netTable->GetNumber("xPos",0);
+	return ReturnCurrentPosition();
 }
 
-void AutoGearPlace::changeActive(bool newState)
+void AutoGearPlace::ChangeActive(bool newState)
 {
 	if(newState)
 	{
@@ -34,26 +36,48 @@ void AutoGearPlace::changeActive(bool newState)
 	}
 	else if (!newState)
 	{
-		isActive = false;
 		Disable();
+		isActive = false;
 	}
 }
 
-bool AutoGearPlace::isDone()
+bool AutoGearPlace::IsDone()
 {
 	bool retval = m_netTable->GetNumber("xSpread", 0) > 400;
 	m_netTable->PutBoolean("AGP_isDone", retval);
 	return retval;
 }
 
+void AutoGearPlace::SetNewRelativeSetpoint(double newSetPoint)
+{
+	if(isInitialized == false)
+		SetSetpoint(ReturnCurrentPosition());
+
+	newSetPoint -= GetPIDController()->GetError();
+	SetSetpointRelative(newSetPoint);
+
+}
+
 void AutoGearPlace::UsePIDOutput(double output)
 {
+
 	m_netTable->PutNumber("output", output);
 	if (isActive)
 	{
-		output = std::abs(output) > 0.25 ? output : 0.25 * output / std::abs(output);
-		m_drivetrain->Drive(-output, 0, false);
+		//output = std::abs(output) > 0.25 ? output : 0.25 * output / std::abs(output);
+		m_drivetrain->Drive(output, m_inputs->xBoxLeftY(), true);
 	}
+}
+
+void AutoGearPlace::CheckPIDValues()
+{
+	if(GetPIDController()->GetP() != SmartDashboard::GetValue("DB/Slider 0")->GetDouble() || GetPIDController()->GetI() != SmartDashboard::GetValue("DB/Slider 1")->GetDouble() ||GetPIDController()->GetD() != SmartDashboard::GetValue("DB/Slider 2")->GetDouble())
+		GetPIDController()->SetPID(SmartDashboard::GetValue("DB/Slider 0")->GetDouble(), SmartDashboard::GetValue("DB/Slider 1")->GetDouble(), SmartDashboard::GetValue("DB/Slider 2")->GetDouble());
+}
+
+double AutoGearPlace::ReturnCurrentPosition()
+{
+	return ((360/(2*3.1415926535))*((m_drivetrain->LeftTalon()->GetPosition()+m_drivetrain->RightTalon()->GetPosition())*WHEEL_CIRCUMFERENCE*3.1415926535)/(WHEEL_BASE));
 }
 
 AutoGearPlace::~AutoGearPlace() {

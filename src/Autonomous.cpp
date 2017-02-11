@@ -42,7 +42,7 @@ bool Autonomous::GoStraight(double feet, double power)
 	double rightposition = m_drivetrain->RightTalon()->GetPosition();
 
 	double kSFoot = SmartDashboard::GetNumber("DB/Slider 0", 0);
-	if (kSFoot == 0) {kSFoot = 0.95;}
+	if (kSFoot == 0) {kSFoot = 1.047;}
 	SmartDashboard::PutNumber("AU6_kSFoot", kSFoot);
 
 	if (feet > 0)
@@ -85,7 +85,7 @@ bool Autonomous::TurnDegree(double degrees)
 	double rightposition = m_drivetrain->RightTalon()->GetPosition();
 
 	double kSDegree = SmartDashboard::GetNumber("DB/Slider 1", 0);
-	if (kSDegree == 0) {kSDegree = 0.0188;}
+	if (kSDegree == 0) {kSDegree = 0.02;}
 	SmartDashboard::PutNumber("AU7_kSDegree", kSDegree);
 
 	if (degrees < 0)
@@ -156,7 +156,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStage1:
 			DriverStation::ReportError("stage1");
-			if (GoStraight(6.0, -0.625))
+			if (GoStraight(6.3, -0.625))
 				m_stage = kStage2;
 			break;
 
@@ -169,7 +169,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStage3:
 			DriverStation::ReportError("stage3");
-			if (GoStraight(6.0, -0.625))
+			if (GoStraight(5.3, -0.625))
 				m_stage = kDeploy;
 			break;
 
@@ -197,7 +197,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStage1:
 			DriverStation::ReportError("stage1");
-			if (GoStraight(6.0, -1.0))
+			if (GoStraight(6.3, -0.625))
 				m_stage = kStage2;
 			break;
 
@@ -209,7 +209,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStage3:
 			DriverStation::ReportError("stage3");
-			if (GoStraight(6.0, -1.0))
+			if (GoStraight(5.3, -0.625))
 				m_stage = kDeploy;
 			break;
 
@@ -237,7 +237,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStage1:
 			DriverStation::ReportError("stage1");
-			if (GoStraight(7.15, -1.0))
+			if (GoStraight(7.04, -0.625))
 				m_stage = kStage2;
 			break;
 
@@ -249,7 +249,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStage3:
 			DriverStation::ReportError("stage3");
-			if (GoStraight(3.5, -1.0))
+			if (GoStraight(3.375, 0.625))
 				m_stage = kDeploy;
 			break;
 
@@ -278,7 +278,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStage1:
 			DriverStation::ReportError("stage1");
-			if (GoStraight(7.15, -1.0))
+			if (GoStraight(7.04, -0.625))
 				m_stage = kStage2;
 			break;
 
@@ -290,7 +290,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStage3:
 			DriverStation::ReportError("stage3");
-			if (GoStraight(3.5, -1.0))
+			if (GoStraight(3.375, 0.625))
 				m_stage = kDeploy;
 			break;
 
@@ -318,7 +318,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStage1:
 			DriverStation::ReportError("stage1");
-			if (GoStraight(6.625, -1.0))
+			if (GoStraight(6.625, -0.625))
 				m_stage = kDeploy;
 			break;
 
