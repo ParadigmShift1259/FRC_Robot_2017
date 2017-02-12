@@ -13,19 +13,18 @@
 #include <LiveWindow/LiveWindow.h>
 #include <SmartDashboard/SendableChooser.h>
 #include <SmartDashboard/SmartDashboard.h>
-#include <ntCore.h>
 
 
 #include "const.h"
 #include "operatorinputs.h"
 #include "drivetrain.h"
+#include "DriveAngle.h"
 #include "compressor.h"
 #include "camera.h"
 #include "autonomous.h"
 #include "climber.h"
 #include "picker.h"
 #include "shooter.h"
-#include "AutoGearPlace.h"
 
 
 using namespace std;
@@ -40,16 +39,15 @@ private:
 	SendableChooser<string> m_chooser;
 	string m_chooserselected;
 	Auto m_autoselected;
-	std::shared_ptr<NetworkTable> m_netTable;
 	OperatorInputs *m_inputs;
 	Drivetrain *m_drivetrain;
+	DriveAngle *m_driveangle;
 	Compressor *m_compressor;
 	Camera *m_camera;
 	Autonomous *m_autonomous;
 	Climber *m_climber;
 	Picker *m_picker;
 	Shooter *m_shooter;
-	AutoGearPlace *m_autoGearPlacer;
 
 	virtual void RobotInit();
 	virtual void AutonomousInit();
@@ -60,8 +58,6 @@ private:
 	virtual void TestPeriodic();
 	virtual void DisabledInit();
 
-
-	double turnValue;
 	Auto Chooser2Auto(string selected);
 };
 

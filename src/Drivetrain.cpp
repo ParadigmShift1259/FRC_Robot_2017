@@ -292,7 +292,6 @@ void Drivetrain::Drive(double x, double y, bool ramp)
 	SmartDashboard::PutNumber("DT19_rightposition", m_rightposition);
 }
 
-
 // sets the motors to coasting mode, shifts, and then sets them back to break mode
 void Drivetrain::Shift()
 {

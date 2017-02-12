@@ -4,6 +4,7 @@
 #include "Robot.h"
 #include <string>
 
+
 const string strAutoDefault = "Left Gear";
 const string strAutoLeftGear = "Left Gear";
 const string strAutoRightGear = "Right Gear";
@@ -15,7 +16,7 @@ const string strAutoStraight = "Straight";
 void Robot::RobotInit()
 {
 	NetworkTable::GlobalDeleteAll();
-	m_netTable = NetworkTable::GetTable("OpenCV");
+
 	// live window inits
 	m_lw = LiveWindow::GetInstance();
 	m_chooser.AddDefault(strAutoDefault, strAutoDefault);
@@ -29,15 +30,13 @@ void Robot::RobotInit()
 	// class inits
 	m_inputs = new OperatorInputs();
 	m_drivetrain = new Drivetrain(m_inputs, &m_ds);
+	m_driveangle = new DriveAngle(m_drivetrain, m_inputs);
 	m_compressor = new Compressor(PCM_COMPRESSOR_SOLENOID);
 	m_camera = new Camera();
 	m_autonomous = new Autonomous(&m_ds, m_drivetrain, m_inputs);
 	m_climber = new Climber(m_inputs);
 	m_shooter = new Shooter(m_inputs);
 	m_picker = new Picker(m_inputs);
-	m_autoGearPlacer = new AutoGearPlace(m_netTable, m_drivetrain, m_inputs);
-	SmartDashboard::PutNumber("DB/Slider 3", 0);
-	turnValue = SmartDashboard::GetNumber("DB/Slider 3", 0);
 }
 
 
@@ -60,25 +59,12 @@ void Robot::AutonomousInit()
 	m_autonomous->Init();
 	m_climber->Init();
 	m_picker->Init();
-	SmartDashboard::PutNumber("DB/Slider 3", 0);
-	turnValue = SmartDashboard::GetNumber("DB/Slider 3", 0);
-	//m_autoGearPlacer->ChangeActive(true);
 }
 
 
 void Robot::AutonomousPeriodic()
 {
-	m_autoGearPlacer->CheckPIDValues();
-	if(turnValue != SmartDashboard::GetNumber("DB/Slider 3", 0))
-	{
-		turnValue = SmartDashboard::GetNumber("DB/Slider 3", 0);
-		m_autoGearPlacer->SetNewRelativeSetpoint(turnValue);
-	}
-	m_autoGearPlacer->ChangeActive(true);
-
-	//m_autonomous->Loop(m_autoselected);
-	m_netTable->PutNumber("DTAngle",m_autoGearPlacer->ReturnCurrentPosition());
-
+	m_autonomous->Loop(m_autoselected);
 }
 
 
@@ -109,40 +95,29 @@ void Robot::TestInit()
 	//m_autoselected = Chooser2Auto(m_chooserselected);
 	m_compressor->Start();
 	m_drivetrain->Init();
+	m_driveangle->Init();
 	m_autonomous->Init();
 	m_climber->Init();
 	m_picker->Init();
-	SmartDashboard::PutNumber("DB/Slider 3", 0);
-	turnValue = SmartDashboard::GetNumber("DB/Slider 3", 0);
-	//m_autoGearPlacer->ChangeActive(true);
 }
 
 
 void Robot::TestPeriodic()
 {
-	m_autoGearPlacer->CheckPIDValues();
-	if(turnValue != SmartDashboard::GetNumber("DB/Slider 3", 0))
-	{
-		turnValue = SmartDashboard::GetNumber("DB/Slider 3", 0);
-		m_autoGearPlacer->SetNewRelativeSetpoint(turnValue);
-	}
-	m_autoGearPlacer->ChangeActive(true);
-	//m_autonomous->Loop(m_autoselected);
-	m_netTable->PutNumber("DTAngle",m_autoGearPlacer->ReturnCurrentPosition());
+	m_driveangle->Loop();
 }
 
 
 void Robot::DisabledInit()
 {
-	m_autoGearPlacer->ChangeActive(false);
 	DriverStation::ReportError("Disabled Init");
 	m_compressor->Stop();
 	m_drivetrain->Stop();
+	m_driveangle->Stop();
 	m_autonomous->Stop();
 	m_climber->Stop();
 	m_picker->Stop();
 	m_shooter->Stop();
-	m_autoGearPlacer->isInitialized = false;
 }
 
 

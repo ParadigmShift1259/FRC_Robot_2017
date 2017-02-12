@@ -49,6 +49,14 @@ public:
 	//double getRightEncoderDistance() {return m_rightencoder->GetDistance();}
 	//double getLeftEncoderDistance() {return m_leftencoder->GetDistance();}
 
+	// moved these variables from protected to public
+	bool m_ishighgear; //Robot starts in low gear
+	double m_previousx;
+	double m_previousy;
+	bool m_isdownshifting;
+	bool m_lowspeedmode;
+	bool m_shift;
+
 protected:
 	OperatorInputs *m_inputs;
 	DriverStation *m_driverstation;
@@ -69,18 +77,12 @@ protected:
 	double m_ratiolr;
 	double m_leftencoderfix;
 	double m_rightencoderfix;
-	bool m_ishighgear; //Robot starts in low gear
 	bool m_isleftfaster;
 	double m_leftspeed;
 	double m_rightspeed;
-	double m_previousx;
-	double m_previousy;
 	double m_leftposition;
 	double m_rightposition;
 	double m_coasting;
-	bool m_isdownshifting;
-	bool m_lowspeedmode;
-	bool m_shift;
 
 	double m_invertleft;
 	double m_invertright;
