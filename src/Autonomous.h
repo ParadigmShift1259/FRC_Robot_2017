@@ -30,8 +30,10 @@ protected:
 	OperatorInputs *m_inputs;
 	Timer m_timer;
 	Stage m_stage;
-	double m_leftposition;
-	double m_rightposition;
+	double m_newleftpos;
+	double m_newrightpos;
+	bool m_inited;
+	bool m_turninited;
 };
 
 

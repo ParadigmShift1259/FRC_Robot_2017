@@ -49,6 +49,10 @@ public:
 	//double getRightEncoderDistance() {return m_rightencoder->GetDistance();}
 	//double getLeftEncoderDistance() {return m_leftencoder->GetDistance();}
 
+	void setAutoX(double x);
+	void setAutoY(double y);
+	void driveAuto();
+
 protected:
 	OperatorInputs *m_inputs;
 	DriverStation *m_driverstation;
@@ -85,6 +89,9 @@ protected:
 	double m_invertleft;
 	double m_invertright;
 	double m_direction;
+
+	double m_auto_x = 0;
+	double m_auto_y = 0;
 };
 
 

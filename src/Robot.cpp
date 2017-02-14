@@ -27,6 +27,7 @@ void Robot::RobotInit()
 	SmartDashboard::PutData("Auto Selector", &m_chooser);
 
 	// class inits
+	m_pigeon = new PigeonImu(0);
 	m_inputs = new OperatorInputs();
 	m_drivetrain = new Drivetrain(m_inputs, &m_ds);
 	m_compressor = new Compressor(PCM_COMPRESSOR_SOLENOID);
@@ -34,6 +35,7 @@ void Robot::RobotInit()
 	m_autonomous = new Autonomous(&m_ds, m_drivetrain, m_inputs);
 	m_climber = new Climber(m_inputs);
 	m_picker = new Picker(m_inputs);
+	m_pidauto = new PIDAutonomous(m_drivetrain);
 }
 
 
@@ -55,12 +57,14 @@ void Robot::AutonomousInit()
 	m_autonomous->Init();
 	m_climber->Init();
 	m_picker->Init();
+	m_pidauto->Init();
 }
 
 
 void Robot::AutonomousPeriodic()
 {
-	m_autonomous->Loop(m_autoselected);
+	//m_autonomous->Loop(m_autoselected);
+	m_pidauto->Loop();
 }
 
 
@@ -71,11 +75,17 @@ void Robot::TeleopInit()
 	m_drivetrain->Init();
 	m_climber->Init();
 	m_picker->Init();
+	m_pigeon->SetFusedHeading(0.0);
 }
 
 
 void Robot::TeleopPeriodic()
 {
+	double ypr[3];
+	m_pigeon->GetYawPitchRoll(ypr);
+	SmartDashboard::PutNumber("yaw",ypr[0]);
+	SmartDashboard::PutNumber("pitch",ypr[1]);
+	SmartDashboard::PutNumber("roll",ypr[2]);
 	m_drivetrain->Loop();
 	m_climber->Loop();
 	m_picker->Loop();
@@ -108,6 +118,7 @@ void Robot::DisabledInit()
 	m_autonomous->Stop();
 	m_climber->Stop();
 	m_picker->Stop();
+	m_pidauto->Stop();
 }
 
 

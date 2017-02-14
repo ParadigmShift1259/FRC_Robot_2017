@@ -127,4 +127,12 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 #define ALG_AUTONOMOUS_GYRO 0
 
 
+//Autonomous PID
+#define DRIVE_ENCODER_GEAR_RATIO 3.0
+#define DRIVE_WHEEL_CIRCUMFERENCE 12.56 //IN
+#define DRIVE_WHEEL_BASE 29.0 //IN
+#define DRIVE_GEAR_RATIO 50/35
+#define DRIVE_ENCODER_CPR 256.0
+
+
 #endif /* SRC_CONST_H_ */

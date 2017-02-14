@@ -23,6 +23,8 @@
 #include "autonomous.h"
 #include "climber.h"
 #include "picker.h"
+#include "PIDAutonomous.h"
+#include "PigeonImu.h"
 
 
 using namespace std;
@@ -38,6 +40,8 @@ private:
 	string m_chooserselected;
 	Auto m_autoselected;
 
+	PigeonImu * m_pigeon;
+
 	OperatorInputs *m_inputs;
 	Drivetrain *m_drivetrain;
 	Compressor *m_compressor;
@@ -45,6 +49,7 @@ private:
 	Autonomous *m_autonomous;
 	Climber *m_climber;
 	Picker *m_picker;
+	PIDAutonomous *m_pidauto;
 
 	virtual void RobotInit();
 	virtual void AutonomousInit();

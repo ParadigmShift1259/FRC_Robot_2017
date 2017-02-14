@@ -458,3 +458,22 @@ void Drivetrain::CheckEncoderTimer()
 		m_timerencoder->Reset();
 	}
 }
+
+
+void Drivetrain::driveAuto()
+{
+	Drive(m_auto_x, m_auto_y);
+}
+
+
+void Drivetrain::setAutoX(double x)
+{
+	m_auto_x = x;
+}
+
+
+void Drivetrain::setAutoY(double y)
+{
+	m_auto_y = y;
+}
+
