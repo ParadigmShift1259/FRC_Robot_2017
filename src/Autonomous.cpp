@@ -42,7 +42,7 @@ bool Autonomous::GoStraight(double feet, double power)
 	double rightposition = m_drivetrain->RightTalon()->GetPosition();
 
 	double kSFoot = SmartDashboard::GetNumber("DB/Slider 0", 0);
-	if (kSFoot == 0) {kSFoot = 1.047;}
+	if (kSFoot == 0) {kSFoot = 0.955;}
 	SmartDashboard::PutNumber("AU6_kSFoot", kSFoot);
 
 	if (feet > 0)
