@@ -47,9 +47,7 @@ void DriveAnglePID::ChangeActive(bool newState)
 
 bool DriveAnglePID::IsDone()
 {
-	bool retval = m_netTable->GetNumber("xSpread", 0) > 400;
-	m_netTable->PutBoolean("AGP_isDone", retval);
-	return retval;
+	return GetPIDController()->OnTarget();
 }
 
 

@@ -17,6 +17,7 @@ void Robot::RobotInit()
 {
 	NetworkTable::GlobalDeleteAll();
 
+	m_netTable = NetworkTable::GetTable("opencv");
 	// live window inits
 	m_lw = LiveWindow::GetInstance();
 	m_chooser.AddDefault(strAutoDefault, strAutoDefault);
@@ -37,6 +38,7 @@ void Robot::RobotInit()
 	m_climber = new Climber(m_inputs);
 	m_shooter = new Shooter(m_inputs);
 	m_picker = new Picker(m_inputs);
+	m_gTarget = new GearTarget(m_netTable, m_driveangle);
 }
 
 

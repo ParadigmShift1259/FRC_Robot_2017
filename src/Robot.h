@@ -25,6 +25,8 @@
 #include "climber.h"
 #include "picker.h"
 #include "shooter.h"
+#include "GearTarget.h"
+#include <ntCore.h>
 
 
 using namespace std;
@@ -48,6 +50,9 @@ private:
 	Climber *m_climber;
 	Picker *m_picker;
 	Shooter *m_shooter;
+	std::shared_ptr<NetworkTable> m_netTable;
+
+	GearTarget *m_gTarget;
 
 	virtual void RobotInit();
 	virtual void AutonomousInit();
