@@ -1,5 +1,0 @@
-SLider1: 13.9
-Slider2: 15
-Slider2 replace
-We have Functions that do the same thing and take parameters
-Using the same slider values

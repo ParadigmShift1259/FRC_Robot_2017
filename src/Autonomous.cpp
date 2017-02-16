@@ -4,10 +4,11 @@
 #include <Autonomous.h>
 
 
-Autonomous::Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, OperatorInputs *operatorinputs)
+Autonomous::Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, DriveAngle *driveangle, OperatorInputs *operatorinputs)
 {
 	m_driverstation = driverstation;
 	m_drivetrain = drivetrain;
+	m_driveangle = driveangle;
 	m_inputs = operatorinputs;
 	m_stage = kIdle;
 	m_leftposition = 0;
@@ -42,7 +43,7 @@ bool Autonomous::GoStraight(double feet, double power)
 	double rightposition = m_drivetrain->RightTalon()->GetPosition();
 
 	double kSFoot = SmartDashboard::GetNumber("DB/Slider 0", 0);
-	if (kSFoot == 0) {kSFoot = 1.047;}
+	if (kSFoot == 0) {kSFoot = 0.955;}
 	SmartDashboard::PutNumber("AU6_kSFoot", kSFoot);
 
 	if (feet > 0)
@@ -50,10 +51,10 @@ bool Autonomous::GoStraight(double feet, double power)
 		double distancepos = feet * kSFoot;
 		SmartDashboard::PutNumber("AU8_distancepos", distancepos);
 
-		m_drivetrain->Drive(0, power, true);
+		m_driveangle->Drive(power, true);
 		if ((leftposition > distancepos) || (-rightposition > distancepos))
 		{
-			m_drivetrain->Drive(0, 0);
+			m_driveangle->Drive(0);
 			m_drivetrain->LeftTalon()->SetPosition(0);
 			m_drivetrain->RightTalon()->SetPosition(0);
 			Wait(0.1);
@@ -65,10 +66,10 @@ bool Autonomous::GoStraight(double feet, double power)
 		double distancepos = -feet * kSFoot;
 		SmartDashboard::PutNumber("AU8_distancepos", distancepos);
 
-		m_drivetrain->Drive(0, power, true);
+		m_driveangle->Drive(power, true);
 		if ((-leftposition > distancepos) || (rightposition > distancepos))
 		{
-			m_drivetrain->Drive(0, 0);
+			m_driveangle->Drive(0);
 			m_drivetrain->LeftTalon()->SetPosition(0);
 			m_drivetrain->RightTalon()->SetPosition(0);
 			Wait(0.1);
@@ -143,7 +144,7 @@ void Autonomous::Loop(Auto autoselected)
 		switch (m_stage)
 		{
 		case kIdle:
-			m_drivetrain->Drive(0, 0);
+			m_driveangle->Drive(0);
 			break;
 
 		case kStart:
@@ -163,12 +164,18 @@ void Autonomous::Loop(Auto autoselected)
 		case kStage2:
 			DriverStation::ReportError("stage2");
 			Wait(0.1);
-			if (TurnDegree(-60))
-				m_stage = kStage3;
+			m_driveangle->SetRelativeAngle(-60);
+			m_stage = kStage3;
 			break;
 
 		case kStage3:
-			DriverStation::ReportError("stage3");
+			DriverStation::ReportError("stage 3");
+			if (m_driveangle->IsOnTarget())
+				m_stage = kStage4;
+			break;
+
+		case kStage4:
+			DriverStation::ReportError("stage4");
 			if (GoStraight(5.3, -0.625))
 				m_stage = kDeploy;
 			break;
@@ -184,7 +191,7 @@ void Autonomous::Loop(Auto autoselected)
 		switch (m_stage)
 		{
 		case kIdle:
-			m_drivetrain->Drive(0, 0);
+			m_driveangle->Drive(0);
 			break;
 
 		case kStart:
@@ -203,12 +210,19 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStage2:
 			DriverStation::ReportError("stage2");
-			if (TurnDegree(60))
-				m_stage = kStage3;
+			m_driveangle->SetRelativeAngle(60);
+			m_stage = kStage3;
 			break;
 
 		case kStage3:
-			DriverStation::ReportError("stage3");
+			DriverStation::ReportError("stage 3");
+			if (m_driveangle->IsOnTarget())
+				m_stage = kStage4;
+			break;
+
+
+		case kStage4:
+			DriverStation::ReportError("stage4");
 			if (GoStraight(5.3, -0.625))
 				m_stage = kDeploy;
 			break;
@@ -224,7 +238,7 @@ void Autonomous::Loop(Auto autoselected)
 		switch (m_stage)
 		{
 		case kIdle:
-			m_drivetrain->Drive(0, 0);
+			m_driveangle->Drive(0);
 			break;
 
 		case kStart:
@@ -243,13 +257,18 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStage2:
 			DriverStation::ReportError("stage2");
-			if (TurnDegree(-90))
+			m_driveangle->SetRelativeAngle(-90);
 				m_stage = kStage3;
 			break;
 
 		case kStage3:
-			DriverStation::ReportError("stage3");
-			if (GoStraight(3.375, 0.625))
+			if (m_driveangle->IsOnTarget())
+				m_stage = kStage4;
+			break;
+
+		case kStage4:
+			DriverStation::ReportError("stage4");
+			if (GoStraight(-3.375, 0.625))
 				m_stage = kDeploy;
 			break;
 
@@ -265,7 +284,7 @@ void Autonomous::Loop(Auto autoselected)
 		switch (m_stage)
 		{
 		case kIdle:
-			m_drivetrain->Drive(0, 0);
+			m_driveangle->Drive(0);
 			break;
 
 		case kStart:
@@ -284,13 +303,18 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStage2:
 			DriverStation::ReportError("stage2");
-			if (TurnDegree(90))
-				m_stage = kStage3;
+			m_driveangle->SetRelativeAngle(90);
+			m_stage = kStage3;
 			break;
 
 		case kStage3:
-			DriverStation::ReportError("stage3");
-			if (GoStraight(3.375, 0.625))
+			if (m_driveangle->IsOnTarget())
+				m_stage = kStage4;
+			break;
+
+		case kStage4:
+			DriverStation::ReportError("stage4");
+			if (GoStraight(-3.375, 0.625))
 				m_stage = kDeploy;
 			break;
 
@@ -305,7 +329,7 @@ void Autonomous::Loop(Auto autoselected)
 		switch (m_stage)
 		{
 		case kIdle:
-			m_drivetrain->Drive(0, 0);
+			m_driveangle->Drive(0);
 			break;
 
 		case kStart:

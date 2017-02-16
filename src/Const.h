@@ -72,9 +72,8 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 #define RAMPING_RATE_MAX 1.5
 #define X_SCALING 0.5
 #define Y_SCALING 1.0
-//#define LEFT_MOTOR_SCALING 0.96
 #define LEFT_MOTOR_SCALING 1
-#define RIGHT_MOTOR_SCALING 0.92
+#define RIGHT_MOTOR_SCALING 1
 #define LOWSPEED_MODIFIER_X 0.75
 #define LOWSPEED_MODIFIER_Y 0.25
 // Encoders
@@ -107,6 +106,7 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 /*#define DIO_SHOOTER_LIMIT_DOWN 2
 #define DIO_SHOOTER_MOTOR_A 3
 #define DIO_SHOOTER_MOTOR_B 4*/
+#define CAN_FEED_MOTOR 5
 #define CAN_SHOOTER_P 0.02
 #define CAN_SHOOTER_I 0.0001
 #define CAN_SHOOTER_D 0
@@ -115,6 +115,10 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 #define SD_SHOOTER_SLIDER_DEFAULT 2.5
 #define SHOOTER_SLIDER_TO_RPM -600.0
 #define SHOOTER_RADIUS 0.0508
+#define SHOOTER_LOW_RPM 300
+#define SHOOTER_SHOOT_RPM 936
+#define SHOOTER_DIRECTION 1
+#define SHOOTER_ERROR_RPM 0.03
 
 
 // Climber
