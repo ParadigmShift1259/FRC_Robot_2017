@@ -1,4 +1,6 @@
-// Picker.h
+/* Picker.h
+ * Editor: Agastya
+ */
 
 
 #ifndef SRC_PICKER_H_

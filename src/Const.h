@@ -1,4 +1,6 @@
-// const.h
+/* const.h
+ * Editor: Agastya
+ */
 
 
 #ifndef SRC_CONST_H_

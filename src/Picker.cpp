@@ -1,4 +1,7 @@
-//picker.cpp
+/*picker.cpp
+ *Editor: Agastya
+ * */
+
 
 #include <Picker.h>
 #include <const.h>

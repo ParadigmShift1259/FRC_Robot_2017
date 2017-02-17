@@ -1,4 +1,7 @@
-// Climber.cpp
+/* Climber.cpp
+ * Editor: Agastya
+ * */
+
 
 
 #include <Climber.h>
