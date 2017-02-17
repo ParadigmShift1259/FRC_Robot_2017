@@ -53,6 +53,10 @@ void Robot::AutonomousInit()
 {
 	DriverStation::ReportError("Autonomous Init");
 	m_autoselected = kAutoLeftGear;
+	//m_autoselected = kAutoRightGear;
+	//m_autoselected = kAutoRedShoot;
+	//m_autoselected = kAutoBlueShoot;
+	//m_autoselected = kAutoStraight;
 	//m_autoselected = Chooser2Auto(m_chooserselected);
 	m_compressor->Start();
 	m_drivetrain->Init();
@@ -91,7 +95,7 @@ void Robot::TeleopPeriodic()
 
 void Robot::TestInit()
 {
-	DriverStation::ReportError("Autonomous Init");
+	DriverStation::ReportError("Test Init");
 	m_autoselected = kAutoLeftGear;
 	//m_autoselected = Chooser2Auto(m_chooserselected);
 	m_compressor->Start();
