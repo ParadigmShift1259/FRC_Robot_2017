@@ -17,7 +17,7 @@ void Robot::RobotInit()
 {
 	NetworkTable::GlobalDeleteAll();
 
-	m_netTable = NetworkTable::GetTable("opencv");
+	m_netTable = NetworkTable::GetTable("OpenCV");
 	// live window inits
 	m_lw = LiveWindow::GetInstance();
 	m_chooser.AddDefault(strAutoDefault, strAutoDefault);
@@ -66,12 +66,14 @@ void Robot::AutonomousInit()
 	m_autonomous->Init();
 	m_climber->Init();
 	m_picker->Init();
+	m_gTarget->Target();
 }
 
 
 void Robot::AutonomousPeriodic()
 {
-	m_autonomous->Loop(m_autoselected);
+	//m_autonomous->Loop(m_autoselected);
+	m_gTarget->Loop();
 }
 
 

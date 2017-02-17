@@ -56,12 +56,12 @@ void GearTarget::Loop()
 				stage = stopped;
 			}
 			break;
-		case targeting:
-			if(container->IsOnTarget())
-			{
-				isDone = true;
-				stage = stopped;
-			}
+//		case targeting:
+//			if(container->IsOnTarget())
+//			{
+//				isDone = true;
+//				stage = stopped;
+//			}
 
 
 	}
