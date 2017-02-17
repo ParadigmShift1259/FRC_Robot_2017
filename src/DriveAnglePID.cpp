@@ -9,11 +9,11 @@ DriveAnglePID::DriveAnglePID(Drivetrain *drive) : PIDSubsystem("DriveAngle", 0, 
 {
 	m_drivetrain = drive;
 	m_netTable = NetworkTable::GetTable("OpenCV");
+	isInitialized = false;
 	isActive = false;
 	m_y = 0;
-	isInitialized = false;
-	ChangeActive(false);
-	SetAbsoluteTolerance(0.3);
+	m_ramp = false;
+	SetAbsoluteTolerance(1.0);
 }
 
 
@@ -32,11 +32,10 @@ void DriveAnglePID::ChangeActive(bool newState)
 {
 	if (newState)
 	{
-		isActive = true;
 		Enable();
+		isActive = true;
 	}
 	else
-	if (!newState)
 	{
 		Disable();
 		isActive = false;
@@ -53,11 +52,18 @@ bool DriveAnglePID::IsDone()
 
 void DriveAnglePID::SetNewRelativeSetpoint(double newSetPoint)
 {
-	if (isInitialized == false)
-		SetSetpoint(ReturnCurrentPosition());
-
-	newSetPoint -= GetPIDController()->GetError();
-	SetSetpointRelative(newSetPoint);
+	if (!isInitialized)
+	{
+		GetPIDController()->Reset();
+		//SetSetpoint(ReturnCurrentPosition());
+		SetSetpointRelative(0);
+		isInitialized = true;
+	}
+	else
+	{
+		newSetPoint -= GetPIDController()->GetError();
+		SetSetpointRelative(newSetPoint);
+	}
 }
 
 
@@ -74,12 +80,15 @@ void DriveAnglePID::UsePIDOutput(double output)
 
 void DriveAnglePID::CheckPIDValues()
 {
+	GetPIDController()->SetPID(0.1, 0.001, 0);
+/*
 	if (GetPIDController()->GetP() != SmartDashboard::GetValue("DB/Slider 0")->GetDouble() ||
 		GetPIDController()->GetI() != SmartDashboard::GetValue("DB/Slider 1")->GetDouble() ||
 		GetPIDController()->GetD() != SmartDashboard::GetValue("DB/Slider 2")->GetDouble())
 		GetPIDController()->SetPID(SmartDashboard::GetValue("DB/Slider 0")->GetDouble(),
 								   SmartDashboard::GetValue("DB/Slider 1")->GetDouble(),
 								   SmartDashboard::GetValue("DB/Slider 2")->GetDouble());
+*/
 }
 
 

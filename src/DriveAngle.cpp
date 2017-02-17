@@ -139,6 +139,6 @@ void DriveAngle::Stop()
 
 void DriveAngle::Drive(double y, bool ramp)
 {
-	m_driveAnglePID->SetRamp(ramp);
 	m_driveAnglePID->SetY(y);
+	m_driveAnglePID->SetRamp(ramp);
 }

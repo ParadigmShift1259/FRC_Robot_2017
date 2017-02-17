@@ -15,7 +15,7 @@
 class Autonomous
 {
 public:
-	enum Stage { kIdle, kStart, kStage1, kStage2, kStage3, kStage4, kDeploy };
+	enum Stage { kIdle, kStart, kStage1, kStage2, kStage3, kDeploy };
 
 	Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, DriveAngle *driveangle, OperatorInputs *operatorinputs);
 	~Autonomous();
@@ -31,6 +31,7 @@ protected:
 	DriveAngle *m_driveangle;
 	OperatorInputs *m_inputs;
 	Stage m_stage;
+	bool m_turning;
 	double m_leftposition;
 	double m_rightposition;
 };
