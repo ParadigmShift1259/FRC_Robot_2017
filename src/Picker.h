@@ -7,6 +7,7 @@
 
 #include <Spark.h>
 #include "OperatorInputs.h"
+#include <Solenoid.h>
 
 
 using namespace frc;
@@ -30,6 +31,7 @@ protected:
 	Stage m_stage;
 	bool m_running;
 	double m_ramping;
+	Solenoid *m_solenoid;
 };
 
 
