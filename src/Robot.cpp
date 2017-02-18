@@ -1,7 +1,8 @@
 /**
  *  Robot.cpp
- *  Date:
- *  Last Edited By:
+ *  Date: 2/18/17
+ *  Last Edited By: Eric
+ *  Note: Fixed chooser (not yet tested)
  */
 
 
@@ -37,7 +38,7 @@ void Robot::RobotInit()
 	m_drivetrain = new Drivetrain(m_inputs, &m_ds);
 	m_driveangle = new DriveAngle(m_drivetrain, m_inputs);
 	m_compressor = new Compressor(PCM_COMPRESSOR_SOLENOID);
-	m_camera = new Camera();
+	//m_camera = new Camera();
 	m_autonomous = new Autonomous(&m_ds, m_drivetrain, m_driveangle, m_inputs);
 	m_climber = new Climber(m_inputs);
 	m_shooter = new Shooter(m_inputs);
@@ -60,10 +61,11 @@ void Robot::AutonomousInit()
 	DriverStation::ReportError("Autonomous Init");
 	//m_autoselected = kAutoLeftGear;
 	//m_autoselected = kAutoRightGear;
-	m_autoselected = kAutoRedShoot;
+	//m_autoselected = kAutoRedShoot;
 	//m_autoselected = kAutoBlueShoot;
 	//m_autoselected = kAutoStraight;
 	//m_autoselected = Chooser2Auto(m_chooserselected);
+	m_autoselected = Chooser2Auto(m_chooser.GetSelected());
 	m_compressor->Start();
 	m_drivetrain->Init();
 	m_driveangle->Init();
@@ -76,10 +78,7 @@ void Robot::AutonomousInit()
 void Robot::AutonomousPeriodic()
 {
 	m_autonomous->Loop(m_autoselected);
-<<<<<<< HEAD
 	//m_gTarget->Loop();
-=======
->>>>>>> refs/remotes/origin/master
 }
 
 

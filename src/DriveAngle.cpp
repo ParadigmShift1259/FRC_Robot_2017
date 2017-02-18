@@ -19,6 +19,7 @@ DriveAngle::DriveAngle(Drivetrain *drivetrain, OperatorInputs *inputs)
 
 DriveAngle::~DriveAngle()
 {
+	delete m_driveAnglePID;
 
 }
 
