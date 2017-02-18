@@ -8,7 +8,6 @@
 #include "GearTarget.h"
 
 GearTarget::GearTarget(std::shared_ptr<NetworkTable> newTable, DriveAngle * newAngle) {
-	// TODO Auto-generated constructor stub
 	xDegree = 0;
 	netTable = newTable;
 	container = newAngle;
@@ -73,6 +72,5 @@ void GearTarget::Stop()
 }
 
 GearTarget::~GearTarget() {
-	// TODO Auto-generated destructor stub
 }
 
