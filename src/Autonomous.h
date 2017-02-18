@@ -25,7 +25,7 @@ public:
 	~Autonomous();
 	void Init();
 	void Stop();
-	bool GoStraight(double feet, double power);
+	bool GoStraight(double feet, double power, double rampdist = 0.3);
 	bool TurnDegree(double degrees);
 	void Loop(Auto autoselected);
 

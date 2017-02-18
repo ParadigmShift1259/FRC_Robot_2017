@@ -69,5 +69,6 @@ void Flipper::Loop()
 void Flipper::Stop()
 {
 	m_solenoid->Set(false);
+	m_timer.Stop();
 }
 

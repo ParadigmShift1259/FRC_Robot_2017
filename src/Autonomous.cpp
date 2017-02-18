@@ -1,7 +1,8 @@
 /**
  *  Autonomous.cpp
- *  Date:
- *  Last Edited By:
+ *  Date: 2/18/17
+ *  Last Edited By: Eric
+ *  Note:
  */
 
 
@@ -33,12 +34,12 @@ void Autonomous::Init()
 {
 	start = false;
 	Test = 0;
-	m_stage = kIdle;
+	//m_stage = kIdle;
 	m_turning = false;
 	m_leftposition = 0;
 	m_rightposition = 0;
 	//if (m_driverstation->IsAutonomous())
-		m_stage = kStart;
+	m_stage = kStart;
 }
 
 
@@ -47,14 +48,14 @@ void Autonomous::Stop()
 	m_stage = kIdle;
 }
 
-
+/*
 bool Autonomous::GoStraight(double feet, double power)
 {
 	double leftposition = m_drivetrain->LeftTalon()->GetPosition();
 	double rightposition = m_drivetrain->RightTalon()->GetPosition();
 
 	double kSFoot = SmartDashboard::GetNumber("DB/Slider 0", 0);
-	if (kSFoot == 0) {kSFoot = 0.955;}
+	if (kSFoot == 0) {kSFoot = 0.87;}									// Old: 0.955
 	SmartDashboard::PutNumber("AU6_kSFoot", kSFoot);
 
 	if (feet > 0)
@@ -70,7 +71,7 @@ bool Autonomous::GoStraight(double feet, double power)
 			m_drivetrain->Drive(0, 0);
 			m_drivetrain->LeftTalon()->SetPosition(0);
 			m_drivetrain->RightTalon()->SetPosition(0);
-			Wait(0.25);
+			Wait(0.25); //change this
 			m_driveangle->Init();
 			return true;
 		}
@@ -95,6 +96,38 @@ bool Autonomous::GoStraight(double feet, double power)
 	}
 	return false;
 }
+*/
+
+bool Autonomous::GoStraight(double feet, double power, double rampdist)
+{
+	double leftposition = m_drivetrain->LeftTalon()->GetPosition();
+	double rightposition = m_drivetrain->RightTalon()->GetPosition();
+
+	double kSFoot = SmartDashboard::GetNumber("DB/Slider 0", 0);
+	if (kSFoot == 0) {kSFoot = 0.87;}									// Old: 0.955
+	SmartDashboard::PutNumber("AU6_kSFoot", kSFoot);
+
+	int direction = feet > 0 ? 1 : -1;
+
+	double distancepos = feet * kSFoot;
+	SmartDashboard::PutNumber("AU8_distancepos", distancepos);
+
+	double distancetotarget = distancepos - ((leftposition - rightposition) / 2);
+	//m_driveangle->Drive(power, true);
+
+	if (((leftposition * direction) > (distancepos * direction)) || ((-rightposition * direction) > (distancepos * direction)))
+	{
+		m_driveangle->Stop();
+		m_driveangle->Drive(0);
+		m_drivetrain->Drive(0, 0);
+		m_drivetrain->LeftTalon()->SetPosition(0);
+		m_drivetrain->RightTalon()->SetPosition(0);
+		Wait(0.25);
+		m_driveangle->Init();
+		return true;
+	}
+	return false;
+}
 
 
 bool Autonomous::TurnDegree(double degrees)
@@ -112,63 +145,15 @@ bool Autonomous::TurnDegree(double degrees)
 		m_drivetrain->Drive(0, 0);
 		m_drivetrain->LeftTalon()->SetPosition(0);
 		m_drivetrain->RightTalon()->SetPosition(0);
-		Wait(0.25);
+		Wait(0.25); //replace this
 		m_driveangle->Init();
 		return true;
 	}
 	return false;
 }
 
+
 /*
-bool Autonomous::TurnDegree(double degrees)
-{
-	double leftposition = m_drivetrain->LeftTalon()->GetPosition();
-	double rightposition = m_drivetrain->RightTalon()->GetPosition();
-
-	double kSDegree = SmartDashboard::GetNumber("DB/Slider 1", 0);
-	if (kSDegree == 0) {kSDegree = 0.02;}
-	SmartDashboard::PutNumber("AU7_kSDegree", kSDegree);
-
-	if (degrees < 0)
-	{
-		double Conversion = degrees * -kSDegree;
-		SmartDashboard::PutNumber("AU8_Conversion", Conversion);
-		//SmartDashboard::PutNumber("AUA_leftpos", leftposition);
-		//SmartDashboard::PutNumber("AUB_rightpos", rightposition);
-		//DriverStation::ReportError("here 1");
-		m_drivetrain->Drive(0.375, 0); //left turn
-		if ((leftposition > Conversion) || (rightposition > Conversion))
-		{
-			//DriverStation::ReportError("here 2");
-			m_drivetrain->Drive(0, 0);
-			m_drivetrain->LeftTalon()->SetPosition(0);
-			m_drivetrain->RightTalon()->SetPosition(0);
-			Wait(0.1);
-			return true;
-		}
-	}
-	else
-	{
-		double Conversion = degrees * kSDegree;
-		SmartDashboard::PutNumber("AU8_Conversion", Conversion);
-		//SmartDashboard::PutNumber("AUA_leftpos", leftposition);
-		//SmartDashboard::PutNumber("AUB_rightpos", rightposition);
-		//DriverStation::ReportError("here 3");
-		m_drivetrain->Drive(-0.375, 0); //right turn
-		if ((-leftposition > Conversion) || (-rightposition > Conversion))
-		{
-			//DriverStation::ReportError("here 4");
-			m_drivetrain->Drive(0, 0);
-			m_drivetrain->LeftTalon()->SetPosition(0);
-			m_drivetrain->RightTalon()->SetPosition(0);
-			Wait(0.1);
-			return true;
-		}
-	}
-	return false;
-}
-*/
-
 void Autonomous::Loop(Auto autoselected)
 {
 	if (start == false){
@@ -198,7 +183,7 @@ void Autonomous::Loop(Auto autoselected)
 	}
 
 }
-/**
+*/
 void Autonomous::Loop(Auto autoselected)
 {
 	double leftvolts = m_drivetrain->LeftTalon()->GetOutputVoltage();
@@ -315,7 +300,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStage2:
 			DriverStation::ReportError("stage2");
-			if (TurnDegree(-90))
+			if (TurnDegree(90))
 				m_stage = kStage3;
 			break;
 
@@ -356,7 +341,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStage2:
 			DriverStation::ReportError("stage2");
-			if (TurnDegree(90))
+			if (TurnDegree(-90))
 				m_stage = kStage3;
 			break;
 
@@ -403,4 +388,4 @@ void Autonomous::Loop(Auto autoselected)
 		}
 	}
 }
-*/
+
