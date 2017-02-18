@@ -58,9 +58,9 @@ void Robot::RobotInit()
 void Robot::AutonomousInit()
 {
 	DriverStation::ReportError("Autonomous Init");
-	m_autoselected = kAutoLeftGear;
+	//m_autoselected = kAutoLeftGear;
 	//m_autoselected = kAutoRightGear;
-	//m_autoselected = kAutoRedShoot;
+	m_autoselected = kAutoRedShoot;
 	//m_autoselected = kAutoBlueShoot;
 	//m_autoselected = kAutoStraight;
 	//m_autoselected = Chooser2Auto(m_chooserselected);
@@ -76,8 +76,8 @@ void Robot::AutonomousInit()
 
 void Robot::AutonomousPeriodic()
 {
-	//m_autonomous->Loop(m_autoselected);
-	m_gTarget->Loop();
+	m_autonomous->Loop(m_autoselected);
+	//m_gTarget->Loop();
 }
 
 

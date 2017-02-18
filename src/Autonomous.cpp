@@ -18,6 +18,8 @@ Autonomous::Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, Dri
 	m_turning = false;
 	m_leftposition = 0;
 	m_rightposition = 0;
+	start = false;
+	Test = 0;
 }
 
 
@@ -29,6 +31,8 @@ Autonomous::~Autonomous()
 
 void Autonomous::Init()
 {
+	start = false;
+	Test = 0;
 	m_stage = kIdle;
 	m_turning = false;
 	m_leftposition = 0;
@@ -165,6 +169,36 @@ bool Autonomous::TurnDegree(double degrees)
 }
 */
 
+void Autonomous::Loop(Auto autoselected)
+{
+	if (start == false){
+		Test = SmartDashboard::GetNumber("DB/Slider 1", 0);
+		start = true;
+	}
+
+	switch (Test) {
+		case 0:
+			m_driveangle->Drive(0);
+			break;
+		case 1:
+			if (GoStraight(6.3, -0.625)){
+				Test = 0;
+			}
+			break;
+		case 2:
+			if (TurnDegree(60)){
+				Test = 0;
+			}
+			break;
+		case 3:
+			if (GoStraight(5.3, -0.625)){
+				Test = 0;
+			}
+			break;
+	}
+
+}
+/**
 void Autonomous::Loop(Auto autoselected)
 {
 	double leftvolts = m_drivetrain->LeftTalon()->GetOutputVoltage();
@@ -369,3 +403,4 @@ void Autonomous::Loop(Auto autoselected)
 		}
 	}
 }
+*/

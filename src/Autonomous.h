@@ -30,6 +30,8 @@ public:
 	void Loop(Auto autoselected);
 
 protected:
+	int Test;
+	bool start;
 	DriverStation *m_driverstation;
 	Drivetrain *m_drivetrain;
 	DriveAngle *m_driveangle;
