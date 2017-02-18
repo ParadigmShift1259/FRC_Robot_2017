@@ -35,6 +35,7 @@ protected:
 	Stage m_stage;
 	bool m_running;
 	double m_ramping;
+	Solenoid *m_solenoid;
 };
 
 
