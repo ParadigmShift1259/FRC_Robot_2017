@@ -7,9 +7,10 @@
 
 #include <Climber.h>
 #include <Const.h>
+#include <PowerDistributionPanel.h>
 
 
-Climber::Climber(OperatorInputs *operatorinputs)
+Climber::Climber(OperatorInputs *operatorinputs) : m_PDP(CAN_PDP)
 {
 	m_inputs = operatorinputs;
 	m_spark = new Spark(PWM_CLIMBER_MOTOR);
@@ -32,6 +33,7 @@ void Climber::Loop()
 {
 	bool climbupbutton = m_inputs->xBoxRightY() < -0.5;
 	bool climbdownbutton = m_inputs->xBoxRightY() > 0.5;
+	double resistance = m_PDP->GetCurrent(PDP_CLIMBER_MOTOR);
 
 	if (climbupbutton)
 	{
@@ -46,6 +48,9 @@ void Climber::Loop()
 	{
 		m_spark->Set(0);
 	}
+
+	if (resistance > 0.5)
+		m_spark->Set(0);
 }
 
 

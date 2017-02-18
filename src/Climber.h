@@ -28,6 +28,7 @@ public:
 protected:
 	OperatorInputs *m_inputs;
 	Spark *m_spark;
+	PowerDistributionPanel *m_PDP;
 };
 
 
