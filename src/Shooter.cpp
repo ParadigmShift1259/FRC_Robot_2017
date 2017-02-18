@@ -1,4 +1,8 @@
-// Shooter.cpp
+/**
+ *  Shooter.cpp
+ *  Date:
+ *  Last Edited By:
+ */
 
 
 #include <Shooter.h>
@@ -93,12 +97,17 @@ void Shooter::Loop()
 
 	double shootrpm = m_shootermotor->GetSpeed() * SHOOTER_DIRECTION;
 	double feedrpm = m_feedmotor->GetSpeed();
+	//Error 2: feedvoltage needs to be multiplied by FEEDER_DIRECTION for the math to work
+	double feedvoltage = m_feedmotor->GetOutputVoltage();
 	bool shooterbutton = m_inputs->xBoxLeftBumper();
-	bool rpmup = m_inputs->xBoxDPadUp(OperatorInputs::ToggleChoice::kHold);
-	bool rpmdown = m_inputs->xBoxDPadDown(OperatorInputs::ToggleChoice::kHold);
+	bool shooterrpmup = m_inputs->xBoxDPadUp(OperatorInputs::ToggleChoice::kHold);
+	bool shooterrpmdown = m_inputs->xBoxDPadDown(OperatorInputs::ToggleChoice::kHold);
+	bool feedrpmup = m_inputs->xBoxDPadRight(OperatorInputs::ToggleChoice::kHold);
+	bool feedrpmdown = m_inputs->xBoxDPadLeft(OperatorInputs::ToggleChoice::kHold);
 
 	SmartDashboard::PutNumber("SH01_shooter", shootrpm);
 	SmartDashboard::PutNumber("SH02_feeder", feedrpm);
+	SmartDashboard::PutNumber("SH03_feedvolt", feedvoltage);
 
 	if (shooterbutton)
 	{
@@ -108,25 +117,36 @@ void Shooter::Loop()
 		else
 			m_shootermotor->Set(m_lowrpm * SHOOTER_DIRECTION);
 	}
-	if (rpmup)
+	if (shooterrpmup)
 	{
 		if (m_shoot)
 			m_shootermotor->Set(++m_shootrpm * SHOOTER_DIRECTION);
 		else
 			m_shootermotor->Set(++m_lowrpm * SHOOTER_DIRECTION);
 	}
-	if (rpmdown)
+	if (shooterrpmdown)
 	{
 		if (m_shoot)
 			m_shootermotor->Set(--m_shootrpm * SHOOTER_DIRECTION);
 		else
 			m_shootermotor->Set(--m_lowrpm * SHOOTER_DIRECTION);
 	}
+
 	if (m_shoot)
 	{
+		if (feedrpmup)
+		{
+			m_feedmotor->Set((feedvoltage += 0.01) * FEEDER_DIRECTION);
+		}
+
+		if (feedrpmdown)
+		{
+			m_feedmotor->Set((feedvoltage -= 0.01) * FEEDER_DIRECTION);
+		}
+		//error 1, feedmotor speed is constantly reset to -6.5 volts
 		if (abs(shootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM * m_shootrpm))
 		{
-			m_feedmotor->Set(-6.0);
+			m_feedmotor->Set(-6.5);
 		}
 		if (((abs(m_feedmotor->Get())) > 0) && (abs(feedrpm) < 50))
 		{

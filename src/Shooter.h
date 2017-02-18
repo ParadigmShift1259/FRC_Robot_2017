@@ -1,4 +1,8 @@
-// Shooter.h
+/**
+ *  Shooter.h
+ *  Date:
+ *  Last Edited By:
+ */
 
 
 #ifndef SRC_SHOOTER_H_
@@ -26,6 +30,7 @@ protected:
 	CANTalon *m_feedmotor;
 	double m_lowrpm;
 	double m_shootrpm;
+	double m_feedlowrpm;
 	bool m_shoot;
 	Timer m_timer;
 };

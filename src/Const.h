@@ -1,4 +1,8 @@
-// const.h
+/**
+ *  Const.h
+ *  Date:
+ *  Last Edited By:
+ */
 
 
 #ifndef SRC_CONST_H_
@@ -98,10 +102,12 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 
 // Picker
 #define PWM_PICKER_MOTOR 4
+#define PWM_PICKER_SOLENOID 2
 
 
 // Shooter
 //#define PCM_SHOOTER_SOLENOID 2
+
 #define CAN_SHOOTER_MOTOR 4
 /*#define DIO_SHOOTER_LIMIT_DOWN 2
 #define DIO_SHOOTER_MOTOR_A 3
@@ -119,6 +125,9 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 #define SHOOTER_SHOOT_RPM 936
 #define SHOOTER_DIRECTION 1
 #define SHOOTER_ERROR_RPM 0.03
+
+//Feeder
+#define FEEDER_DIRECTION -1
 
 
 // Climber
