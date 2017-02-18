@@ -97,6 +97,7 @@ void Shooter::Loop()
 
 	double shootrpm = m_shootermotor->GetSpeed() * SHOOTER_DIRECTION;
 	double feedrpm = m_feedmotor->GetSpeed();
+	//Error 2: feedvoltage needs to be multiplied by FEEDER_DIRECTION for the math to work
 	double feedvoltage = m_feedmotor->GetOutputVoltage();
 	bool shooterbutton = m_inputs->xBoxRightBumper();
 	bool shooterrpmup = m_inputs->xBoxDPadUp(OperatorInputs::ToggleChoice::kHold);
@@ -142,7 +143,7 @@ void Shooter::Loop()
 		{
 			m_feedmotor->Set((feedvoltage -= 0.01) * FEEDER_DIRECTION);
 		}
-
+		//error 1, feedmotor speed is constantly reset to -6.5 volts
 		if (abs(shootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM * m_shootrpm))
 		{
 			m_feedmotor->Set(-6.5);
