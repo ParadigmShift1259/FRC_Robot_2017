@@ -93,7 +93,7 @@ void Shooter::Loop()
 
 	double shootrpm = m_shootermotor->GetSpeed() * SHOOTER_DIRECTION;
 	double feedrpm = m_feedmotor->GetSpeed();
-	bool shooterbutton = m_inputs->xBoxRightBumper();
+	bool shooterbutton = m_inputs->xBoxLeftBumper();
 	bool rpmup = m_inputs->xBoxDPadUp(OperatorInputs::ToggleChoice::kHold);
 	bool rpmdown = m_inputs->xBoxDPadDown(OperatorInputs::ToggleChoice::kHold);
 

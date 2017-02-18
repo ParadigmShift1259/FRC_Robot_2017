@@ -15,13 +15,19 @@ DriveAngle::DriveAngle(Drivetrain *drivetrain, OperatorInputs *inputs)
 
 DriveAngle::~DriveAngle()
 {
+
 }
 
+
+bool DriveAngle::IsEnabled()
+{
+	return m_driveAnglePID->IsEnabled();
+}
 
 void DriveAngle::EnableAnglePID()
 {
 	m_driveAnglePID->CheckPIDValues();
-	m_driveAnglePID->SetNewRelativeSetpoint(0);
+	m_driveAnglePID->SetRelativeSetpoint(0);
 	m_driveAnglePID->ChangeActive(true);
 }
 
@@ -35,7 +41,7 @@ void DriveAngle::DisableAnglePID()
 void DriveAngle::SetRelativeAngle(double angleTarget)
 {
 	m_driveAnglePID->CheckPIDValues();
-	m_driveAnglePID->SetNewRelativeSetpoint(angleTarget);
+	m_driveAnglePID->SetRelativeSetpoint(angleTarget);
 }
 
 
@@ -141,4 +147,10 @@ void DriveAngle::Drive(double y, bool ramp)
 {
 	m_driveAnglePID->SetY(y);
 	m_driveAnglePID->SetRamp(ramp);
+}
+
+void DriveAngle::SetVisionAngle(double angle)
+{
+	m_driveAnglePID->CheckPIDValues();
+	m_driveAnglePID->SetSetpointRelativeToError(angle);
 }

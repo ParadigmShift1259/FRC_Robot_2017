@@ -38,7 +38,7 @@ void Robot::RobotInit()
 	m_climber = new Climber(m_inputs);
 	m_shooter = new Shooter(m_inputs);
 	m_picker = new Picker(m_inputs);
-	m_gTarget = new GearTarget(m_netTable, m_driveangle);
+	m_gTarget = new GearTarget(m_netTable, m_driveangle, m_inputs);
 }
 
 
@@ -66,14 +66,12 @@ void Robot::AutonomousInit()
 	m_autonomous->Init();
 	m_climber->Init();
 	m_picker->Init();
-	m_gTarget->Target();
 }
 
 
 void Robot::AutonomousPeriodic()
 {
-	//m_autonomous->Loop(m_autoselected);
-	m_gTarget->Loop();
+	m_autonomous->Loop(m_autoselected);
 }
 
 
@@ -100,20 +98,21 @@ void Robot::TeleopPeriodic()
 void Robot::TestInit()
 {
 	DriverStation::ReportError("Test Init");
-	m_autoselected = kAutoLeftGear;
-	//m_autoselected = Chooser2Auto(m_chooserselected);
-	m_compressor->Start();
+//	m_autoselected = kAutoLeftGear;
+//	//m_autoselected = Chooser2Auto(m_chooserselected);
+//	m_compressor->Start();
 	m_drivetrain->Init();
-	m_driveangle->Init();
-	m_autonomous->Init();
-	m_climber->Init();
-	m_picker->Init();
+//	m_driveangle->Init();
+//	m_autonomous->Init();
+//	m_climber->Init();
+//	m_picker->Init();
 }
 
 
 void Robot::TestPeriodic()
 {
-	m_driveangle->Loop();
+	//m_driveangle->Loop();
+	m_gTarget->Loop();
 }
 
 
@@ -127,6 +126,7 @@ void Robot::DisabledInit()
 	m_climber->Stop();
 	m_picker->Stop();
 	m_shooter->Stop();
+	m_gTarget->Stop();
 }
 
 

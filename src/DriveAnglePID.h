@@ -22,7 +22,7 @@ public:
 	double ReturnPIDInput();
 	void ChangeActive(bool newState);
 	bool IsDone();
-	void SetNewRelativeSetpoint(double newSetpoint);
+	void SetSetpointRelativeToError(double newSetpoint);
 	void UsePIDOutput(double output);
 	double ReturnCurrentPosition();
 	void CheckPIDValues();
@@ -30,6 +30,8 @@ public:
 	double GetY();
 	void SetRamp(bool ramp);
 	bool GetRamp();
+	bool IsEnabled();
+	void SetRelativeSetpoint(double setpoint);
 
 protected:
 	Drivetrain* m_drivetrain;

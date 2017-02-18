@@ -25,6 +25,8 @@ public:
 	void Loop();
 	void Drive(double y, bool ramp = false);
 	void Stop();
+	void SetVisionAngle(double angle);
+	bool IsEnabled();
 
 protected:
 	Drivetrain *m_drivetrain;
