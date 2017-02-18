@@ -1,4 +1,8 @@
-// operatorinputs.cpp
+/**
+ *  OperatorInputs.cpp
+ *  Date:
+ *  Last Edited By:
+ */
 
 
 #include <OperatorInputs.h>

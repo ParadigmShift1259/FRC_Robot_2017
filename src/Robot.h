@@ -1,8 +1,7 @@
-/*
- * Robot.h
- *
- *  Created on: Feb 18, 2016
- *      Author: eacobb
+/**
+ *  Robot.h
+ *  Date:
+ *  Last Edited By:
  */
 
 #ifndef SRC_ROBOT_H_

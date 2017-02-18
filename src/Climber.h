@@ -1,4 +1,8 @@
-// Climber.h
+/**
+ *  Climber.h
+ *  Date:
+ *  Last Edited By:
+ */
 
 
 #ifndef SRC_CLIMBER_H_

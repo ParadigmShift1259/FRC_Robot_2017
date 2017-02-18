@@ -1,4 +1,8 @@
-// operatorinputs.h
+/**
+ *  OperatorInputs.h
+ *  Date:
+ *  Last Edited By:
+ */
 
 #include <Joystick.h>
 #include <map>

@@ -1,8 +1,7 @@
-/*
- * GearTarget.cpp
- *
- *  Created on: Feb 15, 2017
- *      Author: Developer
+/**
+ *  GearTarget.cpp
+ *  Date:
+ *  Last Edited By:
  */
 
 #include "GearTarget.h"

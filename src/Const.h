@@ -1,4 +1,8 @@
-// const.h
+/**
+ *  Const.h
+ *  Date:
+ *  Last Edited By:
+ */
 
 
 #ifndef SRC_CONST_H_

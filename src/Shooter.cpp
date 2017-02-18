@@ -1,4 +1,8 @@
-// Shooter.cpp
+/**
+ *  Shooter.cpp
+ *  Date:
+ *  Last Edited By:
+ */
 
 
 #include <Shooter.h>
