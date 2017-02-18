@@ -28,9 +28,9 @@ protected:
 	OperatorInputs *m_inputs;
 	CANTalon *m_shootermotor;
 	CANTalon *m_feedmotor;
+	double m_feedvoltage;
 	double m_lowrpm;
 	double m_shootrpm;
-	double m_feedlowrpm;
 	bool m_shoot;
 	Timer m_timer;
 };

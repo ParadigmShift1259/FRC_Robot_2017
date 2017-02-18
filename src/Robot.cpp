@@ -38,11 +38,11 @@ void Robot::RobotInit()
 	m_drivetrain = new Drivetrain(m_inputs, &m_ds);
 	m_driveangle = new DriveAngle(m_drivetrain, m_inputs);
 	m_compressor = new Compressor(PCM_COMPRESSOR_SOLENOID);
+	m_picker = new Picker(m_inputs);
 	//m_camera = new Camera();
-	m_autonomous = new Autonomous(&m_ds, m_drivetrain, m_driveangle, m_inputs);
+	m_autonomous = new Autonomous(&m_ds, m_drivetrain, m_driveangle, m_picker, m_inputs);
 	m_climber = new Climber(m_inputs);
 	m_shooter = new Shooter(m_inputs);
-	m_picker = new Picker(m_inputs);
 	m_gTarget = new GearTarget(m_netTable, m_driveangle, m_inputs);
 }
 

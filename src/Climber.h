@@ -11,6 +11,8 @@
 
 #include "OperatorInputs.h"
 #include <Spark.h>
+#include <SmartDashboard/SmartDashboard.h>
+#include <PowerDistributionPanel.h>
 
 
 using namespace frc;

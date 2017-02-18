@@ -7,7 +7,6 @@
 
 #include <Climber.h>
 #include <Const.h>
-#include <PowerDistributionPanel.h>
 
 
 Climber::Climber(OperatorInputs *operatorinputs) : m_PDP(CAN_PDP)
