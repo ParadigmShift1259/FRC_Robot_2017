@@ -6,7 +6,6 @@
 #include <Picker.h>
 #include <const.h>
 #include <driverstation.h>
-#include "smartdashboard/smartdashboard.h"
 #include <XboxController.h>
 #include <Talon.h>
 
@@ -57,6 +56,7 @@ void Picker::Loop()
 		if (deploy)
 		{
 			m_stage = kDeploying;
+			break;
 		}
 
 		m_stage = kDeploying;
@@ -73,6 +73,8 @@ void Picker::Loop()
 		m_solenoid->Set(false);
 		if (buttonpressed)
 			m_running = !m_running;
+		if (deploy)
+			m_solenoid->Set(true);
 
 		if (m_running)
 		{
