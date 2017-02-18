@@ -1,7 +1,8 @@
-/*picker.cpp
- *Editor: Agastya
- * */
-
+/**
+ *  Picker.cpp
+ *  Date:
+ *  Last Edited By:
+ */
 
 #include <Picker.h>
 #include <const.h>

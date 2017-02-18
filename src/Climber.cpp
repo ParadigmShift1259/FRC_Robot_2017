@@ -1,7 +1,8 @@
-/* Climber.cpp
- * Editor: Agastya
- * */
-
+/**
+ *  Climber.cpp
+ *  Date:
+ *  Last Edited By:
+ */
 
 
 #include <Climber.h>

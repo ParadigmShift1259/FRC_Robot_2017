@@ -1,4 +1,8 @@
-// Camera.h
+/**
+ *  Camera.h
+ *  Date:
+ *  Last Edited By:
+ */
 
 
 #ifndef SRC_CAMERA_H_

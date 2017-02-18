@@ -1,4 +1,8 @@
-// Shooter.h
+/**
+ *  Shooter.h
+ *  Date:
+ *  Last Edited By:
+ */
 
 
 #ifndef SRC_SHOOTER_H_

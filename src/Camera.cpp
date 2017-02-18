@@ -1,4 +1,8 @@
-// Camera.cpp
+/**
+ *  Camera.cpp
+ *  Date:
+ *  Last Edited By:
+ */
 
 
 #include <Camera.h>

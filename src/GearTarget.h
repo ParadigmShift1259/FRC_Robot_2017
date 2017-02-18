@@ -1,8 +1,7 @@
-/*
- * GearTarget.h
- *
- *  Created on: Feb 15, 2017
- *      Author: Developer
+/**
+ *  GearTarget.h
+ *  Date:
+ *  Last Edited By:
  */
 
 #ifndef GEARTARGET_H_
