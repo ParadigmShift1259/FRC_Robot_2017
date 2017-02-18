@@ -11,6 +11,7 @@
 
 #include <Spark.h>
 #include "OperatorInputs.h"
+#include <Solenoid.h>
 
 
 using namespace frc;

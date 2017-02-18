@@ -30,8 +30,8 @@ void Climber::Init()
 
 void Climber::Loop()
 {
-	bool climbupbutton = m_inputs->xBoxYButton(OperatorInputs::ToggleChoice::kHold);
-	bool climbdownbutton = m_inputs->xBoxXButton(OperatorInputs::ToggleChoice::kHold);
+	bool climbupbutton = m_inputs->xBoxRightY() < -0.5;
+	bool climbdownbutton = m_inputs->xBoxRightY() > 0.5;
 
 	if (climbupbutton)
 	{
