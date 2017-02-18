@@ -9,7 +9,7 @@
 #include <Autonomous.h>
 
 
-Autonomous::Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, DriveAngle *driveangle, OperatorInputs *operatorinputs)
+Autonomous::Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, DriveAngle *driveangle, Picker *picker, OperatorInputs *operatorinputs)
 {
 	m_driverstation = driverstation;
 	m_drivetrain = drivetrain;
@@ -21,6 +21,7 @@ Autonomous::Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, Dri
 	m_rightposition = 0;
 	start = false;
 	Test = 0;
+	m_picker = picker;
 }
 
 
@@ -232,6 +233,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kDeploy:
 			DriverStation::ReportError("deploy");
+			m_picker->Deploy();
 			m_stage = kIdle;
 			break;
 		}
@@ -272,6 +274,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kDeploy:
 			DriverStation::ReportError("deploy");
+			m_picker->Deploy();
 			m_stage = kIdle;
 			break;
 		}
@@ -380,6 +383,8 @@ void Autonomous::Loop(Auto autoselected)
 			break;
 
 		case kDeploy:
+			m_picker->Deploy();
+			m_stage = kIdle;
 			break;
 
 		default:

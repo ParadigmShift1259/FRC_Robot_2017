@@ -21,18 +21,16 @@ class Picker
 {
 public:
 
-	enum Stage {kDeploy, kDeploying, kRunning};
-
 	Picker(OperatorInputs *inputs);
 	~Picker();
 	void Init();
 	void Loop();
 	void Stop();
+	void Deploy();
 
 protected:
 	OperatorInputs *m_inputs;
 	Spark *m_motor;
-	Stage m_stage;
 	bool m_running;
 	double m_ramping;
 	Solenoid *m_solenoid;
