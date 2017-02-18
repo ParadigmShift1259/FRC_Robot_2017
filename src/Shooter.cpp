@@ -99,7 +99,7 @@ void Shooter::Loop()
 	double feedrpm = m_feedmotor->GetSpeed();
 	//Error 2: feedvoltage needs to be multiplied by FEEDER_DIRECTION for the math to work
 	double feedvoltage = m_feedmotor->GetOutputVoltage();
-	bool shooterbutton = m_inputs->xBoxRightBumper();
+	bool shooterbutton = m_inputs->xBoxLeftBumper();
 	bool shooterrpmup = m_inputs->xBoxDPadUp(OperatorInputs::ToggleChoice::kHold);
 	bool shooterrpmdown = m_inputs->xBoxDPadDown(OperatorInputs::ToggleChoice::kHold);
 	bool feedrpmup = m_inputs->xBoxDPadRight(OperatorInputs::ToggleChoice::kHold);

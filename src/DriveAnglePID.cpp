@@ -25,6 +25,10 @@ DriveAnglePID::~DriveAnglePID()
 {
 }
 
+bool DriveAnglePID::IsEnabled()
+{
+	return GetPIDController()->IsEnabled();
+}
 
 double DriveAnglePID::ReturnPIDInput()
 {
@@ -54,22 +58,36 @@ bool DriveAnglePID::IsDone()
 }
 
 
-void DriveAnglePID::SetNewRelativeSetpoint(double newSetPoint)
+void DriveAnglePID::SetSetpointRelativeToError(double newSetPoint)
 {
 	if (!isInitialized)
 	{
 		GetPIDController()->Reset();
+		Enable();
 		//SetSetpoint(ReturnCurrentPosition());
 		SetSetpointRelative(0);
 		isInitialized = true;
 	}
 	else
 	{
-		newSetPoint -= GetPIDController()->GetError();
+		if ((newSetPoint > 0) == (GetPIDController()->GetError() > 0))
+			newSetPoint -= GetPIDController()->GetError();
 		SetSetpointRelative(newSetPoint);
 	}
 }
 
+void DriveAnglePID::SetRelativeSetpoint(double newSetPoint) {
+	if (!isInitialized)
+	{
+		GetPIDController()->Reset();
+		Enable();
+		//SetSetpoint(ReturnCurrentPosition());
+		SetSetpointRelative(0);
+		isInitialized = true;
+	}
+	else
+		SetSetpointRelative(newSetPoint);
+}
 
 void DriveAnglePID::UsePIDOutput(double output)
 {
