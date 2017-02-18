@@ -99,6 +99,7 @@ void Picker::Stop()
 {
 	m_motor->Set(0);
 	m_running = false;
+	m_solenoid->Set(false);
 	m_ramping = 0;
 	m_stage = kDeploy;
 }
