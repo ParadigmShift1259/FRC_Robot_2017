@@ -30,7 +30,9 @@ public:
 	void Drive(double y, bool ramp = false);
 	void Stop();
 	void SetVisionAngle(double angle);
+	void RunNormalDrive();
 	bool IsEnabled();
+	void SetToCurrentAngle();
 
 protected:
 	Drivetrain *m_drivetrain;

@@ -68,6 +68,9 @@ void DriveAngle::Init()
 	EnableAnglePID();
 }
 
+void DriveAngle::SetToCurrentAngle() {
+	m_driveAnglePID->SetSetpoint(m_driveAnglePID->ReturnCurrentPosition());
+}
 
 void DriveAngle::Loop()
 {
@@ -139,6 +142,9 @@ void DriveAngle::Loop()
 	SmartDashboard::PutNumber("DT09_abs_y", (abs(m_drivetrain->m_previousy * Y_SCALING) < ENCODER_TOP_SPEED));
 }
 
+void DriveAngle::RunNormalDrive() {
+	m_drivetrain->Loop();
+}
 
 void DriveAngle::Stop()
 {

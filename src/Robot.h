@@ -25,6 +25,7 @@
 #include "picker.h"
 #include "shooter.h"
 #include "GearTarget.h"
+#include "Flipper.h"
 #include <ntCore.h>
 
 
@@ -49,6 +50,7 @@ private:
 	Climber *m_climber;
 	Picker *m_picker;
 	Shooter *m_shooter;
+	Flipper *m_flipper;
 	std::shared_ptr<NetworkTable> m_netTable;
 
 	GearTarget *m_gTarget;

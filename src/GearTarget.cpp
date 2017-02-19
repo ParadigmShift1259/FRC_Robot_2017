@@ -20,8 +20,10 @@ GearTarget::GearTarget(std::shared_ptr<NetworkTable> newTable, DriveAngle * newA
 
 void GearTarget::Init()
 {
+//	m_isActive = true;
+//	m_driveangle->EnableAnglePID();
 	m_prevCounter = 0;
-	m_stage = stopped;
+	//m_stage = stopped;
 }
 
 void GearTarget::Target()
@@ -34,16 +36,24 @@ void GearTarget::Loop()
 {
 	m_nettable->PutNumber("isActive", m_isActive);
 	m_nettable->PutNumber("PIDEnabled", m_driveangle->IsEnabled());
-	if(m_isActive && !m_driveangle->IsEnabled())
-				m_driveangle->EnableAnglePID();
+	//if(m_isActive && !m_driveangle->IsEnabled())
+				//m_driveangle->EnableAnglePID();
 
 	if(m_inputs->xBoxRightBumper(OperatorInputs::kToggle))
 	{
 		m_isActive = !m_isActive;
 		if(m_isActive)
+		{
 			m_driveangle->EnableAnglePID();
+			m_driveangle->SetToCurrentAngle();
+		}
 		else
+		{
 			m_driveangle->Stop();
+		}
+	}
+	if (!m_driveangle->IsEnabled()) {
+		m_driveangle->RunNormalDrive();
 	}
 
 	if(m_isActive)
@@ -52,8 +62,11 @@ void GearTarget::Loop()
 		if(/*container->IsOnTarget() &&*/ m_nettable->GetNumber("counter",0) != m_counter)
 		{
 			m_counter = m_nettable->GetNumber("counter",0);
-			m_xDegree = (m_nettable->GetNumber("xPos", 0) / 40) + (m_nettable->GetNumber("areaDifference", 0) * 10);
-			m_driveangle->SetVisionAngle(-m_xDegree);
+			m_xDegree = (m_nettable->GetNumber("xPos", 0) / 20);
+			int areaDegree = (m_nettable->GetNumber("areaDifference", 0) * 50);
+			areaDegree = (abs(areaDegree)>6) ? (areaDegree>0?6:-6) : areaDegree;
+			areaDegree = (m_nettable->GetNumber("xSpread",0)>190)?0:areaDegree;
+			m_driveangle->SetVisionAngle((m_xDegree+areaDegree));
 		}
 	}
 

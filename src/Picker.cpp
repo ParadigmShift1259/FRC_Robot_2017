@@ -34,7 +34,7 @@ Picker::~Picker()
 
 void Picker::Init()
 {
-	m_motor->SetControlMode(CANSpeedController::ControlMode::kVoltage);
+	m_motor->SetControlMode(CANSpeedController::ControlMode::kPercentVbus);
 	m_motor->Set(0);
 	m_running = false;
 	m_solenoid->Set(false);
@@ -56,12 +56,16 @@ void Picker::Loop()
 	{
 		if(m_ramping < 1)
 			m_ramping += 0.1;
-		m_motor->Set(m_ramping);
+		else
+			m_ramping = 1;
+		m_motor->Set(m_ramping*-1.0);
 	}
 	else
 	{
-		if(m_ramping > 1)
+		if(m_ramping > 0)
 			m_ramping -= 0.25;
+		else
+			m_ramping = 0;
 		m_motor->Set(m_ramping);
 	}
 

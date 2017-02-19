@@ -1,4 +1,5 @@
 /**
+
  *  Robot.cpp
  *  Date: 2/18/17
  *  Last Edited By: Eric
@@ -43,6 +44,7 @@ void Robot::RobotInit()
 	m_autonomous = new Autonomous(&m_ds, m_drivetrain, m_driveangle, m_picker, m_inputs);
 	m_climber = new Climber(m_inputs);
 	m_shooter = new Shooter(m_inputs);
+	m_flipper = new Flipper(&m_ds, m_inputs);
 	m_gTarget = new GearTarget(m_netTable, m_driveangle, m_inputs);
 }
 
@@ -90,15 +92,18 @@ void Robot::TeleopInit()
 	m_climber->Init();
 	m_picker->Init();
 	m_shooter->Init();
+	m_flipper->Init();
 }
 
 
 void Robot::TeleopPeriodic()
 {
-	m_drivetrain->Loop();
+	//m_drivetrain->Loop();
 	m_climber->Loop();
+	m_gTarget->Loop();
 	m_picker->Loop();
 	m_shooter->Loop();
+	m_flipper->Loop();
 }
 
 
@@ -113,6 +118,8 @@ void Robot::TestInit()
 //	m_autonomous->Init();
 //	m_climber->Init();
 //	m_picker->Init();
+	m_flipper->Init();
+	m_gTarget->Init();
 }
 
 
@@ -120,6 +127,7 @@ void Robot::TestPeriodic()
 {
 	//m_driveangle->Loop();
 	m_gTarget->Loop();
+	m_flipper->Loop();
 }
 
 

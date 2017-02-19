@@ -6,7 +6,7 @@
 
 #include <Flipper.h>
 #include <Const.h>
-
+#include <SmartDashboard/SmartDashboard.h>
 
 Flipper::Flipper(DriverStation *driverstation, OperatorInputs *operatorinputs)
 {
@@ -28,22 +28,28 @@ void Flipper::Init()
 {
 	m_solenoid->Set(false);
 	m_flippedup = false;
+	m_timer.Start();
 }
 
 
 void Flipper::Loop()
 {
+	SmartDashboard::PutBoolean("FL01_IsTest",m_driverstation->IsTest());
+	SmartDashboard::PutBoolean("FL02_FlippedUp",m_flippedup);
+	SmartDashboard::PutBoolean("FL03_Solenoid",m_solenoid->Get());
 	if (m_driverstation->IsTest())
 	{
-		 bool flipupbutton = m_inputs->xBoxBButton();
-		 bool flipdownbutton = m_inputs->xBoxAButton();
+		 bool flipupbutton = m_inputs->xBoxAButton();
+		 bool flipdownbutton = m_inputs->xBoxBButton();
 
-		 if (flipupbutton)
+		 if (flipupbutton && !m_flippedup)
 		 {
+			 m_flippedup = true;
 			 m_solenoid->Set(true);
 		 }
-		 else if (flipdownbutton)
+		 if (flipdownbutton && m_flippedup)
 		 {
+			 m_flippedup = false;
 			 m_solenoid->Set(false);
 		 }
 	}

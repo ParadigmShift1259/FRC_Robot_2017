@@ -32,8 +32,8 @@ void Climber::Init()
 
 void Climber::Loop()
 {
-	bool climbupbutton = m_inputs->xBoxRightY() < -0.5;
-	bool climbdownbutton = m_inputs->xBoxRightY() > 0.5;
+	bool climbupbutton = m_inputs->xBoxYButton(OperatorInputs::ToggleChoice::kHold);
+	bool climbdownbutton = false;//m_inputs->xBoxXButton();
 	//double current = m_PDP->GetCurrent(PDP_CLIMBER_MOTOR);
 	double current = m_climbmotor->GetOutputCurrent();
 
@@ -41,20 +41,20 @@ void Climber::Loop()
 
 	if (climbupbutton)
 	{
-		m_climbmotor->Set(0.5);
+		m_climbmotor->Set(9);
 	}
 	else
 	if (climbdownbutton)
 	{
-		m_climbmotor->Set(-0.5);
+		m_climbmotor->Set(-9);
 	}
 	else
 	{
 		m_climbmotor->Set(0);
 	}
 
-	if (current > 0.5)
-		m_climbmotor->Set(0);
+	//if (current > 0.5)
+		//m_climbmotor->Set(0);
 }
 
 
