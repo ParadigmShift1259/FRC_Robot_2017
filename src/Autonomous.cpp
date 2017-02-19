@@ -176,6 +176,7 @@ void Autonomous::Loop(Auto autoselected)
 			if (TurnDegree(90))
 			{
 				m_picker->Deploy();
+				Wait(0.1);
 				m_stage = kStage3;
 			}
 			break;

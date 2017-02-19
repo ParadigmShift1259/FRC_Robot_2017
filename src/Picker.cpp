@@ -17,7 +17,8 @@ using namespace std;
 Picker::Picker(OperatorInputs *operatorinputs)
 {
 	m_inputs = operatorinputs;
-	m_motor = new Spark(PWM_PICKER_MOTOR);
+	//m_motor = new Spark(PWM_PICKER_MOTOR);
+	m_motor = new CANTalon(CAN_PICKER_MOTOR);
 	m_solenoid = new Solenoid(PWM_PICKER_SOLENOID);
 	m_running = false;
 	m_ramping = 0;
@@ -33,6 +34,7 @@ Picker::~Picker()
 
 void Picker::Init()
 {
+	m_motor->SetControlMode(CANSpeedController::ControlMode::kVoltage);
 	m_motor->Set(0);
 	m_running = false;
 	m_solenoid->Set(false);

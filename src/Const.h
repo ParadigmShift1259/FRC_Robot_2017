@@ -103,6 +103,7 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 // Picker
 #define PWM_PICKER_MOTOR 4
 #define PWM_PICKER_SOLENOID 2
+#define CAN_PICKER_MOTOR 6
 
 
 // Shooter

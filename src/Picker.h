@@ -12,6 +12,7 @@
 #include <Spark.h>
 #include "OperatorInputs.h"
 #include <Solenoid.h>
+#include <CANTalon.h>
 
 
 using namespace frc;
@@ -30,7 +31,8 @@ public:
 
 protected:
 	OperatorInputs *m_inputs;
-	Spark *m_motor;
+	//Spark *m_motor;
+	CANTalon *m_motor;
 	bool m_running;
 	double m_ramping;
 	Solenoid *m_solenoid;
