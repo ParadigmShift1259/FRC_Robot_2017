@@ -133,6 +133,7 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 // Climber
 #define PWM_CLIMBER_MOTOR 0
 #define PDP_CLIMBER_MOTOR 4
+#define CAN_CLIMBER_MOTOR 7
 #define CAN_PDP 0
 
 

@@ -11,6 +11,7 @@
 
 #include "OperatorInputs.h"
 #include <Spark.h>
+#include <CANTalon.h>
 #include <SmartDashboard/SmartDashboard.h>
 #include <PowerDistributionPanel.h>
 
@@ -29,7 +30,9 @@ public:
 
 protected:
 	OperatorInputs *m_inputs;
-	Spark *m_spark;
+	//Spark *m_climbmotor;
+	CANTalon *m_climbmotor;
+
 	PowerDistributionPanel *m_PDP;
 };
 
