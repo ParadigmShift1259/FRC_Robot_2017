@@ -9,11 +9,14 @@
 #include <Const.h>
 
 
-Climber::Climber(OperatorInputs *operatorinputs) : m_PDP(CAN_PDP)
+Climber::Climber(OperatorInputs *operatorinputs, Shooter *shooter) : m_PDP(CAN_PDP)
 {
 	m_inputs = operatorinputs;
+	m_timer.Reset();
+	m_timer.Stop();
 	//m_climbmotor = new Spark(PWM_CLIMBER_MOTOR);
 	m_climbmotor = new CANTalon(CAN_CLIMBER_MOTOR);
+	m_shooter = shooter;
 }
 
 
@@ -26,12 +29,15 @@ Climber::~Climber()
 void Climber::Init()
 {
 	m_climbmotor->SetControlMode(CANSpeedController::ControlMode::kVoltage);
+	m_timer.Reset();
+	m_timer.Stop();
 	m_climbmotor->Set(0);
 }
 
 
 void Climber::Loop()
 {
+	static bool timerStarted = false;
 	bool climbupbutton = m_inputs->xBoxYButton(OperatorInputs::ToggleChoice::kHold);
 	bool climbdownbutton = false;//m_inputs->xBoxXButton();
 	//double current = m_PDP->GetCurrent(PDP_CLIMBER_MOTOR);
@@ -42,6 +48,13 @@ void Climber::Loop()
 	if (climbupbutton)
 	{
 		m_climbmotor->Set(9);
+		if(!timerStarted)
+		{
+			m_timer.Start();
+			timerStarted = true;
+		}
+		if(m_timer.HasPeriodPassed(1.0))
+			m_shooter->Stop();
 	}
 	else
 	if (climbdownbutton)
@@ -51,9 +64,15 @@ void Climber::Loop()
 	else
 	{
 		m_climbmotor->Set(0);
+		if(m_timer.HasPeriodPassed(1.0))
+		{
+			timerStarted = false;
+			m_timer.Reset();
+			m_timer.Stop();
+		}
 	}
 
-	//if (current > 0.5)
+	//if (current > 17.0)
 		//m_climbmotor->Set(0);
 }
 

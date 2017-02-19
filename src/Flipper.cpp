@@ -8,7 +8,7 @@
 #include <Const.h>
 #include <SmartDashboard/SmartDashboard.h>
 
-Flipper::Flipper(DriverStation *driverstation, OperatorInputs *operatorinputs)
+Flipper::Flipper(DriverStation *driverstation, OperatorInputs *operatorinputs) : m_timer()
 {
 	m_driverstation = driverstation;
 	m_inputs = operatorinputs;

@@ -61,8 +61,8 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 #define INVERT_LEFT -1.0
 #define INVERT_RIGHT 1.0
 // Talons ports
-#define CAN_LEFT_PORT 0
-#define CAN_SECOND_LEFT_PORT 2
+#define CAN_LEFT_PORT 2
+#define CAN_SECOND_LEFT_PORT 0
 #define CAN_RIGHT_PORT 1
 #define CAN_SECOND_RIGHT_PORT 3
 // Shifter
