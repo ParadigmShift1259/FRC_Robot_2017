@@ -14,6 +14,7 @@
 #include "DriveAngle.h"
 #include "OperatorInputs.h"
 #include "const.h"
+#include "Picker.h"
 
 
 class Autonomous
@@ -21,7 +22,7 @@ class Autonomous
 public:
 	enum Stage { kIdle, kStart, kStage1, kStage2, kStage3, kDeploy };
 
-	Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, DriveAngle *driveangle, OperatorInputs *operatorinputs);
+	Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, DriveAngle *driveangle, Picker *picker, OperatorInputs *operatorinputs);
 	~Autonomous();
 	void Init();
 	void Stop();
@@ -38,6 +39,7 @@ protected:
 	bool m_turning;
 	double m_leftposition;
 	double m_rightposition;
+	Picker *m_picker;
 };
 
 

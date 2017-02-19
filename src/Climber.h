@@ -11,6 +11,8 @@
 
 #include "OperatorInputs.h"
 #include <Spark.h>
+#include <SmartDashboard/SmartDashboard.h>
+#include <PowerDistributionPanel.h>
 
 
 using namespace frc;
@@ -28,6 +30,7 @@ public:
 protected:
 	OperatorInputs *m_inputs;
 	Spark *m_spark;
+	PowerDistributionPanel *m_PDP;
 };
 
 
