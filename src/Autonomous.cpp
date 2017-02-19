@@ -19,8 +19,6 @@ Autonomous::Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, Dri
 	m_turning = false;
 	m_leftposition = 0;
 	m_rightposition = 0;
-	start = false;
-	Test = 0;
 }
 
 
@@ -32,13 +30,9 @@ Autonomous::~Autonomous()
 
 void Autonomous::Init()
 {
-	start = false;
-	Test = 0;
-	//m_stage = kIdle;
 	m_turning = false;
 	m_leftposition = 0;
 	m_rightposition = 0;
-	//if (m_driverstation->IsAutonomous())
 	m_stage = kStart;
 }
 
@@ -48,6 +42,48 @@ void Autonomous::Stop()
 	m_stage = kIdle;
 }
 
+
+bool Autonomous::GoStraight(double feet, double power)
+{
+	double leftposition = m_drivetrain->LeftTalon()->GetPosition();
+	double rightposition = m_drivetrain->RightTalon()->GetPosition();
+
+	double kSFoot = SmartDashboard::GetNumber("DB/Slider 0", 0);
+	if (kSFoot == 0) {kSFoot = 0.87;}									// Old: 0.955
+	SmartDashboard::PutNumber("AU6_kSFoot", kSFoot);
+
+	double distancepos = feet * kSFoot;
+	SmartDashboard::PutNumber("AU8_distancepos", distancepos);
+
+	double distancetotarget = abs(distancepos) - (abs((leftposition - rightposition) / 2));
+
+	if (distancetotarget < 0.6)
+	{
+		power = power * 0.25;
+	}
+	else if (distancetotarget < 1.2)
+	{
+		power = power * 0.5;
+	}
+	else if (distancetotarget < 1.8)
+	{
+		power = power * 0.75;
+	}
+
+	if (distancetotarget <= 0)
+	{
+		m_driveangle->Stop();
+		m_driveangle->Drive(0);
+		m_drivetrain->Drive(0, 0);
+		m_drivetrain->LeftTalon()->SetPosition(0);
+		m_drivetrain->RightTalon()->SetPosition(0);
+		Wait(0.25);
+		m_driveangle->EnableAnglePID();
+		return true;
+	}
+	m_driveangle->Drive(power, true);
+	return false;
+}
 /*
 bool Autonomous::GoStraight(double feet, double power)
 {
@@ -58,64 +94,25 @@ bool Autonomous::GoStraight(double feet, double power)
 	if (kSFoot == 0) {kSFoot = 0.87;}									// Old: 0.955
 	SmartDashboard::PutNumber("AU6_kSFoot", kSFoot);
 
-	if (feet > 0)
-	{
-		double distancepos = feet * kSFoot;
-		SmartDashboard::PutNumber("AU8_distancepos", distancepos);
-
-		m_driveangle->Drive(power, true);
-		if ((leftposition > distancepos) || (-rightposition > distancepos))
-		{
-			m_driveangle->Stop();
-			m_driveangle->Drive(0);
-			m_drivetrain->Drive(0, 0);
-			m_drivetrain->LeftTalon()->SetPosition(0);
-			m_drivetrain->RightTalon()->SetPosition(0);
-			Wait(0.25); //change this
-			m_driveangle->Init();
-			return true;
-		}
-	}
-	else
-	{
-		double distancepos = -feet * kSFoot;
-		SmartDashboard::PutNumber("AU8_distancepos", distancepos);
-
-		m_driveangle->Drive(power, true);
-		if ((-leftposition > distancepos) || (rightposition > distancepos))
-		{
-			m_driveangle->Stop();
-			m_driveangle->Drive(0);
-			m_drivetrain->Drive(0, 0);
-			m_drivetrain->LeftTalon()->SetPosition(0);
-			m_drivetrain->RightTalon()->SetPosition(0);
-			Wait(0.25);
-			m_driveangle->Init();
-			return true;
-		}
-	}
-	return false;
-}
-*/
-
-bool Autonomous::GoStraight(double feet, double power, double rampdist)
-{
-	double leftposition = m_drivetrain->LeftTalon()->GetPosition();
-	double rightposition = m_drivetrain->RightTalon()->GetPosition();
-
-	double kSFoot = SmartDashboard::GetNumber("DB/Slider 0", 0);
-	if (kSFoot == 0) {kSFoot = 0.87;}									// Old: 0.955
-	SmartDashboard::PutNumber("AU6_kSFoot", kSFoot);
-
-	int direction = feet > 0 ? 1 : -1;
-
 	double distancepos = feet * kSFoot;
 	SmartDashboard::PutNumber("AU8_distancepos", distancepos);
 
-	double distancetotarget = distancepos - ((leftposition - rightposition) / 2);
-	//m_driveangle->Drive(power, true);
+	double distancetotarget = abs(distancepos) - (abs((leftposition - rightposition) / 2));
 
-	if (((leftposition * direction) > (distancepos * direction)) || ((-rightposition * direction) > (distancepos * direction)))
+	if (distancetotarget < 0.6)
+	{
+		power = power * 0.25;
+	}
+	else if (distancetotarget < 1.2)
+	{
+		power = power * 0.5;
+	}
+	else if (distancetotarget < 1.8)
+	{
+		power = power * 0.75;
+	}
+
+	if (distancetotarget <= 0)
 	{
 		m_driveangle->Stop();
 		m_driveangle->Drive(0);
@@ -126,9 +123,10 @@ bool Autonomous::GoStraight(double feet, double power, double rampdist)
 		m_driveangle->Init();
 		return true;
 	}
+	m_driveangle->Drive(power, true);
 	return false;
 }
-
+*/
 
 bool Autonomous::TurnDegree(double degrees)
 {
@@ -146,44 +144,131 @@ bool Autonomous::TurnDegree(double degrees)
 		m_drivetrain->LeftTalon()->SetPosition(0);
 		m_drivetrain->RightTalon()->SetPosition(0);
 		Wait(0.25); //replace this
-		m_driveangle->Init();
+		m_driveangle->EnableAnglePID();
 		return true;
 	}
 	return false;
 }
 
 
-/*
 void Autonomous::Loop(Auto autoselected)
 {
-	if (start == false){
-		Test = SmartDashboard::GetNumber("DB/Slider 1", 0);
-		start = true;
-	}
+	double leftvolts = m_drivetrain->LeftTalon()->GetOutputVoltage();
+	double rightvolts = m_drivetrain->RightTalon()->GetOutputVoltage();
 
-	switch (Test) {
-		case 0:
-			m_driveangle->Drive(0);
-			break;
-		case 1:
-			if (GoStraight(6.3, -0.625)){
-				Test = 0;
-			}
-			break;
-		case 2:
-			if (TurnDegree(60)){
-				Test = 0;
-			}
-			break;
-		case 3:
-			if (GoStraight(5.3, -0.625)){
-				Test = 0;
-			}
-			break;
-	}
+	SmartDashboard::PutNumber("AU1_leftvolts", leftvolts);
+	SmartDashboard::PutNumber("AU2_rightvolts", rightvolts);
+	SmartDashboard::PutNumber("AU9_auto", autoselected);
 
+	switch (m_stage)
+	{
+	case kIdle:
+		m_driveangle->Drive(0);
+		break;
+
+	case kStart:
+		DriverStation::ReportError("start");
+		m_drivetrain->LeftTalon()->SetPosition(0);
+		m_drivetrain->RightTalon()->SetPosition(0);
+		Wait(0.1);
+		if (!m_drivetrain->getIsHighGear())
+			m_drivetrain->Shift();
+		m_stage = kStage1;
+		break;
+
+	case kStage1:
+		DriverStation::ReportError("stage1");
+		switch (autoselected)
+		{
+		case kAutoLeftGear:
+		case kAutoRightGear:
+			if (GoStraight(6.3, -1))
+				m_stage = kStage2;
+			break;
+
+		case kAutoRedShoot:
+		case kAutoBlueShoot:
+			if (GoStraight(7.04, -1))
+				m_stage = kStage2;
+			break;
+
+		case kAutoStraight:
+			if (GoStraight(6.625, -1))
+				m_stage = kDeploy;
+			break;
+
+		}
+		break;
+
+	case kStage2:
+		DriverStation::ReportError("stage2");
+		switch (autoselected)
+		{
+		case kAutoLeftGear:
+			if (TurnDegree(-60))
+				m_stage = kStage3;
+			break;
+
+		case kAutoRightGear:
+			if (TurnDegree(60))
+				m_stage = kStage3;
+			break;
+
+		case kAutoRedShoot:
+			if (TurnDegree(90))
+				m_stage = kStage3;
+			break;
+
+		case kAutoBlueShoot:
+			DriverStation::ReportError("stage2");
+			if (TurnDegree(-90))
+				m_stage = kStage3;
+			break;
+
+		case kAutoStraight:
+			break;
+		}
+		break;
+
+	case kStage3:
+		DriverStation::ReportError("stage3");
+		switch(autoselected)
+		{
+		case kAutoLeftGear:
+		case kAutoRightGear:
+			if (GoStraight(5.3, -1))
+				m_stage = kDeploy;
+			break;
+
+		case kAutoRedShoot:
+		case kAutoBlueShoot:
+			if (GoStraight(-3.375, 1))
+				m_stage = kDeploy;
+			break;
+
+		case kAutoStraight:
+			break;
+		}
+		break;
+
+	case kDeploy:
+		DriverStation::ReportError("deploy");
+		switch (autoselected)
+		{
+		case kAutoLeftGear:
+		case kAutoRightGear:
+		case kAutoStraight:
+			break;
+
+		case kAutoRedShoot:
+		case kAutoBlueShoot:
+			break;
+		}
+		m_stage = kIdle;
+		break;
+	}
 }
-*/
+/*
 void Autonomous::Loop(Auto autoselected)
 {
 	double leftvolts = m_drivetrain->LeftTalon()->GetOutputVoltage();
@@ -204,17 +289,16 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStart:
 			DriverStation::ReportError("start");
-			m_driveangle->Stop();
 			m_drivetrain->LeftTalon()->SetPosition(0);
 			m_drivetrain->RightTalon()->SetPosition(0);
 			Wait(0.1);
-			m_driveangle->Init();
+			m_drivetrain->Shift();
 			m_stage = kStage1;
 			break;
 
 		case kStage1:
 			DriverStation::ReportError("stage1");
-			if (GoStraight(6.3, -0.625))
+			if (GoStraight(6.3, -1))
 				m_stage = kStage2;
 			break;
 
@@ -226,7 +310,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStage3:
 			DriverStation::ReportError("stage3");
-			if (GoStraight(5.3, -0.625))
+			if (GoStraight(5.3, -1))
 				m_stage = kDeploy;
 			break;
 
@@ -249,12 +333,13 @@ void Autonomous::Loop(Auto autoselected)
 			m_drivetrain->LeftTalon()->SetPosition(0);
 			m_drivetrain->RightTalon()->SetPosition(0);
 			Wait(0.1);
+			m_drivetrain->Shift();
 			m_stage = kStage1;
 			break;
 
 		case kStage1:
 			DriverStation::ReportError("stage1");
-			if (GoStraight(6.3, -0.625))
+			if (GoStraight(6.3, -1))
 				m_stage = kStage2;
 			break;
 
@@ -266,7 +351,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStage3:
 			DriverStation::ReportError("stage3");
-			if (GoStraight(5.3, -0.625))
+			if (GoStraight(5.3, -1))
 				m_stage = kDeploy;
 			break;
 
@@ -289,12 +374,13 @@ void Autonomous::Loop(Auto autoselected)
 			m_drivetrain->LeftTalon()->SetPosition(0);
 			m_drivetrain->RightTalon()->SetPosition(0);
 			Wait(0.1);
+			m_drivetrain->Shift();
 			m_stage = kStage1;
 			break;
 
 		case kStage1:
 			DriverStation::ReportError("stage1");
-			if (GoStraight(7.04, -0.625))
+			if (GoStraight(7.04, -1))
 				m_stage = kStage2;
 			break;
 
@@ -306,7 +392,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStage3:
 			DriverStation::ReportError("stage3");
-			if (GoStraight(-3.375, 0.625))
+			if (GoStraight(-3.375, 1))
 				m_stage = kDeploy;
 			break;
 
@@ -330,12 +416,13 @@ void Autonomous::Loop(Auto autoselected)
 			m_drivetrain->LeftTalon()->SetPosition(0);
 			m_drivetrain->RightTalon()->SetPosition(0);
 			Wait(0.1);
+			m_drivetrain->Shift();
 			m_stage = kStage1;
 			break;
 
 		case kStage1:
 			DriverStation::ReportError("stage1");
-			if (GoStraight(7.04, -0.625))
+			if (GoStraight(7.04, -1))
 				m_stage = kStage2;
 			break;
 
@@ -347,7 +434,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kStage3:
 			DriverStation::ReportError("stage3");
-			if (GoStraight(-3.375, 0.625))
+			if (GoStraight(-3.375, 1))
 				m_stage = kDeploy;
 			break;
 
@@ -370,12 +457,13 @@ void Autonomous::Loop(Auto autoselected)
 			m_drivetrain->LeftTalon()->SetPosition(0);
 			m_drivetrain->RightTalon()->SetPosition(0);
 			Wait(0.1);
+			m_drivetrain->Shift();
 			m_stage = kStage1;
 			break;
 
 		case kStage1:
 			DriverStation::ReportError("stage1");
-			if (GoStraight(6.625, -0.625))
+			if (GoStraight(6.625, -1))
 				m_stage = kDeploy;
 			break;
 
@@ -388,4 +476,4 @@ void Autonomous::Loop(Auto autoselected)
 		}
 	}
 }
-
+*/

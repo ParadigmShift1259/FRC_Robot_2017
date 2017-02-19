@@ -102,7 +102,7 @@ void DriveAnglePID::UsePIDOutput(double output)
 
 void DriveAnglePID::CheckPIDValues()
 {
-	GetPIDController()->SetPID(0.1, 0.001, 0);
+	GetPIDController()->SetPID(0.1, 0.0125, 0.0005);
 /*
 	if (GetPIDController()->GetP() != SmartDashboard::GetValue("DB/Slider 0")->GetDouble() ||
 		GetPIDController()->GetI() != SmartDashboard::GetValue("DB/Slider 1")->GetDouble() ||
@@ -116,7 +116,10 @@ void DriveAnglePID::CheckPIDValues()
 
 double DriveAnglePID::ReturnCurrentPosition()
 {
-	return ((360/(2*3.1415926535))*((m_drivetrain->LeftTalon()->GetPosition()+m_drivetrain->RightTalon()->GetPosition())*WHEEL_CIRCUMFERENCE*3.1415926535)/(WHEEL_BASE));
+	double retval = ((360/(2*3.1415926535))*((m_drivetrain->LeftTalon()->GetPosition()+m_drivetrain->RightTalon()->GetPosition())*WHEEL_CIRCUMFERENCE*3.1415926535)/(WHEEL_BASE));
+	m_netTable->PutNumber("ontarget", IsDone());
+	m_netTable->PutNumber("angle", retval);
+	return retval;
 }
 
 

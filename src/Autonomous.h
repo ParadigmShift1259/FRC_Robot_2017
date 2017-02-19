@@ -25,13 +25,11 @@ public:
 	~Autonomous();
 	void Init();
 	void Stop();
-	bool GoStraight(double feet, double power, double rampdist = 0.3);
+	bool GoStraight(double feet, double power);
 	bool TurnDegree(double degrees);
 	void Loop(Auto autoselected);
 
 protected:
-	int Test;
-	bool start;
 	DriverStation *m_driverstation;
 	Drivetrain *m_drivetrain;
 	DriveAngle *m_driveangle;

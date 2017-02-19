@@ -26,7 +26,7 @@ void Robot::RobotInit()
 	// live window inits
 	m_lw = LiveWindow::GetInstance();
 	m_chooser.AddDefault(strAutoDefault, strAutoDefault);
-	m_chooser.AddObject(strAutoLeftGear, strAutoRightGear);
+	m_chooser.AddObject(strAutoLeftGear, strAutoLeftGear);
 	m_chooser.AddObject(strAutoRightGear, strAutoRightGear);
 	m_chooser.AddObject(strAutoRedShoot, strAutoRedShoot);
 	m_chooser.AddObject(strAutoBlueShoot, strAutoBlueShoot);
