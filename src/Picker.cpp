@@ -47,8 +47,11 @@ void Picker::Loop()
 	bool deploy = m_inputs->xBoxBackButton();
 
 	//m_solenoid->Set(false);
-	if (buttonpressed)
+	if (buttonpressed == true)
 		m_running = !m_running;
+	if (buttonpressed == false)
+		m_motor->Set(m_ramping*1.0);
+
 	if (deploy)
 		m_solenoid->Set(true);
 
