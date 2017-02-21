@@ -20,6 +20,7 @@ Picker::Picker(OperatorInputs *operatorinputs)
 	//m_motor = new Spark(PWM_PICKER_MOTOR);
 	m_motor = new CANTalon(CAN_PICKER_MOTOR);
 	m_solenoid = new Solenoid(PWM_PICKER_SOLENOID);
+	m_solenoid->Set(false);
 	m_running = false;
 	m_ramping = 0;
 }
@@ -37,7 +38,7 @@ void Picker::Init()
 	m_motor->SetControlMode(CANSpeedController::ControlMode::kPercentVbus);
 	m_motor->Set(0);
 	m_running = false;
-	m_solenoid->Set(false);
+	//Note, do NOT set the solenoid to false here. That will cause an issue where the picker rises up mid match
 }
 
 
