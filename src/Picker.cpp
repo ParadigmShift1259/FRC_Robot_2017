@@ -37,7 +37,7 @@ void Picker::Init()
 	m_motor->SetControlMode(CANSpeedController::ControlMode::kPercentVbus);
 	m_motor->Set(0);
 	m_running = false;
-	m_solenoid->Set(false);
+//	m_solenoid->Set(false);
 }
 
 
@@ -47,10 +47,11 @@ void Picker::Loop()
 	bool deploy = m_inputs->xBoxBackButton();
 
 	//m_solenoid->Set(false);
-	if (buttonpressed == true)
+	if (buttonpressed && m_solenoid->Get())
 		m_running = !m_running;
-	if (buttonpressed == false)
-		m_motor->Set(m_ramping*1.0);
+	else
+	if (!m_solenoid->Get())
+		m_running = false;
 
 	if (deploy)
 		m_solenoid->Set(true);
@@ -65,11 +66,13 @@ void Picker::Loop()
 	}
 	else
 	{
-		if(m_ramping > 0)
+		if(m_ramping > -1)
 			m_ramping -= 0.25;
 		else
+			m_ramping = -1;
+		if (!m_solenoid->Get())
 			m_ramping = 0;
-		m_motor->Set(m_ramping);
+		m_motor->Set(m_ramping*-1.0);
 	}
 
 }
