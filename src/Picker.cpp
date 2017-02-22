@@ -20,6 +20,7 @@ Picker::Picker(OperatorInputs *operatorinputs)
 	//m_motor = new Spark(PWM_PICKER_MOTOR);
 	m_motor = new CANTalon(CAN_PICKER_MOTOR);
 	m_solenoid = new Solenoid(PWM_PICKER_SOLENOID);
+	m_solenoid->Set(false);
 	m_running = false;
 	m_ramping = 0;
 }
@@ -37,7 +38,7 @@ void Picker::Init()
 	m_motor->SetControlMode(CANSpeedController::ControlMode::kPercentVbus);
 	m_motor->Set(0);
 	m_running = false;
-	m_solenoid->Set(false);
+	//Note, do NOT set the solenoid to false here. That will cause an issue where the picker rises up mid match
 }
 
 
@@ -48,8 +49,12 @@ void Picker::Loop()
 	SmartDashboard::PutNumber("P1_PickerState", m_running);
 
 	//m_solenoid->Set(false);
-	if (buttonpressed)
+	if (buttonpressed && m_solenoid->Get())
 		m_running = !m_running;
+	else
+	if (!m_solenoid->Get())
+		m_running = false;
+
 	if (deploy)
 		m_solenoid->Set(true);
 
@@ -63,11 +68,13 @@ void Picker::Loop()
 	}
 	else
 	{
-		if(m_ramping > 0)
+		if(m_ramping > -1)
 			m_ramping -= 0.25;
 		else
+			m_ramping = -1;
+		if (!m_solenoid->Get())
 			m_ramping = 0;
-		m_motor->Set(m_ramping);
+		m_motor->Set(m_ramping*-1.0);
 	}
 
 }

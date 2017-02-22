@@ -17,217 +17,275 @@ using namespace std;
 OperatorInputs::OperatorInputs()
 {
 	m_joystick = new Joystick(0);
-	m_xbox = new Joystick(1);
+	m_xbox.push_back(new Joystick(1));
+	m_xbox.push_back(new Joystick(2));
 }
 
 
 OperatorInputs::~OperatorInputs()
 {
 	delete m_joystick;
-	delete m_xbox;
+	for (std::vector< Joystick* >::iterator it = m_xbox.begin() ; it != m_xbox.end(); it++)
+	{
+	     delete (*it);
+	}
+	m_xbox.clear();
 }
 
 
-double OperatorInputs::xBoxLeftX()
+double OperatorInputs::xBoxLeftX(unsigned int i)
 {
-	return deadzoneFilterX(INVERT_X_AXIS * m_xbox->GetX(GenericHID::JoystickHand::kLeftHand));
-}
-
-
-double OperatorInputs::xBoxRightX()
-{
-	return deadzoneFilterX(m_xbox->GetX(GenericHID::JoystickHand::kRightHand));
-}
-
-
-double OperatorInputs::xBoxLeftY()
-{
-	return deadzoneFilterY(INVERT_Y_AXIS * m_xbox->GetY(GenericHID::JoystickHand::kLeftHand));
-}
-
-
-double OperatorInputs::xBoxRightY()
-{
-	return deadzoneFilterY(m_xbox->GetY(GenericHID::JoystickHand::kRightHand));
-}
-
-
-bool OperatorInputs::xBoxAButton(ToggleChoice choice)
-{
-	bool button = m_xbox->GetRawButton(A_BUTTON);
-
-	if (choice == kToggle)
-		return toggle("xBoxAButton", button);
-	if (choice == kHold)
-		return button;
+	if (i < m_xbox.size())
+		return deadzoneFilterX(INVERT_X_AXIS * m_xbox[i]->GetX(GenericHID::JoystickHand::kLeftHand));
 	return false;
 }
 
 
-bool OperatorInputs::xBoxBButton(ToggleChoice choice)
+double OperatorInputs::xBoxRightX(unsigned int i)
 {
-	bool button = m_xbox->GetRawButton(B_BUTTON);
-
-	if (choice == kToggle)
-		return toggle("xBoxBButton", button);
-	if (choice == kHold)
-		return button;
+	if (i < m_xbox.size())
+		return deadzoneFilterX(m_xbox[i]->GetX(GenericHID::JoystickHand::kRightHand));
 	return false;
 }
 
 
-bool OperatorInputs::xBoxXButton(ToggleChoice choice)
+double OperatorInputs::xBoxLeftY(unsigned int i)
 {
-	bool button = m_xbox->GetRawButton(X_BUTTON);
-
-	if (choice == kToggle)
-		return toggle("xBoxXButton", button);
-	if (choice == kHold)
-		return button;
+	if (i < m_xbox.size())
+		return deadzoneFilterY(INVERT_Y_AXIS * m_xbox[i]->GetY(GenericHID::JoystickHand::kLeftHand));
 	return false;
 }
 
 
-bool OperatorInputs::xBoxYButton(ToggleChoice choice)
+double OperatorInputs::xBoxRightY(unsigned int i)
 {
-	bool button = m_xbox->GetRawButton(Y_BUTTON);
-
-	if (choice == kToggle)
-		return toggle("xBoxYButton", button);
-	if (choice == kHold)
-		return button;
+	if (i < m_xbox.size())
+		return deadzoneFilterY(m_xbox[i]->GetY(GenericHID::JoystickHand::kRightHand));
 	return false;
 }
 
 
-bool OperatorInputs::xBoxLeftBumper(ToggleChoice choice)
+bool OperatorInputs::xBoxAButton(ToggleChoice choice, unsigned int i)
 {
-	bool button = m_xbox->GetRawButton(LEFT_BUMPER);
+	if (i < m_xbox.size())
+	{
+		bool button = m_xbox[i]->GetRawButton(A_BUTTON);
 
-	if (choice == kToggle)
-		return toggle("xBoxLeftBumper", button);
-	if (choice == kHold)
-		return button;
+		if (choice == kToggle)
+			return toggle("xBoxAButton", button);
+		if (choice == kHold)
+			return button;
+	}
 	return false;
 }
 
 
-bool OperatorInputs::xBoxRightBumper(ToggleChoice choice)
+bool OperatorInputs::xBoxBButton(ToggleChoice choice, unsigned int i)
 {
-	bool button = m_xbox->GetRawButton(RIGHT_BUMPER);
+	if (i < m_xbox.size())
+	{
+		bool button = m_xbox[i]->GetRawButton(B_BUTTON);
 
-	if (choice == kToggle)
-		return toggle("xBoxRightBumper", button);
-	if (choice == kHold)
-		return button;
+		if (choice == kToggle)
+			return toggle("xBoxBButton", button);
+		if (choice == kHold)
+			return button;
+	}
 	return false;
 }
 
 
-bool OperatorInputs::xBoxLeftTrigger(ToggleChoice choice)
+bool OperatorInputs::xBoxXButton(ToggleChoice choice, unsigned int i)
 {
-	double axis = m_xbox->GetRawAxis(XBOX_LEFT_TRIGGER_AXIS);
+	if (i < m_xbox.size())
+	{
+		bool button = m_xbox[i]->GetRawButton(X_BUTTON);
 
-	if (choice == kToggle)
-		return toggle("xBoxLeftTrigger", (LEFT_TRIGGER_MIN <= axis) && (axis <= LEFT_TRIGGER_MAX));
-	if (choice == kHold)
-		return ((LEFT_TRIGGER_MIN <= axis) && (axis <= LEFT_TRIGGER_MAX));
+		if (choice == kToggle)
+			return toggle("xBoxXButton", button);
+		if (choice == kHold)
+			return button;
+	}
 	return false;
 }
 
 
-bool OperatorInputs::xBoxRightTrigger(ToggleChoice choice)
+bool OperatorInputs::xBoxYButton(ToggleChoice choice, unsigned int i)
 {
-	double axis = m_xbox->GetRawAxis(XBOX_RIGHT_TRIGGER_AXIS);
+	if (i < m_xbox.size())
+	{
+		bool button = m_xbox[i]->GetRawButton(Y_BUTTON);
 
-	if (choice == kToggle)
-		return toggle("xBoxRightTrigger", (RIGHT_TRIGGER_MIN <= axis && axis <= RIGHT_TRIGGER_MAX));
-	if (choice == kHold)
-		return (RIGHT_TRIGGER_MIN <= axis && axis <= RIGHT_TRIGGER_MAX);
+		if (choice == kToggle)
+			return toggle("xBoxYButton", button);
+		if (choice == kHold)
+			return button;
+	}
 	return false;
 }
 
 
-bool OperatorInputs::xBoxStartButton(ToggleChoice choice)
+bool OperatorInputs::xBoxLeftBumper(ToggleChoice choice, unsigned int i)
 {
-	bool button = m_xbox->GetRawButton(START_BUTTON);
+	if (i < m_xbox.size())
+	{
+		bool button = m_xbox[i]->GetRawButton(LEFT_BUMPER);
 
-	if (choice == kToggle)
-		return toggle("xBoxStartButton", button);
-	if (choice == kHold)
-		return button;
+		if (choice == kToggle)
+			return toggle("xBoxLeftBumper", button);
+		if (choice == kHold)
+			return button;
+	}
 	return false;
 }
 
 
-bool OperatorInputs::xBoxBackButton(ToggleChoice choice)
+bool OperatorInputs::xBoxRightBumper(ToggleChoice choice, unsigned int i)
 {
-	bool button = m_xbox->GetRawButton(BACK_BUTTON);
+	if (i < m_xbox.size())
+	{
+		bool button = m_xbox[i]->GetRawButton(RIGHT_BUMPER);
 
-	if (choice == kToggle)
-		return toggle("xBoxBackButton", button);
-	if (choice == kHold)
-		return button;
+		if (choice == kToggle)
+			return toggle("xBoxRightBumper", button);
+		if (choice == kHold)
+			return button;
+	}
 	return false;
 }
 
 
-bool OperatorInputs::xBoxDPadUp(ToggleChoice choice)
+bool OperatorInputs::xBoxLeftTrigger(ToggleChoice choice, unsigned int i)
 {
-	bool button = (m_xbox->GetPOV() == 0);
+	if (i < m_xbox.size())
+	{
+		double axis = m_xbox[i]->GetRawAxis(XBOX_LEFT_TRIGGER_AXIS);
 
-	if (choice == kToggle)
-		return toggle("xBoxDPadUp", button);
-	if (choice == kHold)
-		return button;
+		if (choice == kToggle)
+			return toggle("xBoxLeftTrigger", (LEFT_TRIGGER_MIN <= axis) && (axis <= LEFT_TRIGGER_MAX));
+		if (choice == kHold)
+			return ((LEFT_TRIGGER_MIN <= axis) && (axis <= LEFT_TRIGGER_MAX));
+	}
 	return false;
 }
 
 
-bool OperatorInputs::xBoxDPadRight(ToggleChoice choice)
+bool OperatorInputs::xBoxRightTrigger(ToggleChoice choice, unsigned int i)
 {
-	bool button = (m_xbox->GetPOV() == 90);
+	if (i < m_xbox.size())
+	{
+		double axis = m_xbox[i]->GetRawAxis(XBOX_RIGHT_TRIGGER_AXIS);
 
-	if (choice == kToggle)
-		return toggle("xBoxDPadLeft", button);
-	if (choice == kHold)
-		return button;
+		if (choice == kToggle)
+			return toggle("xBoxRightTrigger", (RIGHT_TRIGGER_MIN <= axis && axis <= RIGHT_TRIGGER_MAX));
+		if (choice == kHold)
+			return (RIGHT_TRIGGER_MIN <= axis && axis <= RIGHT_TRIGGER_MAX);
+	}
 	return false;
 }
 
 
-bool OperatorInputs::xBoxDPadDown(ToggleChoice choice)
+bool OperatorInputs::xBoxStartButton(ToggleChoice choice, unsigned int i)
 {
-	bool button = (m_xbox->GetPOV() == 180);
+	if (i < m_xbox.size())
+	{
+		bool button = m_xbox[i]->GetRawButton(START_BUTTON);
+
+		if (choice == kToggle)
+			return toggle("xBoxStartButton", button);
+		if (choice == kHold)
+			return button;
+	}
+	return false;
+}
+
+
+bool OperatorInputs::xBoxBackButton(ToggleChoice choice, unsigned int i)
+{
+	if (i < m_xbox.size())
+	{
+		bool button = m_xbox[i]->GetRawButton(BACK_BUTTON);
+
+		if (choice == kToggle)
+			return toggle("xBoxBackButton", button);
+		if (choice == kHold)
+			return button;
+	}
+	return false;
+}
+
+
+bool OperatorInputs::xBoxDPadUp(ToggleChoice choice, unsigned int i)
+{
+	if (i < m_xbox.size())
+	{
+		bool button = (m_xbox[i]->GetPOV() == 0);
+
+		if (choice == kToggle)
+			return toggle("xBoxDPadUp", button);
+		if (choice == kHold)
+			return button;
+	}
+	return false;
+}
+
+
+bool OperatorInputs::xBoxDPadRight(ToggleChoice choice, unsigned int i)
+{
+	if (i < m_xbox.size())
+	{
+		bool button = (m_xbox[i]->GetPOV() == 90);
+
+		if (choice == kToggle)
+			return toggle("xBoxDPadLeft", button);
+		if (choice == kHold)
+			return button;
+	}
+	return false;
+}
+
+
+bool OperatorInputs::xBoxDPadDown(ToggleChoice choice, unsigned int i)
+{
+	if (i < m_xbox.size())
+	{
+	bool button = (m_xbox[i]->GetPOV() == 180);
 
 	if (choice == kToggle)
 		return toggle("xBoxDPadDown", button);
 	if (choice == kHold)
 		return button;
+	}
 	return false;
 }
 
 
-bool OperatorInputs::xBoxDPadLeft(ToggleChoice choice)
+bool OperatorInputs::xBoxDPadLeft(ToggleChoice choice, unsigned int i)
 {
-	bool button = (m_xbox->GetPOV() == 270);
+	if (i < m_xbox.size())
+	{
+		bool button = (m_xbox[i]->GetPOV() == 270);
 
-	if (choice == kToggle)
-		return toggle("xBoxDPadRight", button);
-	if (choice == kHold)
-		return button;
+		if (choice == kToggle)
+			return toggle("xBoxDPadRight", button);
+		if (choice == kHold)
+			return button;
+	}
 	return false;
 }
 
 
-bool OperatorInputs::xBoxR3(ToggleChoice choice)
+bool OperatorInputs::xBoxR3(ToggleChoice choice, unsigned int i)
 {
-	bool button = m_xbox->GetRawButton(10);
+	if (i < m_xbox.size())
+	{
+		bool button = m_xbox[i]->GetRawButton(10);
 
-	if (choice == kToggle)
-		return toggle("xBoxR3", button);
-	if (choice == kHold)
-		return button;
+		if (choice == kToggle)
+			return toggle("xBoxR3", button);
+		if (choice == kHold)
+			return button;
+	}
 	return false;
 }
 
