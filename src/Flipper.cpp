@@ -40,17 +40,11 @@ void Flipper::Loop()
 	if (m_driverstation->IsTest())
 	{
 		 bool flipupbutton = m_inputs->xBoxAButton();
-		 bool flipdownbutton = m_inputs->xBoxBButton();
 
 		 if (flipupbutton && !m_flippedup)
 		 {
 			 m_flippedup = true;
 			 m_solenoid->Set(true);
-		 }
-		 if (flipdownbutton && m_flippedup)
-		 {
-			 m_flippedup = false;
-			 m_solenoid->Set(false);
 		 }
 	}
 	else

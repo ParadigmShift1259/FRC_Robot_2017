@@ -10,7 +10,7 @@
 
 
 #include "WPILib.h"
-#include <networktables/NetworkTable.h>
+#include <Smartdashboard/Smartdashboard.h>
 #include <Commands/PIDSubsystem.h>
 #include <Const.h>
 #include "Drivetrain.h"
@@ -40,7 +40,6 @@ public:
 protected:
 	Drivetrain* m_drivetrain;
 	//OperatorInputs *m_inputs;
-	shared_ptr<NetworkTable> m_netTable;
 	bool isInitialized;
 	bool isActive;
 	double m_y;

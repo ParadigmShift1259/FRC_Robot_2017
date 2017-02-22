@@ -98,7 +98,7 @@ void Robot::TeleopInit()
 
 void Robot::TeleopPeriodic()
 {
-	//m_drivetrain->Loop();
+	m_drivetrain->Loop();
 	m_climber->Loop();
 	m_gTarget->Loop();
 	m_picker->Loop();

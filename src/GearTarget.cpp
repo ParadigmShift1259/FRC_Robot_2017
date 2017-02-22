@@ -34,7 +34,7 @@ void GearTarget::Target()
 
 void GearTarget::Loop()
 {
-	m_nettable->PutNumber("isActive", m_isActive);
+	SmartDashboard::PutNumber("GT_00_IsEnabled", m_isActive);
 	m_nettable->PutNumber("PIDEnabled", m_driveangle->IsEnabled());
 	//if(m_isActive && !m_driveangle->IsEnabled())
 				//m_driveangle->EnableAnglePID();

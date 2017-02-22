@@ -43,8 +43,9 @@ void Picker::Init()
 
 void Picker::Loop()
 {
-	bool buttonpressed = m_inputs->xBoxStartButton();
+	bool buttonpressed = m_inputs->xBoxBButton();
 	bool deploy = m_inputs->xBoxBackButton();
+	SmartDashboard::PutNumber("P1_PickerState", m_running);
 
 	//m_solenoid->Set(false);
 	if (buttonpressed)
