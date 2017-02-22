@@ -93,6 +93,7 @@ void Shooter::Loop()
 		if (m_shoot)
 		{
 			m_shootermotor->Set(m_shootrpm * SHOOTER_DIRECTION);
+			m_rampdown = false;
 		}
 		else
 		{
