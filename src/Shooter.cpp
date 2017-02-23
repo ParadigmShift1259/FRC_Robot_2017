@@ -21,7 +21,9 @@ Shooter::Shooter(OperatorInputs *operatorinputs)
 	m_feedmotor = new CANTalon(CAN_FEED_MOTOR);
 	m_lowrpm = SHOOTER_LOW_RPM;
 	m_shootrpm = SHOOTER_SHOOT_RPM;
+	m_ramprpm = 0;
 	m_shoot = false;
+	m_rampdown = false;
 	m_feedvoltage = 6.5;
 }
 
@@ -37,7 +39,9 @@ void Shooter::Init()
 {
 	m_lowrpm = SHOOTER_LOW_RPM;
 	m_shootrpm = SHOOTER_SHOOT_RPM;
+	m_ramprpm = 0;
 	m_shoot = false;
+	m_rampdown = false;
 	m_timer.Stop();
 	m_timer.Reset();
 
@@ -81,15 +85,24 @@ void Shooter::Loop()
 	SmartDashboard::PutNumber("SH01_shooter", shootrpm);
 	SmartDashboard::PutNumber("SH02_feeder", feedrpm);
 	SmartDashboard::PutNumber("SH03_feedvolt", feedvoltage);
+	SmartDashboard::PutNumber("SH04_Is_Shooting", m_shoot);
 
 	if (shooterbutton)
 	{
 		m_shoot = !m_shoot;
 		if (m_shoot)
+		{
 			m_shootermotor->Set(m_shootrpm * SHOOTER_DIRECTION);
+			m_rampdown = false;
+		}
 		else
-			m_shootermotor->Set(m_lowrpm * SHOOTER_DIRECTION);
+		{
+			//m_shootermotor->Set(m_lowrpm * SHOOTER_DIRECTION);
+			m_rampdown = true;
+			m_ramprpm = m_shootrpm;
+		}
 	}
+
 	if (shooterrpmup)
 	{
 		if (m_shoot)
@@ -133,5 +146,15 @@ void Shooter::Loop()
 	else
 	{
 		m_feedmotor->Set(0);
+		if (m_rampdown)
+		{
+			m_ramprpm -= 5;
+			if (m_ramprpm < SHOOTER_LOW_RPM)
+			{
+				m_ramprpm = SHOOTER_LOW_RPM;
+				m_rampdown = false;
+			}
+			m_shootermotor->Set(m_ramprpm * SHOOTER_DIRECTION);
+		}
 	}
 }

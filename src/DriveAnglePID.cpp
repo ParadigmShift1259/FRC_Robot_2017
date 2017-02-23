@@ -12,7 +12,6 @@
 DriveAnglePID::DriveAnglePID(Drivetrain *drive) : PIDSubsystem("DriveAngle", 0, 0, 0)
 {
 	m_drivetrain = drive;
-	m_netTable = NetworkTable::GetTable("OpenCV");
 	isInitialized = false;
 	isActive = false;
 	m_y = 0;
@@ -91,7 +90,7 @@ void DriveAnglePID::SetRelativeSetpoint(double newSetPoint) {
 
 void DriveAnglePID::UsePIDOutput(double output)
 {
-	m_netTable->PutNumber("output", output);
+	SmartDashboard::PutNumber("DP01_output", output);
 	if (isActive)
 	{
 		//output = std::abs(output) > 0.25 ? output : 0.25 * output / std::abs(output);
@@ -117,8 +116,8 @@ void DriveAnglePID::CheckPIDValues()
 double DriveAnglePID::ReturnCurrentPosition()
 {
 	double retval = ((360/(2*3.1415926535))*((m_drivetrain->LeftTalon()->GetPosition()+m_drivetrain->RightTalon()->GetPosition())*WHEEL_CIRCUMFERENCE*3.1415926535)/(WHEEL_BASE));
-	m_netTable->PutNumber("ontarget", IsDone());
-	m_netTable->PutNumber("angle", retval);
+	SmartDashboard::PutNumber("DP02_ontarget", IsDone());
+	SmartDashboard::PutNumber("DP03_angle", retval);
 	return retval;
 }
 

@@ -31,7 +31,9 @@ protected:
 	double m_feedvoltage;
 	double m_lowrpm;
 	double m_shootrpm;
+	double m_ramprpm;
 	bool m_shoot;
+	bool m_rampdown;
 	Timer m_timer;
 };
 

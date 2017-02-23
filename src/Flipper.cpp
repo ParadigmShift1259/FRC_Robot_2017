@@ -39,23 +39,17 @@ void Flipper::Loop()
 	SmartDashboard::PutBoolean("FL03_Solenoid",m_solenoid->Get());
 	if (m_driverstation->IsTest())
 	{
-		 bool flipupbutton = m_inputs->xBoxAButton();
-		 bool flipdownbutton = m_inputs->xBoxBButton();
+		 bool flipupbutton = m_inputs->xBoxAButton(OperatorInputs::ToggleChoice::kToggle, 1);
 
 		 if (flipupbutton && !m_flippedup)
 		 {
 			 m_flippedup = true;
 			 m_solenoid->Set(true);
 		 }
-		 if (flipdownbutton && m_flippedup)
-		 {
-			 m_flippedup = false;
-			 m_solenoid->Set(false);
-		 }
 	}
 	else
 	{
-		bool flipbutton = m_inputs->xBoxAButton();
+		bool flipbutton = m_inputs->xBoxAButton(OperatorInputs::ToggleChoice::kToggle, 1);
 
 		if (flipbutton && !m_flippedup)
 		{

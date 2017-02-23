@@ -44,14 +44,16 @@ void Picker::Init()
 
 void Picker::Loop()
 {
-	bool buttonpressed = m_inputs->xBoxStartButton();
+	bool buttonpressed = m_inputs->xBoxBButton();
 	bool deploy = m_inputs->xBoxBackButton();
+	SmartDashboard::PutNumber("P1_PickerState", m_running);
 
 	//m_solenoid->Set(false);
-	if (buttonpressed == true)
+	if (buttonpressed && m_solenoid->Get())
 		m_running = !m_running;
-	if (buttonpressed == false)
-		m_motor->Set(m_ramping*1.0);
+	else
+	if (!m_solenoid->Get())
+		m_running = false;
 
 	if (deploy)
 		m_solenoid->Set(true);
@@ -66,11 +68,13 @@ void Picker::Loop()
 	}
 	else
 	{
-		if(m_ramping > 0)
+		if(m_ramping > -1)
 			m_ramping -= 0.25;
 		else
+			m_ramping = -1;
+		if (!m_solenoid->Get())
 			m_ramping = 0;
-		m_motor->Set(m_ramping);
+		m_motor->Set(m_ramping*-1.0);
 	}
 
 }
