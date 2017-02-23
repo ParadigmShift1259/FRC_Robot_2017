@@ -24,6 +24,7 @@ void Robot::RobotInit()
 	NetworkTable::GlobalDeleteAll();
 
 	m_netTable = NetworkTable::GetTable("OpenCV");
+	m_netTable2 = NetworkTable::GetTable("OpenCV2");
 	// live window inits
 	m_lw = LiveWindow::GetInstance();
 	m_chooser.AddDefault(strAutoDefault, strAutoDefault);
@@ -46,6 +47,8 @@ void Robot::RobotInit()
 	m_climber = new Climber(m_inputs, m_shooter);
 	m_flipper = new Flipper(&m_ds, m_inputs);
 	m_gTarget = new GearTarget(m_netTable, m_driveangle, m_inputs);
+	m_sTarget = new ShooterTarget(m_netTable, m_driveangle, m_inputs);
+	drivingStage = kDrive;
 }
 
 
@@ -74,6 +77,7 @@ void Robot::AutonomousInit()
 	m_autonomous->Init();
 	m_climber->Init();
 	m_picker->Init();
+	m_sTarget->Init();
 }
 
 
@@ -100,7 +104,7 @@ void Robot::TeleopPeriodic()
 {
 	//m_drivetrain->Loop();
 	m_climber->Loop();
-	m_gTarget->Loop();
+	Driving();
 	m_picker->Loop();
 	m_shooter->Loop();
 	m_flipper->Loop();
@@ -158,6 +162,35 @@ Auto Robot::Chooser2Auto(string selected)
 	if (selected == strAutoStraight)
 		return kAutoStraight;
 	return kAutoLeftGear;
+}
+
+void Robot::Driving()
+{
+	if (m_inputs->xBoxRightBumper())
+		drivingStage = (drivingStage == kGearTarget) ? kDrive : kGearTarget;
+
+	if (m_inputs->xBoxAButton())
+		drivingStage = (drivingStage == kShootingTarget) ? kDrive : kShootingTarget;
+
+	if (m_inputs->xBoxBButton())
+		drivingStage = kDrive;
+
+	switch (drivingStage)
+	{
+		case kDrive:
+			m_drivetrain->Loop();
+			break;
+
+		case kGearTarget:
+			m_gTarget->Loop();
+			break;
+
+		case kShootingTarget:
+			m_sTarget->Loop();
+			break;
+	}
+
+
 }
 
 

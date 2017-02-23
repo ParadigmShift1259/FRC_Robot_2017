@@ -12,7 +12,7 @@
 #include <DriveAnglePID.h>
 #include "Drivetrain.h"
 #include "OperatorInputs.h"
-#include <ntCore.h>
+#include <SmartDashboard/SmartDashboard.h>
 
 
 class DriveAngle

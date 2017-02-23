@@ -1,24 +1,25 @@
-/**
- *  GearTarget.h
- *  Date:
- *  Last Edited By:
+/*
+ * ShooterTarget.h
+ *
+ *  Created on: Feb 20, 2017
+ *      Author: Developer
  */
 
-#ifndef GEARTARGET_H_
-#define GEARTARGET_H_
+#ifndef SRC_SHOOTERTARGET_H_
+#define SRC_SHOOTERTARGET_H_
 
 #include "DriveAngle.h"
 #include "Drivetrain.h"
 #include <ntCore.h>
 #include "OperatorInputs.h"
 
-class GearTarget {
+class ShooterTarget {
 public:
-	GearTarget(std::shared_ptr<NetworkTable> newTable, DriveAngle *newAngle, OperatorInputs *newoi);
+	ShooterTarget(std::shared_ptr<NetworkTable> newTable, DriveAngle *newAngle, OperatorInputs *newoi);
 	void Init();
 	void Loop();
 	void Stop();
-	virtual ~GearTarget();
+	virtual ~ShooterTarget();
 private:
 	int m_prevCounter;
 	int m_counter;
@@ -31,4 +32,4 @@ private:
 	bool m_isActive;
 };
 
-#endif /* GEARTARGET_H_ */
+#endif /* SRC_SHOOTERTARGET_H_ */

@@ -1,12 +1,12 @@
 /**
- *  GearTarget.cpp
+ *  ShooterTarget.cpp
  *  Date:
  *  Last Edited By:
  */
 
-#include "GearTarget.h"
+#include "ShooterTarget.h"
 
-GearTarget::GearTarget(std::shared_ptr<NetworkTable> newTable, DriveAngle * newAngle, OperatorInputs *oi) {
+ShooterTarget::ShooterTarget(std::shared_ptr<NetworkTable> newTable, DriveAngle * newAngle, OperatorInputs *oi) {
 	// TODO Auto-generated constructor stub
 	m_xDegree = 0;
 	m_nettable = newTable;
@@ -18,7 +18,7 @@ GearTarget::GearTarget(std::shared_ptr<NetworkTable> newTable, DriveAngle * newA
 	m_inputs = oi;
 }
 
-void GearTarget::Init()
+void ShooterTarget::Init()
 {
 //	m_isActive = true;
 //	m_driveangle->EnableAnglePID();
@@ -26,14 +26,14 @@ void GearTarget::Init()
 	//m_stage = stopped;
 }
 
-void GearTarget::Loop()
+void ShooterTarget::Loop()
 {
 	m_nettable->PutNumber("isActive", m_isActive);
 	m_nettable->PutNumber("PIDEnabled", m_driveangle->IsEnabled());
 	//if(m_isActive && !m_driveangle->IsEnabled())
 				//m_driveangle->EnableAnglePID();
 
-	if(m_inputs->xBoxRightBumper(OperatorInputs::kToggle))
+	if(m_inputs->xBoxAButton(OperatorInputs::kToggle))
 	{
 		m_isActive = !m_isActive;
 		if(m_isActive)
@@ -46,6 +46,7 @@ void GearTarget::Loop()
 			m_driveangle->Stop();
 		}
 	}
+
 	if (!m_driveangle->IsEnabled()) {
 		m_driveangle->RunNormalDrive();
 	}
@@ -57,10 +58,7 @@ void GearTarget::Loop()
 		{
 			m_counter = m_nettable->GetNumber("counter",0);
 			m_xDegree = (m_nettable->GetNumber("xPos", 0) / 20);
-			int areaDegree = (m_nettable->GetNumber("areaDifference", 0) * 50);
-			areaDegree = (abs(areaDegree)>6) ? (areaDegree>0?6:-6) : areaDegree;
-			areaDegree = (m_nettable->GetNumber("xSpread",0)>190)?0:areaDegree;
-			m_driveangle->SetVisionAngle((m_xDegree+areaDegree));
+			m_driveangle->SetVisionAngle((m_xDegree));
 		}
 	}
 
@@ -99,13 +97,13 @@ void GearTarget::Loop()
 //	}
 }
 
-void GearTarget::Stop()
+void ShooterTarget::Stop()
 {
 	m_isActive = 0;
 	m_driveangle->Stop();
 }
 
-GearTarget::~GearTarget() {
+ShooterTarget::~ShooterTarget() {
 	// TODO Auto-generated destructor stub
 }
 

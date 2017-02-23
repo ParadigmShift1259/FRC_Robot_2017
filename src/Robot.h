@@ -24,10 +24,10 @@
 #include "climber.h"
 #include "picker.h"
 #include "shooter.h"
-#include "GearTarget.h"
 #include "Flipper.h"
 #include <ntCore.h>
-
+#include "GearTarget.h"
+#include "ShooterTarget.h"
 
 using namespace std;
 using namespace frc;
@@ -36,6 +36,8 @@ using namespace frc;
 class Robot: public IterativeRobot
 {
 private:
+
+	enum DrivingStage {kDrive, kGearTarget, kShootingTarget};
 	// live window variables
 	LiveWindow *m_lw;
 	SendableChooser<string> m_chooser;
@@ -52,8 +54,11 @@ private:
 	Shooter *m_shooter;
 	Flipper *m_flipper;
 	std::shared_ptr<NetworkTable> m_netTable;
+	std::shared_ptr<NetworkTable> m_netTable2;
+	DrivingStage drivingStage;
 
 	GearTarget *m_gTarget;
+	ShooterTarget *m_sTarget;
 
 	virtual void RobotInit();
 	virtual void AutonomousInit();
@@ -65,6 +70,8 @@ private:
 	virtual void DisabledInit();
 
 	Auto Chooser2Auto(string selected);
+
+	void Driving();
 };
 
 
