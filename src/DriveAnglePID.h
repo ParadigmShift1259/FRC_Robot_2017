@@ -36,6 +36,9 @@ public:
 	bool GetRamp();
 	bool IsEnabled();
 	void SetRelativeSetpoint(double setpoint);
+	void SetP(double p) {m_P = p; SmartDashboard::PutNumber("DP00_P",m_P); CheckPIDValues();}
+	void SetI(double i) {m_I = i; SmartDashboard::PutNumber("DP00_I",m_I); CheckPIDValues();}
+	void SetD(double d) {m_D = d; SmartDashboard::PutNumber("DP00_D",m_D); CheckPIDValues();}
 
 protected:
 	Drivetrain* m_drivetrain;

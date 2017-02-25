@@ -72,6 +72,8 @@ void Shooter::Init()
 	m_feedmotor->SetControlMode(CANSpeedController::ControlMode::kVoltage);
 	m_feedmotor->ConfigEncoderCodesPerRev(CAN_SHOOTER_ENCODER_TICKS);
 	m_feedmotor->Set(0);
+
+	SmartDashboard::PutString("SH99_FeedStatus","");
 }
 
 
@@ -143,6 +145,18 @@ void Shooter::Loop()
 		else
 			m_shootermotor->Set(--m_lowrpm * SHOOTER_DIRECTION);
 	}
+	switch (m_feedmotor->IsSensorPresent(CANTalon::FeedbackDevice::QuadEncoder))
+	{
+	case CANTalon::FeedbackDeviceStatus::FeedbackStatusPresent:
+		SmartDashboard::PutString("SH99_FeedStatus","Present");
+		break;
+	case CANTalon::FeedbackDeviceStatus::FeedbackStatusNotPresent:
+		SmartDashboard::PutString("SH99_FeedStatus","NotPresent");
+		break;
+	case CANTalon::FeedbackDeviceStatus::FeedbackStatusUnknown:
+		SmartDashboard::PutString("SH99_FeedStatus","Unknown");
+		break;
+	}
 
 	if (m_shoot)
 	{
@@ -157,20 +171,8 @@ void Shooter::Loop()
 
 			m_feedmotor->Set(m_feedvoltage * FEEDER_DIRECTION);
 		}
-		switch (m_feedmotor->IsSensorPresent(CANTalon::FeedbackDevice::QuadEncoder))
-		{
-		case CANTalon::FeedbackDeviceStatus::FeedbackStatusPresent:
-			SmartDashboard::PutString("SH99_FeedStatus","Present");
-			break;
-		case CANTalon::FeedbackDeviceStatus::FeedbackStatusNotPresent:
-			SmartDashboard::PutString("SH99_FeedStatus","NotPresent");
-			break;
-		case CANTalon::FeedbackDeviceStatus::FeedbackStatusUnknown:
-			SmartDashboard::PutString("SH99_FeedStatus","Unknown");
-			break;
-		}
-		bool jamtest = (m_feedmotor->IsSensorPresent(CANTalon::FeedbackDevice::QuadEncoder) == CANTalon::FeedbackDeviceStatus::FeedbackStatusPresent) ?
-				(abs(feedrpm) < 50) : false;
+		bool jamtest = (m_feedmotor->IsSensorPresent(CANTalon::FeedbackDevice::QuadEncoder) == CANTalon::FeedbackDeviceStatus::FeedbackStatusUnknown) ?
+				(abs(feedrpm) < 5) : false;
 		if (!feedjammed && (abs(m_feedmotor->Get()) > 0) && jamtest)
 		{
 			feedjammed = true;

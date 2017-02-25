@@ -117,6 +117,7 @@ void Autonomous::Loop(Auto autoselected)
 		break;
 
 	case kStart:
+		m_driveangle->SetD(0.2);
 		DriverStation::ReportError("start");
 		m_drivetrain->LeftTalon()->SetPosition(0);
 		m_drivetrain->RightTalon()->SetPosition(0);
@@ -132,7 +133,7 @@ void Autonomous::Loop(Auto autoselected)
 		{
 		case kAutoLeftGear:
 		case kAutoRightGear:
-			if (GoStraight(6.3, -1))
+			if (GoStraight(67.6/12.0, -1))
 				m_stage = kStage2;
 			break;
 
@@ -192,7 +193,7 @@ void Autonomous::Loop(Auto autoselected)
 		{
 		case kAutoLeftGear:
 		case kAutoRightGear:
-			if (GoStraight(5.3, -1))
+			if (GoStraight(58.6/12.0, -1))
 				m_stage = kDeploy;
 			break;
 

@@ -35,6 +35,7 @@ void Robot::RobotInit()
 	m_chooser.AddObject(strAutoStraight, strAutoStraight);
 	SmartDashboard::PutData("Auto Selector", &m_chooser);
 
+
 	// class inits
 	m_inputs = new OperatorInputs();
 	m_drivetrain = new Drivetrain(m_inputs, &m_ds);
@@ -52,13 +53,14 @@ void Robot::RobotInit()
 }
 
 
-void Robot::AutonomousInit()
+/*void Robot::AutonomousInit()
 {
 	DriverStation::ReportError("Test Init");
 //	m_autoselected = kAutoLeftGear;
 //	//m_autoselected = Chooser2Auto(m_chooserselected);
 //	m_compressor->Start();
-	m_driveangle->Init();
+	m_drivetrain->Init();
+	m_driveangle->Init(true);
 //	m_driveangle->Init();
 //	m_autonomous->Init();
 //	m_climber->Init();
@@ -66,12 +68,14 @@ void Robot::AutonomousInit()
 	m_flipper->Init();
 	m_gTarget->Init();
 	test = baLow;
+	m_driveangle->SetD(0.2);
 }
 
 
 void Robot::AutonomousPeriodic()
 {
-	//m_driveangle->Loop();
+	if (!m_drivetrain->getIsHighGear())
+		m_drivetrain->Shift();
 
 	switch (test)
 	{
@@ -104,8 +108,7 @@ void Robot::AutonomousPeriodic()
 		default:
 			break;
 	}
-}
-
+}*/
 
 /*
  * This autonomous (along with the chooser code above) shows how to select between different autonomous modes
@@ -115,7 +118,7 @@ void Robot::AutonomousPeriodic()
  *
  * You can add additional auto modes by adding additional comparisons to the if-else structure below with additional strings.
  * If using the SendableChooser make sure to add them to the chooser code above as well.
- *//*
+ */
 void Robot::AutonomousInit()
 {
 	DriverStation::ReportError("Autonomous Init");
@@ -128,7 +131,7 @@ void Robot::AutonomousInit()
 	m_autoselected = Chooser2Auto(m_chooser.GetSelected());
 	m_compressor->Start();
 	m_drivetrain->Init();
-	m_driveangle->Init();
+	m_driveangle->Init(true);
 	m_autonomous->Init();
 	m_climber->Init();
 	m_picker->Init();
@@ -140,7 +143,7 @@ void Robot::AutonomousPeriodic()
 {
 	m_autonomous->Loop(m_autoselected);
 	//m_gTarget->Loop();
-}*/
+}
 
 
 void Robot::TeleopInit()
