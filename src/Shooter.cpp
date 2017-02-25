@@ -28,6 +28,7 @@ Shooter::Shooter(OperatorInputs *operatorinputs)
 	m_P = CAN_SHOOTER_P;
 	m_I = CAN_SHOOTER_I;
 	m_D = CAN_SHOOTER_D;
+	m_F = CAN_SHOOTER_F;
 }
 
 
@@ -50,22 +51,26 @@ void Shooter::Init()
 	SmartDashboard::PutNumber("SH00_P",m_P);
 	SmartDashboard::PutNumber("SH00_I",m_I);
 	SmartDashboard::PutNumber("SH00_D",m_D);
+	SmartDashboard::PutNumber("SH00_F",m_F);
 	m_P = SmartDashboard::GetNumber("SH00_P",m_P);
 	m_I = SmartDashboard::GetNumber("SH00_I",m_I);
 	m_D = SmartDashboard::GetNumber("SH00_D",m_D);
+	m_F = SmartDashboard::GetNumber("SH00_D",m_F);
 
 	m_shootermotor->ConfigNeutralMode(CANSpeedController::NeutralMode::kNeutralMode_Coast);
 	m_shootermotor->SetFeedbackDevice(CANTalon::FeedbackDevice::QuadEncoder);
 	m_shootermotor->SetControlMode(CANSpeedController::ControlMode::kSpeed);
 	//m_shootermotor->SetControlMode(CANSpeedController::ControlMode::kVoltage);
-	m_shootermotor->SetPID(m_P, m_I, m_D, CAN_SHOOTER_F);
+	m_shootermotor->SetPID(m_P, m_I, m_D, m_F);
 	m_shootermotor->SetSensorDirection(true);
 	m_shootermotor->ConfigEncoderCodesPerRev(CAN_SHOOTER_ENCODER_TICKS);
 	m_shootermotor->ClearIaccum();
 	m_shootermotor->Enable();
 	m_shootermotor->Set(m_lowrpm);
 
+	m_feedmotor->SetFeedbackDevice(CANTalon::FeedbackDevice::QuadEncoder);
 	m_feedmotor->SetControlMode(CANSpeedController::ControlMode::kVoltage);
+	m_feedmotor->ConfigEncoderCodesPerRev(CAN_SHOOTER_ENCODER_TICKS);
 	m_feedmotor->Set(0);
 }
 
@@ -98,11 +103,15 @@ void Shooter::Loop()
 	bool shooterrpmdown = m_inputs->xBoxDPadDown(OperatorInputs::ToggleChoice::kHold);
 	bool feedrpmup = m_inputs->xBoxDPadRight(OperatorInputs::ToggleChoice::kHold);
 	bool feedrpmdown = m_inputs->xBoxDPadLeft(OperatorInputs::ToggleChoice::kHold);
+	static bool feedjammed = false;
+	static double feedpos = m_feedmotor->GetPosition();
+	static double feedjampos = 0;
 
 	SmartDashboard::PutNumber("SH01_shooter", shootrpm);
 	SmartDashboard::PutNumber("SH02_feeder", feedrpm);
 	SmartDashboard::PutNumber("SH03_shootvolt", shootvoltage);
-	SmartDashboard::PutNumber("SH04_Is_Shooting", m_shoot);
+	SmartDashboard::PutNumber("SH04_feedvolt", feedvoltage);
+	SmartDashboard::PutNumber("SH05_Is_Shooting", m_shoot);
 
 	if (shooterbutton)
 	{
@@ -138,7 +147,7 @@ void Shooter::Loop()
 	if (m_shoot)
 	{
 		//error 1, feedmotor speed is constantly reset to -6.5 volts
-		if (abs(shootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM * m_shootrpm))
+		if (!feedjammed && (abs(shootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM * m_shootrpm)))
 		{
 			if (feedrpmup)
 				m_feedvoltage += 0.01;
@@ -148,16 +157,29 @@ void Shooter::Loop()
 
 			m_feedmotor->Set(m_feedvoltage * FEEDER_DIRECTION);
 		}
-		if (((abs(m_feedmotor->Get())) > 0) && (abs(feedrpm) < 50))
+		if (!feedjammed && (abs(m_feedmotor->Get()) > 0) && (abs(feedrpm) < 50) && (m_feedmotor->IsSensorPresent(CANTalon::FeedbackDevice::QuadEncoder) == CANTalon::FeedbackDeviceStatus::FeedbackStatusPresent))
 		{
+			feedjammed = true;
+			feedjampos = feedpos;
 			m_timer.Start();
 			if (m_timer.HasPeriodPassed(0.5))
 				m_feedmotor->Set(0);
 		}
-		else
+		else if(!feedjammed)
 		{
 			m_timer.Stop();
 			m_timer.Reset();
+		}
+		else if (m_feedmotor->IsSensorPresent(CANTalon::FeedbackDevice::QuadEncoder) == CANTalon::FeedbackDeviceStatus::FeedbackStatusPresent)
+		{
+			if (abs(feedpos-feedjampos) < 0.5)
+			{
+				m_feedmotor->Set(-m_feedvoltage * FEEDER_DIRECTION);
+			}
+			else
+			{
+				feedjammed = false;
+			}
 		}
 	}
 	else

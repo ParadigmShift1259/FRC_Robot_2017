@@ -38,6 +38,7 @@ protected:
 	double m_P;
 	double m_I;
 	double m_D;
+	double m_F;
 };
 
 #endif /* SRC_SHOOTER_H_ */
