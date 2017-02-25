@@ -26,14 +26,14 @@ void ShooterTarget::Init()
 	//m_stage = stopped;
 }
 
-void ShooterTarget::Loop()
+void ShooterTarget::Loop(bool initonce)
 {
 	m_nettable->PutNumber("isActive", m_isActive);
 	m_nettable->PutNumber("PIDEnabled", m_driveangle->IsEnabled());
 	//if(m_isActive && !m_driveangle->IsEnabled())
 				//m_driveangle->EnableAnglePID();
 
-	if(m_inputs->xBoxAButton(OperatorInputs::kToggle))
+	if(initonce)
 	{
 		m_isActive = !m_isActive;
 		if(m_isActive)

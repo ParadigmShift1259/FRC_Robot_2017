@@ -9,7 +9,7 @@
 #include <math.h>
 
 
-DriveAnglePID::DriveAnglePID(Drivetrain *drive) : PIDSubsystem("DriveAngle", 0, 0, 0)
+DriveAnglePID::DriveAnglePID(Drivetrain *drive) : PIDSubsystem("DriveAngle", m_P, m_I, m_D)
 {
 	m_drivetrain = drive;
 	isInitialized = false;
@@ -17,6 +17,9 @@ DriveAnglePID::DriveAnglePID(Drivetrain *drive) : PIDSubsystem("DriveAngle", 0, 
 	m_y = 0;
 	m_ramp = false;
 	SetAbsoluteTolerance(1.0);
+	SmartDashboard::PutNumber("DP00_P", m_P);
+	SmartDashboard::PutNumber("DP00_I", m_I);
+	SmartDashboard::PutNumber("DP00_D", m_D);
 }
 
 
@@ -101,7 +104,11 @@ void DriveAnglePID::UsePIDOutput(double output)
 
 void DriveAnglePID::CheckPIDValues()
 {
-	GetPIDController()->SetPID(0.1, 0.0125, 0);
+	 m_P = SmartDashboard::GetNumber("DP00_P", m_P);
+	 m_I = SmartDashboard::GetNumber("DP00_I", m_I);
+	 m_D = SmartDashboard::GetNumber("DP00_D", m_D);
+
+	GetPIDController()->SetPID(m_P, m_I, m_D);
 /*
 	if (GetPIDController()->GetP() != SmartDashboard::GetValue("DB/Slider 0")->GetDouble() ||
 		GetPIDController()->GetI() != SmartDashboard::GetValue("DB/Slider 1")->GetDouble() ||

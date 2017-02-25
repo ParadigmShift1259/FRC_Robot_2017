@@ -60,6 +60,9 @@ private:
 	GearTarget *m_gTarget;
 	ShooterTarget *m_sTarget;
 
+	enum Test {foHigh, foLow, baHigh, baLow, done};
+	Test test;
+
 	virtual void RobotInit();
 	virtual void AutonomousInit();
 	virtual void AutonomousPeriodic();

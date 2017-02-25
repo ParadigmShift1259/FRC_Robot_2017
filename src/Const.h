@@ -72,8 +72,8 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 #define FLIP_HIGH_GEAR false
 // Ramping
 #define RAMPING_RATE_PERIOD 0.10
-#define RAMPING_RATE_MIN 0.6
-#define RAMPING_RATE_MAX 1.5
+#define RAMPING_RATE_MIN 0.05
+#define RAMPING_RATE_MAX 0.125
 #define X_SCALING 0.5
 #define Y_SCALING 1.0
 #define LEFT_MOTOR_SCALING 1

@@ -26,14 +26,14 @@ void GearTarget::Init()
 	//m_stage = stopped;
 }
 
-void GearTarget::Loop()
+void GearTarget::Loop(bool initonce)
 {
 	SmartDashboard::PutNumber("GT_00_IsEnabled", m_isActive);
 	m_nettable->PutNumber("PIDEnabled", m_driveangle->IsEnabled());
 	//if(m_isActive && !m_driveangle->IsEnabled())
 				//m_driveangle->EnableAnglePID();
 
-	if(m_inputs->xBoxRightBumper(OperatorInputs::kToggle))
+	if(initonce)
 	{
 		m_isActive = !m_isActive;
 		if(m_isActive)
@@ -56,10 +56,10 @@ void GearTarget::Loop()
 		if(/*container->IsOnTarget() &&*/ m_nettable->GetNumber("counter",0) != m_counter)
 		{
 			m_counter = m_nettable->GetNumber("counter",0);
-			m_xDegree = (m_nettable->GetNumber("xPos", 0) / 20);
-			int areaDegree = (m_nettable->GetNumber("areaDifference", 0) * 50);
-			areaDegree = (abs(areaDegree)>6) ? (areaDegree>0?6:-6) : areaDegree;
-			areaDegree = (m_nettable->GetNumber("xSpread",0)>190)?0:areaDegree;
+			m_xDegree = (m_nettable->GetNumber("xPos", 0) / 20); // how fast it turns (making it larger is slower)
+			int areaDegree = (m_nettable->GetNumber("areaDifference", 0) * 50); // how sensitive the arcing is
+			areaDegree = (abs(areaDegree)>6) ? (areaDegree>0?6:-6) : areaDegree; // maximum arc
+			areaDegree = (m_nettable->GetNumber("xSpread",0)>190)?0:areaDegree; // distance to stop arcing
 			m_driveangle->SetVisionAngle((m_xDegree+areaDegree));
 		}
 	}

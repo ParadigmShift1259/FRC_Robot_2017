@@ -17,7 +17,7 @@ class ShooterTarget {
 public:
 	ShooterTarget(std::shared_ptr<NetworkTable> newTable, DriveAngle *newAngle, OperatorInputs *newoi);
 	void Init();
-	void Loop();
+	void Loop(bool initonce = false);
 	void Stop();
 	virtual ~ShooterTarget();
 private:
