@@ -35,6 +35,9 @@ protected:
 	bool m_shoot;
 	bool m_rampdown;
 	Timer m_timer;
+	double m_P;
+	double m_I;
+	double m_D;
 };
 
 #endif /* SRC_SHOOTER_H_ */

@@ -101,7 +101,7 @@ void DriveAnglePID::UsePIDOutput(double output)
 
 void DriveAnglePID::CheckPIDValues()
 {
-	GetPIDController()->SetPID(0.1, 0.0125, 0.0005);
+	GetPIDController()->SetPID(0.1, 0.0125, 0);
 /*
 	if (GetPIDController()->GetP() != SmartDashboard::GetValue("DB/Slider 0")->GetDouble() ||
 		GetPIDController()->GetI() != SmartDashboard::GetValue("DB/Slider 1")->GetDouble() ||

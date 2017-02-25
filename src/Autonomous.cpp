@@ -57,16 +57,16 @@ bool Autonomous::GoStraight(double feet, double power)
 	SmartDashboard::PutNumber("AU8_distancepos", distancepos);
 
 	double distancetotarget = abs(distancepos) - (abs((leftposition - rightposition) / 2));
-
-	if (distancetotarget < 0.6)
+	double k = 1.0;
+	if (distancetotarget < k)
 	{
 		power = power * 0.25;
 	}
-	else if (distancetotarget < 1.2)
+	else if (distancetotarget < 2*k)
 	{
 		power = power * 0.5;
 	}
-	else if (distancetotarget < 1.8)
+	else if (distancetotarget < 3*k)
 	{
 		power = power * 0.75;
 	}
@@ -129,7 +129,7 @@ void Autonomous::Loop(Auto autoselected)
 		m_drivetrain->LeftTalon()->SetPosition(0);
 		m_drivetrain->RightTalon()->SetPosition(0);
 		Wait(0.1);
-		if (!m_drivetrain->getIsHighGear())
+		if (m_drivetrain->getIsHighGear())
 			m_drivetrain->Shift();
 		m_stage = kStage1;
 		break;

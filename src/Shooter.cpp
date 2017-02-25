@@ -25,6 +25,9 @@ Shooter::Shooter(OperatorInputs *operatorinputs)
 	m_shoot = false;
 	m_rampdown = false;
 	m_feedvoltage = 6.5;
+	m_P = CAN_SHOOTER_P;
+	m_I = CAN_SHOOTER_I;
+	m_D = CAN_SHOOTER_D;
 }
 
 
@@ -44,11 +47,18 @@ void Shooter::Init()
 	m_rampdown = false;
 	m_timer.Stop();
 	m_timer.Reset();
+	SmartDashboard::PutNumber("SH00_P",m_P);
+	SmartDashboard::PutNumber("SH00_I",m_I);
+	SmartDashboard::PutNumber("SH00_D",m_D);
+	m_P = SmartDashboard::GetNumber("SH00_P",m_P);
+	m_I = SmartDashboard::GetNumber("SH00_I",m_I);
+	m_D = SmartDashboard::GetNumber("SH00_D",m_D);
 
 	m_shootermotor->ConfigNeutralMode(CANSpeedController::NeutralMode::kNeutralMode_Coast);
 	m_shootermotor->SetFeedbackDevice(CANTalon::FeedbackDevice::QuadEncoder);
 	m_shootermotor->SetControlMode(CANSpeedController::ControlMode::kSpeed);
-	m_shootermotor->SetPID(CAN_SHOOTER_P, CAN_SHOOTER_I, CAN_SHOOTER_D, CAN_SHOOTER_F);
+	//m_shootermotor->SetControlMode(CANSpeedController::ControlMode::kVoltage);
+	m_shootermotor->SetPID(m_P, m_I, m_D, CAN_SHOOTER_F);
 	m_shootermotor->SetSensorDirection(true);
 	m_shootermotor->ConfigEncoderCodesPerRev(CAN_SHOOTER_ENCODER_TICKS);
 	m_shootermotor->ClearIaccum();
@@ -72,10 +82,17 @@ void Shooter::Stop()
 
 void Shooter::Loop()
 {
+	m_P = SmartDashboard::GetNumber("SH00_P",m_P);
+	m_I = SmartDashboard::GetNumber("SH00_I",m_I);
+	m_D = SmartDashboard::GetNumber("SH00_D",m_D);
+	m_shootermotor->SetP(m_P);
+	m_shootermotor->SetI(m_I);
+	m_shootermotor->SetD(m_D);
 
 	double shootrpm = m_shootermotor->GetSpeed() * SHOOTER_DIRECTION;
 	double feedrpm = m_feedmotor->GetSpeed();
 	double feedvoltage = m_feedmotor->GetOutputVoltage() * FEEDER_DIRECTION;
+	double shootvoltage = m_shootermotor->GetOutputVoltage() * FEEDER_DIRECTION;
 	bool shooterbutton = m_inputs->xBoxLeftBumper();
 	bool shooterrpmup = m_inputs->xBoxDPadUp(OperatorInputs::ToggleChoice::kHold);
 	bool shooterrpmdown = m_inputs->xBoxDPadDown(OperatorInputs::ToggleChoice::kHold);
@@ -84,7 +101,7 @@ void Shooter::Loop()
 
 	SmartDashboard::PutNumber("SH01_shooter", shootrpm);
 	SmartDashboard::PutNumber("SH02_feeder", feedrpm);
-	SmartDashboard::PutNumber("SH03_feedvolt", feedvoltage);
+	SmartDashboard::PutNumber("SH03_shootvolt", shootvoltage);
 	SmartDashboard::PutNumber("SH04_Is_Shooting", m_shoot);
 
 	if (shooterbutton)

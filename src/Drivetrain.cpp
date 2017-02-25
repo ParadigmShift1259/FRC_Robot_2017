@@ -177,6 +177,9 @@ void Drivetrain::Loop()
 	double x;
 	double y;
 
+	if (m_inputs->xBoxR3())
+		ChangeDirection();
+
 	if (m_inputs->xBoxLeftTrigger())
 	{
 		m_shift = true;
