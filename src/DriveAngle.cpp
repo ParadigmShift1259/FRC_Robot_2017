@@ -23,6 +23,13 @@ DriveAngle::~DriveAngle()
 
 }
 
+bool DriveAngle::IsHighGear() {
+	return m_drivetrain->m_ishighgear;
+}
+
+void DriveAngle::Shift() {
+	m_drivetrain->Shift();
+}
 
 bool DriveAngle::IsEnabled()
 {

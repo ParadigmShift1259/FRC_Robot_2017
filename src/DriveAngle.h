@@ -32,6 +32,8 @@ public:
 	void SetVisionAngle(double angle);
 	void RunNormalDrive();
 	bool IsEnabled();
+	bool IsHighGear();
+	void Shift();
 	void SetToCurrentAngle();
 	void SetP(double p) {m_driveAnglePID->SetP(p);};
 	void SetI(double i) {m_driveAnglePID->SetI(i);};

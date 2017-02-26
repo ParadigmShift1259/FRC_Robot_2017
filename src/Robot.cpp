@@ -46,10 +46,8 @@ void Robot::RobotInit()
 	m_shooter = new Shooter(m_inputs);
 	m_climber = new Climber(m_inputs, m_shooter);
 	m_flipper = new Flipper(&m_ds, m_inputs);
-	m_gTarget = new GearTarget(m_netTable, m_driveangle, m_inputs);
-	m_sTarget = new ShooterTarget(m_netTable, m_driveangle, m_inputs);
-	m_autonomous = new Autonomous(&m_ds, m_drivetrain, m_driveangle, m_gTarget, m_picker, m_inputs);
-	drivingStage = kDrive;
+	m_visiontarget = new VisionTarget(m_netTable, m_driveangle, m_inputs);
+	m_autonomous = new Autonomous(&m_ds, m_drivetrain, m_driveangle, m_visiontarget, m_picker, m_inputs);
 }
 
 
@@ -66,7 +64,7 @@ void Robot::RobotInit()
 //	m_climber->Init();
 //	m_picker->Init();
 	m_flipper->Init();
-	m_gTarget->Init();
+	m_visiontarget->Init();
 	test = baLow;
 	m_driveangle->SetD(0.2);
 }
@@ -135,14 +133,13 @@ void Robot::AutonomousInit()
 	m_autonomous->Init();
 	m_climber->Init();
 	m_picker->Init();
-	m_sTarget->Init();
 }
 
 
 void Robot::AutonomousPeriodic()
 {
 	m_autonomous->Loop(m_autoselected);
-	//m_gTarget->Loop();
+	//m_visiontarget->Loop();
 }
 
 
@@ -162,7 +159,7 @@ void Robot::TeleopPeriodic()
 {
 	//m_drivetrain->Loop();
 	m_climber->Loop();
-	m_gTarget->Loop();
+	m_visiontarget->Loop();
 	m_picker->Loop();
 	m_shooter->Loop();
 	m_flipper->Loop();
@@ -181,7 +178,7 @@ void Robot::TestInit()
 //	m_climber->Init();
 //	m_picker->Init();
 	m_flipper->Init();
-	m_gTarget->Init();
+	m_visiontarget->Init();
 	test = foHigh;
 }
 
@@ -201,7 +198,7 @@ void Robot::DisabledInit()
 	m_climber->Stop();
 	m_picker->Stop();
 	m_shooter->Stop();
-	m_gTarget->Stop();
+	m_visiontarget->Stop();
 }
 
 
@@ -218,41 +215,6 @@ Auto Robot::Chooser2Auto(string selected)
 	if (selected == strAutoStraight)
 		return kAutoStraight;
 	return kAutoLeftGear;
-}
-
-void Robot::Driving()
-{
-	if (m_inputs->xBoxRightBumper())
-	{
-		drivingStage = (drivingStage == kGearTarget) ? kDrive : kGearTarget;
-		//m_gTarget->Loop(true);
-	}
-	/**
-	if (m_inputs->xBoxAButton())
-	{
-		drivingStage = (drivingStage == kShootingTarget) ? kDrive : kShootingTarget;
-		m_sTarget->Loop(true);
-	}
-	*/
-	if (m_inputs->xBoxBButton())
-		drivingStage = kDrive;
-
-	switch (drivingStage)
-	{
-		case kDrive:
-			m_drivetrain->Loop();
-			break;
-
-		case kGearTarget:
-			m_gTarget->Loop();
-			break;
-
-		case kShootingTarget:
-			m_sTarget->Loop();
-			break;
-	}
-
-
 }
 
 

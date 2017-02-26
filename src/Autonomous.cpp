@@ -9,9 +9,9 @@
 #include <Autonomous.h>
 
 
-Autonomous::Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, DriveAngle *driveangle, GearTarget *geartarget, Picker *picker, OperatorInputs *operatorinputs)
+Autonomous::Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, DriveAngle *driveangle, VisionTarget *visiontarget, Picker *picker, OperatorInputs *operatorinputs)
 {
-	m_geartarget = geartarget;
+	m_visiontarget = visiontarget;
 	m_driverstation = driverstation;
 	m_drivetrain = drivetrain;
 	m_driveangle = driveangle;
@@ -20,9 +20,7 @@ Autonomous::Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, Dri
 	m_turning = false;
 	m_leftposition = 0;
 	m_rightposition = 0;
-	m_counter = 0;
 	m_picker = picker;
-	m_nettable = NetworkTable::GetTable("OpenCV");
 }
 
 
@@ -196,7 +194,7 @@ void Autonomous::Loop(Auto autoselected)
 		{
 		case kAutoLeftGear:
 		case kAutoRightGear:
-			m_geartarget->TargetGear();
+			m_visiontarget->TargetGear();
 			if (GoStraight(70.6/12.0, -0.6))
 				m_stage = kDeploy;
 			break;

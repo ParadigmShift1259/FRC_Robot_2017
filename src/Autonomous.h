@@ -10,12 +10,12 @@
 
 
 #include <DriverStation.h>
+#include <VisionTarget.h>
 #include "Drivetrain.h"
 #include "DriveAngle.h"
 #include "OperatorInputs.h"
 #include "const.h"
 #include "Picker.h"
-#include "GearTarget.h"
 
 
 class Autonomous
@@ -23,7 +23,7 @@ class Autonomous
 public:
 	enum Stage { kIdle, kStart, kStage1, kStage2, kStage3, kDeploy };
 
-	Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, DriveAngle *driveangle, GearTarget* geartarget, Picker *picker, OperatorInputs *operatorinputs);
+	Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, DriveAngle *driveangle, VisionTarget* visiontarget, Picker *picker, OperatorInputs *operatorinputs);
 	~Autonomous();
 	void Init();
 	void Stop();
@@ -32,12 +32,10 @@ public:
 	void Loop(Auto autoselected);
 
 protected:
-	std::shared_ptr<NetworkTable> m_nettable;
-	int m_counter;
 	DriverStation *m_driverstation;
 	Drivetrain *m_drivetrain;
 	DriveAngle *m_driveangle;
-	GearTarget *m_geartarget;
+	VisionTarget *m_visiontarget;
 	OperatorInputs *m_inputs;
 	Stage m_stage;
 	bool m_turning;

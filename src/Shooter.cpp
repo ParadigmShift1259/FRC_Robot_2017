@@ -57,6 +57,7 @@ void Shooter::Init()
 	m_D = SmartDashboard::GetNumber("SH00_D",m_D);
 	m_F = SmartDashboard::GetNumber("SH00_D",m_F);
 
+
 	m_shootermotor->ConfigNeutralMode(CANSpeedController::NeutralMode::kNeutralMode_Coast);
 	m_shootermotor->SetFeedbackDevice(CANTalon::FeedbackDevice::QuadEncoder);
 	m_shootermotor->SetControlMode(CANSpeedController::ControlMode::kSpeed);
@@ -92,6 +93,9 @@ void Shooter::Loop()
 	m_P = SmartDashboard::GetNumber("SH00_P",m_P);
 	m_I = SmartDashboard::GetNumber("SH00_I",m_I);
 	m_D = SmartDashboard::GetNumber("SH00_D",m_D);
+
+
+
 	m_shootermotor->SetP(m_P);
 	m_shootermotor->SetI(m_I);
 	m_shootermotor->SetD(m_D);
@@ -114,6 +118,7 @@ void Shooter::Loop()
 	SmartDashboard::PutNumber("SH03_shootvolt", shootvoltage);
 	SmartDashboard::PutNumber("SH04_feedcurr", feedvoltage);
 	SmartDashboard::PutNumber("SH05_Is_Shooting", m_shoot);
+	SmartDashboard::PutNumber("SH06_Error",m_shootermotor->GetClosedLoopError());
 
 	if (shooterbutton)
 	{

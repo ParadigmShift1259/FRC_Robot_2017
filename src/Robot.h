@@ -26,8 +26,7 @@
 #include "shooter.h"
 #include "Flipper.h"
 #include <ntCore.h>
-#include "GearTarget.h"
-#include "ShooterTarget.h"
+#include <VisionTarget.h>
 
 using namespace std;
 using namespace frc;
@@ -37,7 +36,6 @@ class Robot: public IterativeRobot
 {
 private:
 
-	enum DrivingStage {kDrive, kGearTarget, kShootingTarget};
 	// live window variables
 	LiveWindow *m_lw;
 	SendableChooser<string> m_chooser;
@@ -55,10 +53,8 @@ private:
 	Flipper *m_flipper;
 	std::shared_ptr<NetworkTable> m_netTable;
 	std::shared_ptr<NetworkTable> m_netTable2;
-	DrivingStage drivingStage;
 
-	GearTarget *m_gTarget;
-	ShooterTarget *m_sTarget;
+	VisionTarget *m_visiontarget;
 
 	enum Test {foHigh, foLow, baHigh, baLow, done};
 	Test test;
