@@ -39,11 +39,11 @@ void Climber::Loop()
 {
 	static bool timerStarted = false;
 	bool climbupbutton = m_inputs->xBoxYButton(OperatorInputs::ToggleChoice::kHold);
-	bool climbdownbutton = false;//m_inputs->xBoxXButton();
+	bool climbdownbutton = m_inputs->xBoxXButton(OperatorInputs::ToggleChoice::kHold);
 	//double current = m_PDP->GetCurrent(PDP_CLIMBER_MOTOR);
-	double current = m_climbmotor->GetOutputCurrent();
+	//double current = m_climbmotor->GetOutputCurrent();
 
-	SmartDashboard::PutNumber("Climber", current);
+	//SmartDashboard::PutNumber("Climber", current);
 
 	if (climbupbutton)
 	{

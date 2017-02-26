@@ -11,6 +11,9 @@
 
 DriveAnglePID::DriveAnglePID(Drivetrain *drive) : PIDSubsystem("DriveAngle", m_P, m_I, m_D)
 {
+	m_P = 0.15;
+	m_I = 0.0;
+	m_D = 0.03;
 	m_drivetrain = drive;
 	isInitialized = false;
 	isActive = false;

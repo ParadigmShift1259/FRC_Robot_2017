@@ -64,7 +64,7 @@ void Picker::Loop()
 			m_ramping += 0.1;
 		else
 			m_ramping = 1;
-		m_motor->Set(m_ramping*-1.0);
+		m_motor->Set(m_ramping*-0.5);
 	}
 	else
 	{
@@ -74,7 +74,7 @@ void Picker::Loop()
 			m_ramping = -1;
 		if (!m_solenoid->Get())
 			m_ramping = 0;
-		m_motor->Set(m_ramping*-1.0);
+		m_motor->Set(m_ramping*-0.5);
 	}
 
 }

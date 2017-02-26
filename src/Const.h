@@ -69,11 +69,11 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 #define PCM_SHIFT_PORT_LOW 0
 #define PCM_SHIFT_MODULE 0
 #define CHILD_PROOF_SPEED 0.75
-#define FLIP_HIGH_GEAR false
+#define FLIP_HIGH_GEAR true
 // Ramping
 #define RAMPING_RATE_PERIOD 0.10
-#define RAMPING_RATE_MIN 0.05
-#define RAMPING_RATE_MAX 0.125
+#define RAMPING_RATE_MIN 0.6
+#define RAMPING_RATE_MAX 1.5
 #define X_SCALING 0.5
 #define Y_SCALING 1.0
 #define LEFT_MOTOR_SCALING 1
@@ -114,10 +114,10 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 #define DIO_SHOOTER_MOTOR_A 3
 #define DIO_SHOOTER_MOTOR_B 4*/
 #define CAN_FEED_MOTOR 5
-#define CAN_SHOOTER_P 0.007
-#define CAN_SHOOTER_I 0.00007
-#define CAN_SHOOTER_D 0.07
-#define CAN_SHOOTER_F 0.0260
+#define CAN_SHOOTER_P 0.02
+#define CAN_SHOOTER_I 0.0001
+#define CAN_SHOOTER_D 0
+#define CAN_SHOOTER_F 0.0254
 #define CAN_SHOOTER_ENCODER_TICKS 4096
 #define SD_SHOOTER_SLIDER_DEFAULT 2.5
 #define SHOOTER_SLIDER_TO_RPM -600.0
@@ -125,7 +125,7 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 #define SHOOTER_LOW_RPM 300
 #define SHOOTER_SHOOT_RPM 936
 #define SHOOTER_DIRECTION 1
-#define SHOOTER_ERROR_RPM 0.01
+#define SHOOTER_ERROR_RPM 0.03
 
 //Feeder
 #define FEEDER_DIRECTION -1

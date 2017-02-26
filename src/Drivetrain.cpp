@@ -160,8 +160,8 @@ void Drivetrain::Init()
 	m_timerencoder->Reset();
 	m_timerramp->Reset();
 	m_timerramp->Start();
-	m_ishighgear = false;
-	// Starts in low gear
+	m_ishighgear = true;
+	// Starts in high gear
 	m_shifter->Set(FLIP_HIGH_GEAR ^ m_ishighgear);
 	m_isdownshifting = false;
 	m_lowspeedmode = false;
@@ -176,9 +176,6 @@ void Drivetrain::Loop()
 	static unsigned int shiftcnt = 0;
 	double x;
 	double y;
-
-	if (m_inputs->xBoxR3())
-		ChangeDirection();
 
 	if (m_inputs->xBoxLeftTrigger())
 	{
@@ -239,7 +236,7 @@ void Drivetrain::Loop()
 
 void Drivetrain::Stop()
 {
-	m_ishighgear = false;
+	m_ishighgear = true;
 	m_shifter->Set(FLIP_HIGH_GEAR ^ m_ishighgear);
 }
 
@@ -270,8 +267,8 @@ void Drivetrain::Drive(double x, double y, bool ramp)
 	else
 	{
 		double battery = m_driverstation->GetInstance().GetBatteryVoltage();
-		double rampmin = RAMPING_RATE_MIN;// / battery;
-		double rampmax = RAMPING_RATE_MAX;// / battery;
+		double rampmin = RAMPING_RATE_MIN / battery;
+		double rampmax = RAMPING_RATE_MAX / battery;
 		SmartDashboard::PutNumber("DT10_battery", battery);
 		m_previousx = x;	//rampInput(previousX, joyStickX, rampmin, rampmax);
 		m_previousy = Ramp(m_previousy, yd, rampmin, rampmax);
@@ -464,3 +461,4 @@ void Drivetrain::CheckEncoderTimer()
 		m_timerencoder->Reset();
 	}
 }
+

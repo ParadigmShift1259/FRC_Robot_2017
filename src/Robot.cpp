@@ -43,12 +43,12 @@ void Robot::RobotInit()
 	m_compressor = new Compressor(PCM_COMPRESSOR_SOLENOID);
 	m_picker = new Picker(m_inputs);
 	m_camera = new Camera();
-	m_autonomous = new Autonomous(&m_ds, m_drivetrain, m_driveangle, m_picker, m_inputs);
 	m_shooter = new Shooter(m_inputs);
 	m_climber = new Climber(m_inputs, m_shooter);
 	m_flipper = new Flipper(&m_ds, m_inputs);
 	m_gTarget = new GearTarget(m_netTable, m_driveangle, m_inputs);
 	m_sTarget = new ShooterTarget(m_netTable, m_driveangle, m_inputs);
+	m_autonomous = new Autonomous(&m_ds, m_drivetrain, m_driveangle, m_gTarget, m_picker, m_inputs);
 	drivingStage = kDrive;
 }
 
@@ -162,7 +162,7 @@ void Robot::TeleopPeriodic()
 {
 	//m_drivetrain->Loop();
 	m_climber->Loop();
-	Driving();
+	m_gTarget->Loop();
 	m_picker->Loop();
 	m_shooter->Loop();
 	m_flipper->Loop();
@@ -188,40 +188,6 @@ void Robot::TestInit()
 
 void Robot::TestPeriodic()
 {
-	//m_driveangle->Loop();
-
-	switch (test)
-	{
-		case foHigh:
-			m_drivetrain->Drive(0,-1,true);
-			if(abs(m_drivetrain->getLeftPow()) > 0.97)
-			{
-				test = foLow;
-			}
-			break;
-		case foLow:
-			m_drivetrain->Drive(0,0,true);
-			if(abs(m_drivetrain->getLeftPow()) <.03)
-			{
-				m_drivetrain->Shift();
-				test = baHigh;
-			}
-			break;
-		case baHigh:
-			m_drivetrain->Drive(0,1,true);
-			if(abs(m_drivetrain->getLeftPow()) > 0.97)
-				{
-					test = baLow;
-				}
-			break;
-		case baLow:
-			m_drivetrain->Drive(0,0,true);
-			if(abs(m_drivetrain->getLeftPow()) < 0.03)
-						{
-							test = done;
-						}
-
-	}
 }
 
 
@@ -259,15 +225,15 @@ void Robot::Driving()
 	if (m_inputs->xBoxRightBumper())
 	{
 		drivingStage = (drivingStage == kGearTarget) ? kDrive : kGearTarget;
-		m_gTarget->Loop(true);
+		//m_gTarget->Loop(true);
 	}
-
+	/**
 	if (m_inputs->xBoxAButton())
 	{
 		drivingStage = (drivingStage == kShootingTarget) ? kDrive : kShootingTarget;
 		m_sTarget->Loop(true);
 	}
-
+	*/
 	if (m_inputs->xBoxBButton())
 		drivingStage = kDrive;
 

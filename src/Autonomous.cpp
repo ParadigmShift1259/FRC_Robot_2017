@@ -9,8 +9,9 @@
 #include <Autonomous.h>
 
 
-Autonomous::Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, DriveAngle *driveangle, Picker *picker, OperatorInputs *operatorinputs)
+Autonomous::Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, DriveAngle *driveangle, GearTarget *geartarget, Picker *picker, OperatorInputs *operatorinputs)
 {
+	m_geartarget = geartarget;
 	m_driverstation = driverstation;
 	m_drivetrain = drivetrain;
 	m_driveangle = driveangle;
@@ -19,7 +20,9 @@ Autonomous::Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, Dri
 	m_turning = false;
 	m_leftposition = 0;
 	m_rightposition = 0;
+	m_counter = 0;
 	m_picker = picker;
+	m_nettable = NetworkTable::GetTable("OpenCV");
 }
 
 
@@ -60,7 +63,7 @@ bool Autonomous::GoStraight(double feet, double power)
 	//double k = 1.0;
 	if (distancetotarget <= (0.5 * abs(distancepos)))
 	{
-		power = 0.05;
+		power = 0.15 * (power/abs(power));
 	}
 
 	if (distancetotarget <= 0)
@@ -117,7 +120,7 @@ void Autonomous::Loop(Auto autoselected)
 		break;
 
 	case kStart:
-		m_driveangle->SetD(0.2);
+		//m_driveangle->SetD(0.2);
 		DriverStation::ReportError("start");
 		m_drivetrain->LeftTalon()->SetPosition(0);
 		m_drivetrain->RightTalon()->SetPosition(0);
@@ -193,7 +196,8 @@ void Autonomous::Loop(Auto autoselected)
 		{
 		case kAutoLeftGear:
 		case kAutoRightGear:
-			if (GoStraight(58.6/12.0, -1))
+			m_geartarget->TargetGear();
+			if (GoStraight(70.6/12.0, -0.6))
 				m_stage = kDeploy;
 			break;
 

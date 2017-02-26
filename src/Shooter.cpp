@@ -171,8 +171,8 @@ void Shooter::Loop()
 
 			m_feedmotor->Set(m_feedvoltage * FEEDER_DIRECTION);
 		}
-		bool jamtest = (m_feedmotor->IsSensorPresent(CANTalon::FeedbackDevice::QuadEncoder) == CANTalon::FeedbackDeviceStatus::FeedbackStatusUnknown) ?
-				(abs(feedrpm) < 5) : false;
+		bool jamtest = false;//(m_feedmotor->IsSensorPresent(CANTalon::FeedbackDevice::QuadEncoder) == CANTalon::FeedbackDeviceStatus::FeedbackStatusUnknown) ?
+				//(abs(feedrpm) < 5) : false;
 		if (!feedjammed && (abs(m_feedmotor->Get()) > 0) && jamtest)
 		{
 			feedjammed = true;

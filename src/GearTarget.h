@@ -16,8 +16,9 @@ class GearTarget {
 public:
 	GearTarget(std::shared_ptr<NetworkTable> newTable, DriveAngle *newAngle, OperatorInputs *newoi);
 	void Init();
-	void Loop(bool initonce = false);
+	void Loop();
 	void Stop();
+	void TargetGear();
 	virtual ~GearTarget();
 private:
 	int m_prevCounter;

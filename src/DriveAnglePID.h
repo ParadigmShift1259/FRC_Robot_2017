@@ -47,9 +47,9 @@ protected:
 	bool isActive;
 	double m_y;
 	bool m_ramp;
-	double m_P = 0.1;
-	double m_I = 0.0125;
-	double m_D = 0.0;
+	double m_P;
+	double m_I;
+	double m_D;
 };
 
 
