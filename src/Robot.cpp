@@ -56,15 +56,8 @@ void Robot::RobotInit()
 /*void Robot::AutonomousInit()
 {
 	DriverStation::ReportError("Test Init");
-//	m_autoselected = kAutoLeftGear;
-//	//m_autoselected = Chooser2Auto(m_chooserselected);
-//	m_compressor->Start();
 	m_drivetrain->Init();
 	m_driveangle->Init(true);
-//	m_driveangle->Init();
-//	m_autonomous->Init();
-//	m_climber->Init();
-//	m_picker->Init();
 	m_flipper->Init();
 	m_gTarget->Init();
 	test = baLow;
@@ -122,12 +115,6 @@ void Robot::AutonomousPeriodic()
 void Robot::AutonomousInit()
 {
 	DriverStation::ReportError("Autonomous Init");
-	//m_autoselected = kAutoLeftGear;
-	//m_autoselected = kAutoRightGear;
-	//m_autoselected = kAutoRedShoot;
-	//m_autoselected = kAutoBlueShoot;
-	//m_autoselected = kAutoStraight;
-	//m_autoselected = Chooser2Auto(m_chooserselected);
 	m_autoselected = Chooser2Auto(m_chooser.GetSelected());
 	m_compressor->Start();
 	m_drivetrain->Init();
@@ -162,24 +149,17 @@ void Robot::TeleopPeriodic()
 {
 	//m_drivetrain->Loop();
 	m_climber->Loop();
-	m_gTarget->Loop();
+	//m_gTarget->Loop();
 	m_picker->Loop();
 	m_shooter->Loop();
-	m_flipper->Loop();
+	Driving();
 }
 
 
 void Robot::TestInit()
 {
 	DriverStation::ReportError("Test Init");
-//	m_autoselected = kAutoLeftGear;
-//	//m_autoselected = Chooser2Auto(m_chooserselected);
-//	m_compressor->Start();
 	m_drivetrain->Init();
-//	m_driveangle->Init();
-//	m_autonomous->Init();
-//	m_climber->Init();
-//	m_picker->Init();
 	m_flipper->Init();
 	m_gTarget->Init();
 	test = foHigh;
@@ -224,18 +204,38 @@ void Robot::Driving()
 {
 	if (m_inputs->xBoxRightBumper())
 	{
-		drivingStage = (drivingStage == kGearTarget) ? kDrive : kGearTarget;
-		//m_gTarget->Loop(true);
+		m_sTarget->Disable();
+		if (drivingStage == kGearTarget)
+		{
+			m_gTarget->Disable();
+			drivingStage = kDrive;
+		}
+		else
+		{
+			m_gTarget->Enable();
+			drivingStage = kGearTarget;
+		}
 	}
-	/**
 	if (m_inputs->xBoxAButton())
 	{
-		drivingStage = (drivingStage == kShootingTarget) ? kDrive : kShootingTarget;
-		m_sTarget->Loop(true);
+		m_gTarget->Disable();
+		if (drivingStage == kShootingTarget)
+		{
+			m_sTarget->Disable();
+			drivingStage = kDrive;
+		}
+		else
+		{
+			m_sTarget->Enable();
+			drivingStage = kShootingTarget;
+		}
 	}
-	*/
 	if (m_inputs->xBoxBButton())
+	{
 		drivingStage = kDrive;
+		m_sTarget->Disable();
+		m_gTarget->Disable();
+	}
 
 	switch (drivingStage)
 	{

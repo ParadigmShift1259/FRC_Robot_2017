@@ -20,74 +20,19 @@ GearTarget::GearTarget(std::shared_ptr<NetworkTable> newTable, DriveAngle * newA
 
 void GearTarget::Init()
 {
-//	m_isActive = true;
-//	m_driveangle->EnableAnglePID();
 	m_prevCounter = 0;
-	//m_stage = stopped;
 }
 
 void GearTarget::Loop()
 {
 	SmartDashboard::PutNumber("GT_00_IsEnabled", m_isActive);
 	m_nettable->PutNumber("PIDEnabled", m_driveangle->IsEnabled());
-	//if(m_isActive && !m_driveangle->IsEnabled())
-				//m_driveangle->EnableAnglePID();
 
-	if(m_inputs->xBoxRightBumper())
-	{
-		m_isActive = !m_isActive;
-		if(m_isActive)
-		{
-			m_driveangle->EnableAnglePID();
-			m_driveangle->SetToCurrentAngle();
-		}
-		else
-		{
-			m_driveangle->Stop();
-		}
-	}
-	if (!m_driveangle->IsEnabled()) {
-		m_driveangle->RunNormalDrive();
-	}
-
-	if(m_isActive)
+	if (m_isActive)
 	{
 		m_driveangle->Drive(m_inputs->xBoxLeftY(), true);
 		TargetGear();
 	}
-//	switch (stage)
-//	{
-//		case stopped:
-//			break;
-//
-//		case read:
-//			if(counter < 3)
-//			{
-//				prevCounter = netTable->GetNumber("counter", 0);
-//				counter++;
-//			}
-//			else if(netTable->GetNumber("counter", 0) > prevCounter)
-//			{
-//				xDegree = netTable->GetNumber("xPos", 0) / 10;
-//				container->EnableAnglePID();
-//				container->SetRelativeAngle(xDegree);
-//				stage = targeting;
-//			}
-//			else
-//			{
-//				isDone = true;
-//				stage = stopped;
-//			}
-//			break;
-////		case targeting:
-////			if(container->IsOnTarget())
-////			{
-////				isDone = true;
-////				stage = stopped;
-////			}
-//
-//
-//	}
 }
 
 void GearTarget::TargetGear() {
@@ -103,11 +48,27 @@ void GearTarget::TargetGear() {
 }
 
 
-void GearTarget::Stop()
+void GearTarget::Enable()
 {
-	m_isActive = 0;
+	m_isActive = true;
+	m_driveangle->EnableAnglePID();
+	m_driveangle->SetToCurrentAngle();
+}
+
+
+void GearTarget::Disable()
+{
+	m_isActive = false;
 	m_driveangle->Stop();
 }
+
+
+void GearTarget::Stop()
+{
+	m_isActive = false;
+	m_driveangle->Stop();
+}
+
 
 GearTarget::~GearTarget() {
 	// TODO Auto-generated destructor stub

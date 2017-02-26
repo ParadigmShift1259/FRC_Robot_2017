@@ -20,38 +20,15 @@ ShooterTarget::ShooterTarget(std::shared_ptr<NetworkTable> newTable, DriveAngle 
 
 void ShooterTarget::Init()
 {
-//	m_isActive = true;
-//	m_driveangle->EnableAnglePID();
 	m_prevCounter = 0;
-	//m_stage = stopped;
 }
 
-void ShooterTarget::Loop(bool initonce)
+void ShooterTarget::Loop()
 {
 	m_nettable->PutNumber("isActive", m_isActive);
 	m_nettable->PutNumber("PIDEnabled", m_driveangle->IsEnabled());
-	//if(m_isActive && !m_driveangle->IsEnabled())
-				//m_driveangle->EnableAnglePID();
 
-	if(initonce)
-	{
-		m_isActive = !m_isActive;
-		if(m_isActive)
-		{
-			m_driveangle->EnableAnglePID();
-			m_driveangle->SetToCurrentAngle();
-		}
-		else
-		{
-			m_driveangle->Stop();
-		}
-	}
-
-	if (!m_driveangle->IsEnabled()) {
-		m_driveangle->RunNormalDrive();
-	}
-
-	if(m_isActive)
+	if (m_isActive)
 	{
 		m_driveangle->Drive(m_inputs->xBoxLeftY(), true);
 		if(/*container->IsOnTarget() &&*/ m_nettable->GetNumber("counter",0) != m_counter)
@@ -61,47 +38,30 @@ void ShooterTarget::Loop(bool initonce)
 			m_driveangle->SetVisionAngle((m_xDegree));
 		}
 	}
-
-//	switch (stage)
-//	{
-//		case stopped:
-//			break;
-//
-//		case read:
-//			if(counter < 3)
-//			{
-//				prevCounter = netTable->GetNumber("counter", 0);
-//				counter++;
-//			}
-//			else if(netTable->GetNumber("counter", 0) > prevCounter)
-//			{
-//				xDegree = netTable->GetNumber("xPos", 0) / 10;
-//				container->EnableAnglePID();
-//				container->SetRelativeAngle(xDegree);
-//				stage = targeting;
-//			}
-//			else
-//			{
-//				isDone = true;
-//				stage = stopped;
-//			}
-//			break;
-////		case targeting:
-////			if(container->IsOnTarget())
-////			{
-////				isDone = true;
-////				stage = stopped;
-////			}
-//
-//
-//	}
 }
+
+
+void ShooterTarget::Enable()
+{
+	m_isActive = true;
+	m_driveangle->EnableAnglePID();
+	m_driveangle->SetToCurrentAngle();
+}
+
+
+void ShooterTarget::Disable()
+{
+	m_isActive = false;
+	m_driveangle->Stop();
+}
+
 
 void ShooterTarget::Stop()
 {
-	m_isActive = 0;
+	m_isActive = false;
 	m_driveangle->Stop();
 }
+
 
 ShooterTarget::~ShooterTarget() {
 	// TODO Auto-generated destructor stub

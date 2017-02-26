@@ -20,6 +20,8 @@ public:
 	void Stop();
 	void TargetGear();
 	virtual ~GearTarget();
+	void Enable();
+	void Disable();
 private:
 	int m_prevCounter;
 	int m_counter;
