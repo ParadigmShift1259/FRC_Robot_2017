@@ -59,11 +59,18 @@ void VisionTarget::Loop()
 			m_driveangle->SetToCurrentAngle();
 		}
 	}
+<<<<<<< HEAD
 	else if (m_inputs->xBoxBButton())
 	{
 		m_driveangle->Stop();
 		m_targetingshooter = false;
 		m_targetinggear = false;
+=======
+	if (!m_driveangle->IsEnabled()) {
+		m_driveangle->RunNormalDrive();
+	} else if (!m_driveangle->IsHighGear()) {
+		m_driveangle->Shift();
+>>>>>>> refs/remotes/origin/John-Dev
 	}
 	
 	if (!m_driveangle->IsEnabled())
