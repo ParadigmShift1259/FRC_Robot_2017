@@ -63,7 +63,7 @@ void VisionTarget::Loop()
 	}
 	if (!m_driveangle->IsEnabled()) {
 		m_driveangle->RunNormalDrive();
-	} else if (m_driveangle->IsHighGear()) {
+	} else if (!m_driveangle->IsHighGear()) {
 		m_driveangle->Shift();
 	}
 
