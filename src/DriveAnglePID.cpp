@@ -9,10 +9,10 @@
 #include <math.h>
 
 
-DriveAnglePID::DriveAnglePID(Drivetrain *drive) : PIDSubsystem("DriveAngle", m_P, m_I, m_D)
+DriveAnglePID::DriveAnglePID(Drivetrain *drive) : PIDSubsystem("DriveAngle", 0.15, 0.001, 0.03)
 {
 	m_P = 0.15;
-	m_I = 0.0;
+	m_I = 0.001;
 	m_D = 0.03;
 	m_drivetrain = drive;
 	isInitialized = false;
@@ -23,6 +23,7 @@ DriveAnglePID::DriveAnglePID(Drivetrain *drive) : PIDSubsystem("DriveAngle", m_P
 	SmartDashboard::PutNumber("DP00_P", m_P);
 	SmartDashboard::PutNumber("DP00_I", m_I);
 	SmartDashboard::PutNumber("DP00_D", m_D);
+	SetOutputRange(-0.5,0.5);
 }
 
 

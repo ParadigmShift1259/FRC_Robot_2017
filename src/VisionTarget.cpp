@@ -95,7 +95,7 @@ void VisionTarget::TargetGear() {
 	if(m_nettable->GetNumber("gear/counter",0) != m_gearcounter)
 	{
 		m_gearcounter = m_nettable->GetNumber("gear/counter",0);
-		double m_xDegree = (m_nettable->GetNumber("gear/xPos", 0) / 20); // how fast it turns (making it larger is slower)
+		double m_xDegree = ((m_nettable->GetNumber("gear/xPos", 0) - 27.0) / 18); // todo change the subtract value, it's the angle info, the divisor is how fast it turns (making it larger is slower)
 		int areaDegree = (m_nettable->GetNumber("gear/areaDifference", 0) * 50); // how sensitive the arcing is
 		areaDegree = (abs(areaDegree)>6) ? (areaDegree>0?6:-6) : areaDegree; // maximum arc
 		areaDegree = (m_nettable->GetNumber("gear/xSpread",0)>180)?0:areaDegree; // distance to stop arcing
@@ -107,7 +107,7 @@ void VisionTarget::TargetShooter() {
 	if(m_nettable->GetNumber("shooter/counter",0) != m_shootercounter)
 	{
 		m_gearcounter = m_nettable->GetNumber("shooter/counter",0);
-		double m_xDegree = (m_nettable->GetNumber("shooter/xPos", 0) / 20); // how fast it turns (making it larger is slower)
+		double m_xDegree = ((m_nettable->GetNumber("shooter/xPos", 0) - 0) / 18); // todo change the subtract value, it's the angle info, the divisor is how fast it turns (making it larger is slower)
 		m_driveangle->SetVisionAngle((m_xDegree));
 	}
 }
