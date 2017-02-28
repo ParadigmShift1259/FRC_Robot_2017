@@ -38,8 +38,8 @@ void Climber::Init()
 void Climber::Loop()
 {
 	static bool timerStarted = false;
-	bool climbupbutton = m_inputs->xBoxYButton(OperatorInputs::ToggleChoice::kHold);
-	bool climbdownbutton = m_inputs->xBoxXButton(OperatorInputs::ToggleChoice::kHold);
+	bool climbupbutton = m_inputs->xBoxYButton(OperatorInputs::ToggleChoice::kHold, 1);
+	bool climbdownbutton = m_inputs->xBoxXButton(OperatorInputs::ToggleChoice::kHold, 1);
 	//double current = m_PDP->GetCurrent(PDP_CLIMBER_MOTOR);
 	//double current = m_climbmotor->GetOutputCurrent();
 
