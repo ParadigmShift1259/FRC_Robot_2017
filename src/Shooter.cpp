@@ -24,11 +24,13 @@ Shooter::Shooter(OperatorInputs *operatorinputs)
 	m_ramprpm = 0;
 	m_shoot = false;
 	m_rampdown = false;
-	m_feedvoltage = 6.5;
+	m_feedvoltage = 9;
 	m_P = CAN_SHOOTER_P;
 	m_I = CAN_SHOOTER_I;
 	m_D = CAN_SHOOTER_D;
 	m_F = CAN_SHOOTER_F;
+	m_prevshootrpm = 0;
+	m_2prevshootrpm = 0;
 }
 
 
@@ -166,7 +168,9 @@ void Shooter::Loop()
 	if (m_shoot)
 	{
 		//error 1, feedmotor speed is constantly reset to -6.5 volts
-		if (!feedjammed && (abs(shootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM * m_shootrpm)))
+		if (!feedjammed && (abs(shootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM * m_shootrpm))
+				        && (abs(m_prevshootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM * m_shootrpm))
+				        && (abs(m_2prevshootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM * m_shootrpm)))
 		{
 			if (feedrpmup)
 				m_feedvoltage += 0.01;
@@ -215,4 +219,7 @@ void Shooter::Loop()
 			m_shootermotor->Set(m_ramprpm * SHOOTER_DIRECTION);
 		}
 	}
+
+	m_2prevshootrpm = m_prevshootrpm;
+	m_prevshootrpm = shootrpm;
 }

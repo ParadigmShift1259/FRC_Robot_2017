@@ -125,7 +125,7 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 #define SHOOTER_LOW_RPM 300
 #define SHOOTER_SHOOT_RPM 936
 #define SHOOTER_DIRECTION 1
-#define SHOOTER_ERROR_RPM 0.03
+#define SHOOTER_ERROR_RPM 0.005
 
 //Feeder
 #define FEEDER_DIRECTION -1

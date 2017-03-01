@@ -39,6 +39,8 @@ protected:
 	double m_I;
 	double m_D;
 	double m_F;
+	double m_prevshootrpm;
+	double m_2prevshootrpm;
 };
 
 #endif /* SRC_SHOOTER_H_ */

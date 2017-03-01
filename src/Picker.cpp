@@ -44,12 +44,12 @@ void Picker::Init()
 
 void Picker::Loop()
 {
-	bool buttonpressed = m_inputs->xBoxBButton();
-	bool deploy = m_inputs->xBoxBackButton();
+	bool changePickerDirection = m_inputs->xBoxStartButton(OperatorInputs::ToggleChoice::kToggle, 1);
+	bool deploy = m_inputs->xBoxBackButton(OperatorInputs::ToggleChoice::kToggle, 1);
 	SmartDashboard::PutNumber("P1_PickerState", m_running);
 
 	//m_solenoid->Set(false);
-	if (buttonpressed && m_solenoid->Get())
+	if (changePickerDirection && m_solenoid->Get())
 		m_running = !m_running;
 	else
 	if (!m_solenoid->Get())
