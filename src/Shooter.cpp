@@ -24,7 +24,7 @@ Shooter::Shooter(OperatorInputs *operatorinputs)
 	m_ramprpm = 0;
 	m_shoot = false;
 	m_rampdown = false;
-	m_feedvoltage = 6.5;
+	m_feedvoltage = 9;
 	m_P = CAN_SHOOTER_P;
 	m_I = CAN_SHOOTER_I;
 	m_D = CAN_SHOOTER_D;

@@ -107,8 +107,8 @@ void VisionTarget::TargetShooter() {
 	if(m_nettable->GetNumber("shooter/counter",0) != m_shootercounter)
 	{
 		m_gearcounter = m_nettable->GetNumber("shooter/counter",0);
-		double m_xDegree = ((m_nettable->GetNumber("shooter/xPos", 0) - 0) / 18); // todo change the subtract value, it's the angle info, the divisor is how fast it turns (making it larger is slower)
-		m_driveangle->SetVisionAngle((m_xDegree));
+		double m_xDegree = ((m_nettable->GetNumber("shooter/xPos", 0) - 0) / 10); // todo change the subtract value, it's the angle info, the divisor is how fast it turns (making it larger is slower)
+		m_driveangle->SetVisionAngle((-m_xDegree));
 	}
 }
 
