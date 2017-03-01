@@ -100,7 +100,7 @@ void Shooter::Loop() {
 
 	double shootrpm = m_shootermotor->GetSpeed() * SHOOTER_DIRECTION;
 	double feedrpm = m_feedmotor->GetSpeed();
-	double feedvoltage = m_feedmotor->GetOutputCurrent(); // * FEEDER_DIRECTION;
+	double feedcurrent = m_feedmotor->GetOutputCurrent(); // * FEEDER_DIRECTION;
 	double shootvoltage = m_shootermotor->GetOutputVoltage() * FEEDER_DIRECTION;
 	bool shooterbutton = m_inputs->xBoxLeftBumper();
 	bool shooterrpmup = m_inputs->xBoxDPadUp(
@@ -115,10 +115,10 @@ void Shooter::Loop() {
 	double feedpos = m_feedmotor->GetPosition();
 	static double feedjampos = 0;
 
-	SmartDashboard::PutNumber("SH01_shooter", shootrpm);
-	SmartDashboard::PutNumber("SH02_feeder", feedrpm);
+	SmartDashboard::PutNumber("SH01_shooter_rpm", shootrpm);
+	SmartDashboard::PutNumber("SH02_feeder_rpm", feedrpm);
 	SmartDashboard::PutNumber("SH03_shootvolt", shootvoltage);
-	SmartDashboard::PutNumber("SH04_feedcurr", feedvoltage);
+	SmartDashboard::PutNumber("SH04_feedcurr", feedcurrent);
 	SmartDashboard::PutNumber("SH05_Is_Shooting", m_shoot);
 	SmartDashboard::PutNumber("SH06_Error",
 			m_shootermotor->GetClosedLoopError());
