@@ -73,7 +73,7 @@ void Shooter::Init() {
 	if (SHOOTER_DIRECTION == 1){
 		m_feedmotor->ConfigPeakOutputVoltage(+12.0,+0.0);
 	} else if (SHOOTER_DIRECTION == -1) {
-		m_feedmotor->ConfigPeakOutputVoltage(+12.0,+0.0);
+		m_feedmotor->ConfigPeakOutputVoltage(-0.0,-12.0);
 	} else {
 		m_feedmotor->ConfigPeakOutputVoltage(+0.0,-0.0);
 	}
