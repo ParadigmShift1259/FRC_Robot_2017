@@ -126,6 +126,8 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 #define SHOOTER_SHOOT_RPM 936
 #define SHOOTER_DIRECTION 1
 #define SHOOTER_ERROR_RPM 0.005
+#define SHOOTER_ABS_ERROR 2.0
+#define SHOOTER_RAMP_RATE (1023/100) //throttle per 10ms, current value means 1 seconds to go from 0 to 100%
 
 //Feeder
 #define FEEDER_DIRECTION -1
