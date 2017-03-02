@@ -54,6 +54,7 @@ void Shooter::Init()
 	SmartDashboard::PutNumber("SH00_I",m_I);
 	SmartDashboard::PutNumber("SH00_D",m_D);
 	SmartDashboard::PutNumber("SH00_F",m_F);
+	SmartDashboard::PutNumber("SH00_Target",m_shootrpm);
 	m_P = SmartDashboard::GetNumber("SH00_P",m_P);
 	m_I = SmartDashboard::GetNumber("SH00_I",m_I);
 	m_D = SmartDashboard::GetNumber("SH00_D",m_D);
@@ -95,12 +96,15 @@ void Shooter::Loop()
 	m_P = SmartDashboard::GetNumber("SH00_P",m_P);
 	m_I = SmartDashboard::GetNumber("SH00_I",m_I);
 	m_D = SmartDashboard::GetNumber("SH00_D",m_D);
-
+	m_F = SmartDashboard::GetNumber("SH00_F",m_F);
+	m_shootrpm = SmartDashboard::GetNumber("SH00_Target", m_shootrpm);
 
 
 	m_shootermotor->SetP(m_P);
 	m_shootermotor->SetI(m_I);
 	m_shootermotor->SetD(m_D);
+	m_shootermotor->SetF(m_F);
+	m_shootermotor->SetIzone(600);
 
 	double shootrpm = m_shootermotor->GetSpeed() * SHOOTER_DIRECTION;
 	double feedrpm = m_feedmotor->GetSpeed();
@@ -168,9 +172,9 @@ void Shooter::Loop()
 	if (m_shoot)
 	{
 		//error 1, feedmotor speed is constantly reset to -6.5 volts
-		if (!feedjammed && (abs(shootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM * m_shootrpm))
-				        && (abs(m_prevshootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM * m_shootrpm))
-				        && (abs(m_2prevshootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM * m_shootrpm)))
+		if (!feedjammed && (abs(shootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM))
+				        && (abs(m_prevshootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM))
+				        && (abs(m_2prevshootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM)))
 		{
 			if (feedrpmup)
 				m_feedvoltage += 0.01;

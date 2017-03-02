@@ -114,10 +114,10 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 #define DIO_SHOOTER_MOTOR_A 3
 #define DIO_SHOOTER_MOTOR_B 4*/
 #define CAN_FEED_MOTOR 5
-#define CAN_SHOOTER_P 0.02
+#define CAN_SHOOTER_P 0.025
 #define CAN_SHOOTER_I 0.0001
 #define CAN_SHOOTER_D 0
-#define CAN_SHOOTER_F 0.0254
+#define CAN_SHOOTER_F 0.023
 #define CAN_SHOOTER_ENCODER_TICKS 4096
 #define SD_SHOOTER_SLIDER_DEFAULT 2.5
 #define SHOOTER_SLIDER_TO_RPM -600.0
@@ -125,7 +125,7 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 #define SHOOTER_LOW_RPM 300
 #define SHOOTER_SHOOT_RPM 936
 #define SHOOTER_DIRECTION 1
-#define SHOOTER_ERROR_RPM 0.005
+#define SHOOTER_ERROR_RPM 4.5
 
 //Feeder
 #define FEEDER_DIRECTION -1
