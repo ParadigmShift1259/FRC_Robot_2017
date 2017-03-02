@@ -21,6 +21,7 @@ class Shooter
 public:
 	Shooter(OperatorInputs *operatorinputs);
 	~Shooter();
+	void SetShootRPM(double rpm);
 	void Init();
 	void Stop();
 	void Loop();

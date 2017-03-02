@@ -68,6 +68,7 @@ void Shooter::Init()
 	m_shootermotor->SetPID(m_P, m_I, m_D, m_F);
 	m_shootermotor->SetSensorDirection(true);
 	m_shootermotor->ConfigEncoderCodesPerRev(CAN_SHOOTER_ENCODER_TICKS);
+	m_shootermotor->SetIzone(600);
 	m_shootermotor->ClearIaccum();
 	m_shootermotor->Enable();
 	m_shootermotor->Set(m_lowrpm);
@@ -90,6 +91,12 @@ void Shooter::Stop()
 	m_timer.Reset();
 }
 
+void Shooter::SetShootRPM(double rpm)
+{
+	m_shootrpm = rpm;
+	m_shootermotor->Set(m_shootrpm * SHOOTER_DIRECTION);
+}
+
 
 void Shooter::Loop()
 {
@@ -104,7 +111,6 @@ void Shooter::Loop()
 	m_shootermotor->SetI(m_I);
 	m_shootermotor->SetD(m_D);
 	m_shootermotor->SetF(m_F);
-	m_shootermotor->SetIzone(600);
 
 	double shootrpm = m_shootermotor->GetSpeed() * SHOOTER_DIRECTION;
 	double feedrpm = m_feedmotor->GetSpeed();
