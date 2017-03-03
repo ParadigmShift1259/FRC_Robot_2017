@@ -167,6 +167,7 @@ void Drivetrain::Init()
 	m_lowspeedmode = false;
 	m_shift = false;
 	m_direction = DT_DEFAULT_DIRECTION;
+	SmartDashboard::PutString("DT10_Direction", "Gear Forward");
 }
 
 
@@ -177,6 +178,13 @@ void Drivetrain::Loop()
 	double x;
 	double y;
 
+	if (m_inputs->xBoxR3())
+	{
+		if (ChangeDirection())
+			SmartDashboard::PutString("DT10_Direction", "Gear Forward");
+		else
+			SmartDashboard::PutString("DT10_Direction", "Picker Forward");
+	}
 	if (m_inputs->xBoxLeftTrigger())
 	{
 		m_shift = true;

@@ -145,8 +145,8 @@ void Autonomous::Loop(Auto autoselected)
 			break;
 
 		case kAutoStraight:
-			if (GoStraight(6.625, -1))
-				m_stage = kDeploy;
+			if (GoStraight(39.75/12.0, -1))
+				m_stage = kStage2;
 			break;
 
 		}
@@ -184,6 +184,7 @@ void Autonomous::Loop(Auto autoselected)
 			break;
 
 		case kAutoStraight:
+			m_stage = kStage3;
 			break;
 		}
 		break;
@@ -206,6 +207,9 @@ void Autonomous::Loop(Auto autoselected)
 			break;
 
 		case kAutoStraight:
+			m_visiontarget->TargetGear();
+			if (GoStraight(39.75/12.0, -0.6))
+				m_stage = kDeploy;
 			break;
 		}
 		break;
