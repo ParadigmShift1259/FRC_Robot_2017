@@ -68,7 +68,7 @@ void Shooter::Init()
 	m_shootermotor->SetPID(m_P, m_I, m_D, m_F);
 	m_shootermotor->SetSensorDirection(true);
 	m_shootermotor->ConfigEncoderCodesPerRev(CAN_SHOOTER_ENCODER_TICKS);
-	m_shootermotor->SetIzone(600);
+	m_shootermotor->SetIzone(1200);
 	m_shootermotor->ClearIaccum();
 	m_shootermotor->Enable();
 	m_shootermotor->Set(m_lowrpm);
@@ -151,14 +151,20 @@ void Shooter::Loop()
 	if (shooterrpmup)
 	{
 		if (m_shoot)
+		{
 			m_shootermotor->Set(++m_shootrpm * SHOOTER_DIRECTION);
+			SmartDashboard::PutNumber("SH00_Target", m_shootrpm);
+		}
 		else
 			m_shootermotor->Set(++m_lowrpm * SHOOTER_DIRECTION);
 	}
 	if (shooterrpmdown)
 	{
 		if (m_shoot)
+		{
 			m_shootermotor->Set(--m_shootrpm * SHOOTER_DIRECTION);
+			SmartDashboard::PutNumber("SH00_Target", m_shootrpm);
+		}
 		else
 			m_shootermotor->Set(--m_lowrpm * SHOOTER_DIRECTION);
 	}
