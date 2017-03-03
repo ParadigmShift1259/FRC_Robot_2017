@@ -114,7 +114,7 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 #define DIO_SHOOTER_MOTOR_A 3
 #define DIO_SHOOTER_MOTOR_B 4*/
 #define CAN_FEED_MOTOR 5
-#define CAN_SHOOTER_P 0.027
+#define CAN_SHOOTER_P 0.046
 #define CAN_SHOOTER_I 0.0007
 #define CAN_SHOOTER_D 0
 #define CAN_SHOOTER_F 0.021
