@@ -23,6 +23,7 @@ public:
 	void TargetShooter();
 	virtual ~VisionTarget();
 private:
+	double ConvAreaToRPM(double area);
 	int m_gearcounter;
 	int m_shootercounter;
 	DriveAngle* m_driveangle;
