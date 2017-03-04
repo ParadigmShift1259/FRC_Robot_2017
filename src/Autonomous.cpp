@@ -9,7 +9,7 @@
 #include <Autonomous.h>
 
 
-Autonomous::Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, DriveAngle *driveangle, VisionTarget *visiontarget, Picker *picker, OperatorInputs *operatorinputs)
+Autonomous::Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, DriveAngle *driveangle, VisionTarget *visiontarget, Picker *picker, OperatorInputs *operatorinputs, Shooter *shooter)
 {
 	m_visiontarget = visiontarget;
 	m_driverstation = driverstation;
@@ -21,6 +21,7 @@ Autonomous::Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, Dri
 	m_leftposition = 0;
 	m_rightposition = 0;
 	m_picker = picker;
+	m_shooter = shooter;
 }
 
 
@@ -134,19 +135,22 @@ void Autonomous::Loop(Auto autoselected)
 		{
 		case kAutoLeftGear:
 		case kAutoRightGear:
+		case kAutoRedShoot:
+		case kAutoBlueShoot:
 			if (GoStraight(67.6/12.0, -1))
 				m_stage = kStage2;
 			break;
 
-		case kAutoRedShoot:
-		case kAutoBlueShoot:
 			if (GoStraight(7.04, -1))
 				m_stage = kStage2;
 			break;
 
 		case kAutoStraight:
+			m_visiontarget->TargetGear();
 			if (GoStraight(39.75/12.0, -1))
+			{
 				m_stage = kStage2;
+			}
 			break;
 
 		}
@@ -157,30 +161,15 @@ void Autonomous::Loop(Auto autoselected)
 		switch (autoselected)
 		{
 		case kAutoLeftGear:
+		case kAutoBlueShoot:
 			if (TurnDegree(-60))
 				m_stage = kStage3;
 			break;
 
+		case kAutoRedShoot:
 		case kAutoRightGear:
 			if (TurnDegree(60))
 				m_stage = kStage3;
-			break;
-
-		case kAutoRedShoot:
-			if (TurnDegree(90))
-			{
-				m_picker->Deploy();
-				Wait(0.1);
-				m_stage = kStage3;
-			}
-			break;
-
-		case kAutoBlueShoot:
-			if (TurnDegree(-90))
-			{
-				m_picker->Deploy();
-				m_stage = kStage3;
-			}
 			break;
 
 		case kAutoStraight:
@@ -202,17 +191,69 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kAutoRedShoot:
 		case kAutoBlueShoot:
-			if (GoStraight(-3.375, 1))
-				m_stage = kDeploy;
+			m_visiontarget->TargetGear();
+			if (GoStraight(70.6/12.0, -0.6))
+				m_stage = kStage4;
 			break;
 
+
 		case kAutoStraight:
-			m_visiontarget->TargetGear();
 			if (GoStraight(39.75/12.0, -0.6))
 				m_stage = kDeploy;
 			break;
 		}
 		break;
+
+	case kStage4:
+		switch(autoselected)
+		{
+			case kAutoRedShoot:
+				if(TurnDegree(13.74))
+				{
+					m_shooter->StartShooting();
+					m_stage = kStage5;
+				}
+				break;
+			case kAutoBlueShoot:
+				if(TurnDegree(-13.74))
+				{
+					m_stage = kStage5;
+				}
+				break;
+			case kAutoRightGear:
+			case kAutoLeftGear:
+			case kAutoStraight:
+				m_stage = kDeploy;
+				break;
+
+		}
+		break;
+
+
+
+
+	case kStage5:
+		switch(autoselected)
+		{
+			case kAutoRedShoot:
+					m_stage = kDeploy;
+				break;
+			case kAutoBlueShoot:
+					m_stage = kDeploy;
+				break;
+			case kAutoRightGear:
+			case kAutoLeftGear:
+			case kAutoStraight:
+				m_stage = kDeploy;
+				break;
+		}
+		break;
+
+
+	case kShoot:
+		break;
+
+
 
 	case kDeploy:
 		DriverStation::ReportError("deploy");
@@ -222,13 +263,18 @@ void Autonomous::Loop(Auto autoselected)
 		case kAutoRightGear:
 		case kAutoStraight:
 			m_picker->Deploy();
+			m_stage = kIdle;
 			break;
 
 		case kAutoRedShoot:
 		case kAutoBlueShoot:
+			m_picker->Deploy();
+			m_shooter->SetShootRPM(780);
+			m_shooter->StartShooting();
+			m_stage = kShoot;
 			break;
 		}
-		m_stage = kIdle;
+
 		break;
 	}
 }

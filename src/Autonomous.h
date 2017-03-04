@@ -16,14 +16,15 @@
 #include "OperatorInputs.h"
 #include "const.h"
 #include "Picker.h"
+#include "Shooter.h"
 
 
 class Autonomous
 {
 public:
-	enum Stage { kIdle, kStart, kStage1, kStage2, kStage3, kDeploy };
+	enum Stage { kIdle, kStart, kStage1, kStage2, kStage3, kStage4, kStage5, kShoot, kDeploy };
 
-	Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, DriveAngle *driveangle, VisionTarget* visiontarget, Picker *picker, OperatorInputs *operatorinputs);
+	Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, DriveAngle *driveangle, VisionTarget* visiontarget, Picker *picker, OperatorInputs *operatorinputs, Shooter *shooter);
 	~Autonomous();
 	void Init();
 	void Stop();
@@ -37,6 +38,7 @@ protected:
 	DriveAngle *m_driveangle;
 	VisionTarget *m_visiontarget;
 	OperatorInputs *m_inputs;
+	Shooter *m_shooter;
 	Stage m_stage;
 	bool m_turning;
 	double m_leftposition;

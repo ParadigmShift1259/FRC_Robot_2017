@@ -9,7 +9,7 @@
 #include <Const.h>
 
 
-Climber::Climber(OperatorInputs *operatorinputs, Shooter *shooter) : m_PDP(CAN_PDP)
+Climber::Climber(OperatorInputs *operatorinputs, Shooter *shooter, Picker *picker) : m_PDP(CAN_PDP)
 {
 	m_inputs = operatorinputs;
 	m_timer.Reset();
@@ -17,6 +17,7 @@ Climber::Climber(OperatorInputs *operatorinputs, Shooter *shooter) : m_PDP(CAN_P
 	//m_climbmotor = new Spark(PWM_CLIMBER_MOTOR);
 	m_climbmotor = new CANTalon(CAN_CLIMBER_MOTOR);
 	m_shooter = shooter;
+	m_picker = picker;
 }
 
 
@@ -47,14 +48,17 @@ void Climber::Loop()
 
 	if (climbupbutton)
 	{
-		m_climbmotor->Set(9);
+		m_climbmotor->Set(999);
 		if(!timerStarted)
 		{
 			m_timer.Start();
 			timerStarted = true;
 		}
 		if(m_timer.HasPeriodPassed(1.0))
+		{
 			m_shooter->Stop();
+			m_picker->Stop();
+		}
 	}
 	else
 	if (climbdownbutton)

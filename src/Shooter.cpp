@@ -31,6 +31,7 @@ Shooter::Shooter(OperatorInputs *operatorinputs)
 	m_F = CAN_SHOOTER_F;
 	m_prevshootrpm = 0;
 	m_2prevshootrpm = 0;
+	m_shooting = false;
 }
 
 
@@ -84,6 +85,7 @@ void Shooter::Init()
 	m_feedmotor->Set(0);
 
 	SmartDashboard::PutString("SH99_FeedStatus","");
+	m_shooting = false;
 }
 
 
@@ -94,12 +96,19 @@ void Shooter::Stop()
 	m_shoot = false;
 	m_timer.Stop();
 	m_timer.Reset();
+	m_shooting = false;
 }
 
 void Shooter::SetShootRPM(double rpm)
 {
 	m_shootrpm = rpm;
 	m_shootermotor->Set(m_shootrpm * SHOOTER_DIRECTION);
+	SmartDashboard::PutNumber("SH00_Target", m_shootrpm);
+}
+
+void Shooter::StartShooting()
+{
+	m_shooting = true;
 }
 
 
@@ -151,6 +160,11 @@ void Shooter::Loop()
 			m_rampdown = true;
 			m_ramprpm = m_shootrpm;
 		}
+	}
+	else if (m_shooting)
+	{
+		m_shootermotor->Set(m_shootrpm * SHOOTER_DIRECTION);
+		m_rampdown = false;
 	}
 
 	if (shooterrpmup)

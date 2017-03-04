@@ -25,6 +25,7 @@ public:
 	void Init();
 	void Stop();
 	void Loop();
+	void StartShooting();
 protected:
 	OperatorInputs *m_inputs;
 	CANTalon *m_shootermotor;
@@ -42,6 +43,7 @@ protected:
 	double m_F;
 	double m_prevshootrpm;
 	double m_2prevshootrpm;
+	bool m_shooting;
 };
 
 #endif /* SRC_SHOOTER_H_ */

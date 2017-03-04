@@ -180,10 +180,7 @@ void Drivetrain::Loop()
 
 	if (m_inputs->xBoxR3())
 	{
-		if (ChangeDirection())
-			SmartDashboard::PutString("DT10_Direction", "Gear Forward");
-		else
-			SmartDashboard::PutString("DT10_Direction", "Picker Forward");
+		ChangeDirection();
 	}
 	if (m_inputs->xBoxLeftTrigger())
 	{
@@ -205,7 +202,7 @@ void Drivetrain::Loop()
 		y = y * LOWSPEED_MODIFIER_Y;
 	}
 
-	Drive(x, y, true);
+	Drive(x, y * m_direction, true);
 
 	if (m_shift)
 	{

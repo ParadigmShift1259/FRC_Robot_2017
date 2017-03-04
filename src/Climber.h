@@ -16,7 +16,7 @@
 #include <SmartDashboard/SmartDashboard.h>
 #include <PowerDistributionPanel.h>
 #include <timer.h>
-
+#include <Picker.h>
 
 using namespace frc;
 
@@ -24,13 +24,14 @@ using namespace frc;
 class Climber
 {
 public:
-	Climber(OperatorInputs *operatorinputs, Shooter *shooter);
+	Climber(OperatorInputs *operatorinputs, Shooter *shooter, Picker *picker);
 	~Climber();
 	void Init();
 	void Loop();
 	void Stop();
 
 protected:
+	Picker *m_picker;
 	OperatorInputs *m_inputs;
 	Shooter *m_shooter;
 	//Spark *m_climbmotor;

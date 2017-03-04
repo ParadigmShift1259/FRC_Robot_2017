@@ -143,7 +143,7 @@ enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoS
 
 
 // Auger
-#define AUGER_CHANNEL 16 //Augur
+#define AUGER_CHANNEL 16 //Auger
 #define AUGER_POWER 1
 #define AUGER_RAMP 0.1
 #define AUGER_ON_TIME 1
