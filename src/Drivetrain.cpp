@@ -202,7 +202,7 @@ void Drivetrain::Loop()
 		y = y * LOWSPEED_MODIFIER_Y;
 	}
 
-	Drive(x, y * m_direction, true);
+	Drive(x, y, true);
 
 	if (m_shift)
 	{
@@ -227,6 +227,8 @@ void Drivetrain::Loop()
 		m_isdownshifting = false;
 	}
 
+
+	SmartDashboard::PutNumber("DIRECTION", m_direction);
 	SmartDashboard::PutNumber("DT01_x", x);
 	SmartDashboard::PutNumber("DT02_y", y);
 	SmartDashboard::PutNumber("DT03_top", ENCODER_TOP_SPEED);

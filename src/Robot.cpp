@@ -44,10 +44,10 @@ void Robot::RobotInit()
 	m_picker = new Picker(m_inputs);
 	m_camera = new Camera();
 	m_shooter = new Shooter(m_inputs);
-	m_climber = new Climber(m_inputs, m_shooter);
+	m_climber = new Climber(m_inputs, m_shooter, m_picker);
 	m_flipper = new Flipper(&m_ds, m_inputs);
 	m_visiontarget = new VisionTarget(m_netTable, m_driveangle, m_inputs);
-	m_autonomous = new Autonomous(&m_ds, m_drivetrain, m_driveangle, m_visiontarget, m_picker, m_inputs);
+	m_autonomous = new Autonomous(&m_ds, m_drivetrain, m_driveangle, m_visiontarget, m_picker, m_inputs, m_shooter);
 }
 
 
