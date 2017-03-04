@@ -76,6 +76,7 @@ void VisionTarget::Loop() {
 	if (m_targetingshooter) {
 		m_driveangle->Drive(m_inputs->xBoxLeftY(), true);
 		TargetShooter();
+		SmartDashboard::PutNumber("SH00_Target", ConvAreaToRPM(m_nettable->GetNumber("shooter/area",500)));
 	} else {
 		m_shootercounter = m_nettable->GetNumber("shooter/counter", 0);
 	}

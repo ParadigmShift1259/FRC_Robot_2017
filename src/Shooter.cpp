@@ -24,7 +24,7 @@ Shooter::Shooter(OperatorInputs *operatorinputs)
 	m_ramprpm = 0;
 	m_shoot = false;
 	m_rampdown = false;
-	m_feedvoltage = 9;
+	m_feedvoltage = 12;
 	m_P = CAN_SHOOTER_P;
 	m_I = CAN_SHOOTER_I;
 	m_D = CAN_SHOOTER_D;
@@ -72,6 +72,11 @@ void Shooter::Init()
 	m_shootermotor->ClearIaccum();
 	m_shootermotor->Enable();
 	m_shootermotor->Set(m_lowrpm);
+	if (SHOOTER_DIRECTION ==1) {
+		m_shootermotor->ConfigPeakOutputVoltage(+12.0,0.0);
+	} else if (SHOOTER_DIRECTION == -1) {
+		m_shootermotor->ConfigPeakOutputVoltage(0.0,-12.0);
+	}
 
 	m_feedmotor->SetFeedbackDevice(CANTalon::FeedbackDevice::QuadEncoder);
 	m_feedmotor->SetControlMode(CANSpeedController::ControlMode::kVoltage);
