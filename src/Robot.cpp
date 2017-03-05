@@ -133,12 +133,14 @@ void Robot::AutonomousInit()
 	m_autonomous->Init();
 	m_climber->Init();
 	m_picker->Init();
+	m_shooter->Init();
 }
 
 
 void Robot::AutonomousPeriodic()
 {
 	m_autonomous->Loop(m_autoselected);
+	m_shooter->Loop();
 	//m_visiontarget->Loop();
 }
 

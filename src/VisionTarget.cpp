@@ -86,15 +86,15 @@ void VisionTarget::TargetGear() {
 	if (m_nettable->GetNumber("gear/counter", 0) != m_gearcounter) {
 		m_gearcounter = m_nettable->GetNumber("gear/counter", 0);
 		// todo change the subtract value, it's the angle info, the divisor is how fast it turns (making it larger is slower)
-		double m_xDegree = ((m_nettable->GetNumber("gear/xPos", 0) - 27.0) / 18);
+		double m_xDegree = ((m_nettable->GetNumber("gear/xPos", 0) - 17.0) / 18.0);
 		// the multiplier is how sensitive arcing is
-		int areaDegree = (m_nettable->GetNumber("gear/areaDifference", 0) * 50);
+		int areaDegree = (m_nettable->GetNumber("gear/areaDifference", 0) * 49);
 		// capping of the arcing, change higher to arc more at maximum
 		areaDegree =
-				(abs(areaDegree) > 6) ? (areaDegree > 0 ? 6 : -6) : areaDegree;
+				(abs(areaDegree) > 5) ? (areaDegree > 0 ? 5 : -5) : areaDegree;
 		// the number is the distance to stop arcing in the spread of the x values of the contours
 		areaDegree =
-				(m_nettable->GetNumber("gear/xSpread", 0) > 180) ?
+				(m_nettable->GetNumber("gear/xSpread", 0) > 160) ?
 						0 : areaDegree;
 		m_driveangle->SetVisionAngle((m_xDegree + areaDegree));
 	}

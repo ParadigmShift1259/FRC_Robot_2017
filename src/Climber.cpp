@@ -18,6 +18,7 @@ Climber::Climber(OperatorInputs *operatorinputs, Shooter *shooter, Picker *picke
 	m_climbmotor = new CANTalon(CAN_CLIMBER_MOTOR);
 	m_shooter = shooter;
 	m_picker = picker;
+	timerStarted = false;
 }
 
 
@@ -30,17 +31,18 @@ Climber::~Climber()
 void Climber::Init()
 {
 	m_climbmotor->SetControlMode(CANSpeedController::ControlMode::kVoltage);
+	m_climbmotor->ConfigNeutralMode(CANSpeedController::kNeutralMode_Brake);
 	m_timer.Reset();
 	m_timer.Stop();
 	m_climbmotor->Set(0);
+	timerStarted = false;
 }
 
 
 void Climber::Loop()
 {
-	static bool timerStarted = false;
 	bool climbupbutton = m_inputs->xBoxYButton(OperatorInputs::ToggleChoice::kHold, 1);
-	bool climbdownbutton = m_inputs->xBoxXButton(OperatorInputs::ToggleChoice::kHold, 1);
+	bool climbdownbutton = false;	//m_inputs->xBoxXButton(OperatorInputs::ToggleChoice::kHold, 1);
 	//double current = m_PDP->GetCurrent(PDP_CLIMBER_MOTOR);
 	//double current = m_climbmotor->GetOutputCurrent();
 
@@ -48,7 +50,7 @@ void Climber::Loop()
 
 	if (climbupbutton)
 	{
-		m_climbmotor->Set(999);
+		m_climbmotor->Set(-999);
 		if(!timerStarted)
 		{
 			m_timer.Start();
@@ -63,7 +65,7 @@ void Climber::Loop()
 	else
 	if (climbdownbutton)
 	{
-		m_climbmotor->Set(-9);
+		m_climbmotor->Set(999);
 	}
 	else
 	{
