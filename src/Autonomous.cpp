@@ -5,11 +5,12 @@
  *  Note:
  */
 
+
 #include <Autonomous.h>
 
-Autonomous::Autonomous(DriverStation *driverstation, Drivetrain *drivetrain,
-		DriveAngle *driveangle, VisionTarget *visiontarget, Picker *picker,
-		OperatorInputs *operatorinputs, Shooter *shooter) {
+
+Autonomous::Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, DriveAngle *driveangle, VisionTarget *visiontarget, Picker *picker, OperatorInputs *operatorinputs, Shooter *shooter)
+{
 	m_visiontarget = visiontarget;
 	m_driverstation = driverstation;
 	m_drivetrain = drivetrain;
@@ -24,43 +25,48 @@ Autonomous::Autonomous(DriverStation *driverstation, Drivetrain *drivetrain,
 	m_timer = new Timer();
 }
 
-Autonomous::~Autonomous() {
-	delete m_timer;
 
+Autonomous::~Autonomous()
+{
+	delete m_timer;
 }
 
-void Autonomous::Init() {
+
+void Autonomous::Init()
+{
 	m_turning = false;
 	m_leftposition = 0;
 	m_rightposition = 0;
 	m_stage = kStart;
 }
 
-void Autonomous::Stop() {
+
+void Autonomous::Stop()
+{
 	m_stage = kIdle;
 }
 
-bool Autonomous::GoStraight(double feet, double power) {
+
+bool Autonomous::GoStraight(double feet, double power)
+{
 	double leftposition = m_drivetrain->LeftTalon()->GetPosition();
 	double rightposition = m_drivetrain->RightTalon()->GetPosition();
 
 	double kSFoot = SmartDashboard::GetNumber("DB/Slider 0", 0);
-	if (kSFoot == 0) {
-		kSFoot = 0.87;
-	}									// Old: 0.955
+	if (kSFoot == 0) 
+		kSFoot = 0.87;									// Old: 0.955
 	SmartDashboard::PutNumber("AU6_kSFoot", kSFoot);
 
 	double distancepos = feet * kSFoot;
 	SmartDashboard::PutNumber("AU8_distancepos", distancepos);
 
-	double distancetotarget = abs(distancepos)
-			- (abs((leftposition - rightposition) / 2));
+	double distancetotarget = abs(distancepos) - (abs((leftposition - rightposition) / 2));
 	//double k = 1.0;
-	if (distancetotarget <= (0.5 * abs(distancepos))) {
-		power = 0.15 * (power / abs(power));
-	}
+	if (distancetotarget <= (0.5 * abs(distancepos)))
+		power = 0.15 * (power/abs(power));
 
-	if (distancetotarget <= 0) {
+	if (distancetotarget <= 0)
+	{
 		m_driveangle->Stop();
 		m_driveangle->Drive(0);
 		m_drivetrain->Drive(0, 0);
@@ -74,11 +80,16 @@ bool Autonomous::GoStraight(double feet, double power) {
 	return false;
 }
 
-bool Autonomous::TurnDegree(double degrees) {
-	if (!m_turning) {
+bool Autonomous::TurnDegree(double degrees)
+{
+	if (!m_turning)
+	{
 		m_turning = true;
 		m_driveangle->SetRelativeAngle(degrees);
-	} else if (m_driveangle->IsOnTarget()) {
+	}
+	else
+	if (m_driveangle->IsOnTarget())
+	{
 		m_turning = false;
 		m_driveangle->Stop();
 		m_drivetrain->Drive(0, 0);
@@ -91,7 +102,9 @@ bool Autonomous::TurnDegree(double degrees) {
 	return false;
 }
 
-void Autonomous::Loop(Auto autoselected) {
+
+void Autonomous::Loop(Auto autoselected)
+{
 	double leftvolts = m_drivetrain->LeftTalon()->GetOutputVoltage();
 	double rightvolts = m_drivetrain->RightTalon()->GetOutputVoltage();
 
@@ -99,7 +112,8 @@ void Autonomous::Loop(Auto autoselected) {
 	SmartDashboard::PutNumber("AU2_rightvolts", rightvolts);
 	SmartDashboard::PutNumber("AU9_auto", autoselected);
 
-	switch (m_stage) {
+	switch (m_stage)
+	{
 	case kIdle:
 		m_driveangle->Drive(0);
 		break;
@@ -117,22 +131,26 @@ void Autonomous::Loop(Auto autoselected) {
 
 	case kStage1:
 		DriverStation::ReportError("stage1");
-		switch (autoselected) {
-		case kAutoLeftGear:
-		case kAutoRightGear:
-		case kAutoRedShoot:
-		case kAutoBlueShoot:
-			if (GoStraight(56.0 / 12.0, -1))
+		switch (autoselected)
+		{
+		case kAutoBoilerGear:
+		case kAutoBoilerShootGear:
+		case kAutoOldLeftGear:
+		case kAutoOldRightGear:
+			if (GoStraight(56.0/12.0, -1))
 				m_stage = kStage2;
 			break;
 
+		case kAutoOldRedShoot:
+		case kAutoOldBlueShoot:
 			if (GoStraight(7.04, -1))
 				m_stage = kStage2;
 			break;
 
-		case kAutoStraight:
+		case kAutoStraightGear:
 			m_visiontarget->TargetGear();
-			if (GoStraight(39.75 / 12.0, -1)) {
+			if (GoStraight(39.75/12.0, -1))
+			{
 				m_stage = kStage2;
 			}
 			break;
@@ -142,20 +160,48 @@ void Autonomous::Loop(Auto autoselected) {
 
 	case kStage2:
 		DriverStation::ReportError("stage2");
-		switch (autoselected) {
-		case kAutoLeftGear:
-		case kAutoBlueShoot:
+		switch (autoselected)
+		{
+		case kAutoBoilerGear:
+		case kAutoBoilerShootGear:
+			switch (m_driverstation->GetAlliance())
+			{
+			case DriverStation::Alliance::kRed:
+				if (TurnDegree(60))
+					m_stage = kStage3;
+				break;
+			
+			case Driverstation::Alliance::kBlue:
+				if (TurnDegree(-60))
+					m_stage = kStage3;
+				break;
+
+			default:
+				m_stage = kStage3;
+				break;
+			}
+			
+		case kAutoOldLeftGear:
 			if (TurnDegree(-60))
 				m_stage = kStage3;
 			break;
 
-		case kAutoRedShoot:
-		case kAutoRightGear:
+		case kAutoOldRightGear:
 			if (TurnDegree(60))
 				m_stage = kStage3;
 			break;
 
-		case kAutoStraight:
+		case kAutoOldBlueShoot:
+			if (TurnDegree(-90))
+				m_stage = kStage3;
+			break;
+
+		case kAutoOldRedShoot:
+			if (TurnDegree(90))
+				m_stage = kStage3;
+			break;
+
+		case kAutoStraightGear:
 			m_stage = kStage3;
 			break;
 		}
@@ -163,95 +209,142 @@ void Autonomous::Loop(Auto autoselected) {
 
 	case kStage3:
 		DriverStation::ReportError("stage3");
-		switch (autoselected) {
-		case kAutoLeftGear:
-		case kAutoRightGear:
+		switch(autoselected)
+		{
+		case kAutoBoilerShootGear:
 			m_visiontarget->TargetGear();
-			if (GoStraight(66.0 / 12.0, -0.7))
+			if (GoStraight(70.6/12.0, -0.6))
+				m_stage = kStage4;
+			break;
+		
+		case kAutoBoilerGear:
+		case kAutoOldLeftGear:
+		case kAutoOldRightGear:
+			m_visiontarget->TargetGear();
+			if (GoStraight(70.6/12.0, -0.6))
 				m_stage = kDeploy;
 			break;
 
-		case kAutoRedShoot:
-		case kAutoBlueShoot:
-			m_visiontarget->TargetGear();
-			if (GoStraight(66.0 / 12.0, -0.7))
-				m_stage = kDeploy;
+		case kAutoOldRedShoot:
+		case kAutoOldBlueShoot:
+			if (GoStraight(48/12.0, 0.6))
+				m_stage = kStage4;
 			break;
 
-		case kAutoStraight:
-			if (GoStraight(39.75 / 12.0, -0.7))
+
+		case kAutoStraightGear:
+			if (GoStraight(39.75/12.0, -0.6))
 				m_stage = kDeploy;
 			break;
 		}
 		break;
 
 	case kStage4:
-		switch (autoselected) {
-		case kAutoRedShoot:
-			if (m_timer->HasPeriodPassed(1.0)) {
-				if (TurnDegree(-13.74)) {
-					m_stage = kStage5;
-				}
-			}
-			break;
-		case kAutoBlueShoot:
-			if (m_timer->HasPeriodPassed(1.0)) {
-				if (TurnDegree(13.74)) {
-					m_stage = kStage5;
-				}
-			}
-			break;
-		case kAutoRightGear:
-		case kAutoLeftGear:
-		case kAutoStraight:
-			m_stage = kDeploy;
-			break;
+		DriverStation::ReportError("stage4");
+		switch(autoselected)
+		{
+			case kAutoBoilerShootGear:
+				m_shooter->SetShootRPM(860);
+				m_shooter->StartShooter();
+				m_picker->Deploy();
+				m_timer->Reset();
+				m_timer->Start();
+				m_stage = kStage5;
+				break;
+
+			case kAutoOldRightGear:
+			case kAutoOldLeftGear:
+			case kAutoOldRedShoot:
+			case kAutoOldBlueShoot:
+			case kAutoStraightGear:
+				m_stage = kDeploy;
+				break;
 
 		}
 		break;
 
 	case kStage5:
-		switch (autoselected) {
-		case kAutoRedShoot:
-		case kAutoBlueShoot:
-			m_shooter->StartAuger();
-			m_stage = kShoot;
+		DriverStation::ReportError("stage5");
+		switch(autoselected)
+		{
+		case kAutoBoilerShootGear:
+			if(m_timer->HasPeriodPassed(1.0)
+			{
+				switch (m_driverstation->GetAlliance())
+				{
+				case DriverStation::Alliance::kRed:
+					if(TurnDegree(13.74))
+					{
+						m_shooter->StartAuger();
+						m_timer->Reset();
+						m_timer->Start();
+						m_stage = kShoot;
+					}
+					break;
+
+				case DriverStation::Alliance::kBlue:
+					if(TurnDegree(-13.74))
+					{
+						m_shooter->StartAuger();
+						m_timer->Reset();
+						m_timer->Start();
+						m_stage = kShoot;
+					}
+					break;
+			
+				default:
+					m_stage = kDeploy;
+					break;
+				}
+			}
 			break;
-			break;
-		case kAutoRightGear:
-		case kAutoLeftGear:
-			m_stage = kDeploy;
-			break;
-		case kAutoStraight:
+
+		case kAutoOldRightGear:
+		case kAutoOldLeftGear:
+		case kAutoOldRedShoot:
+		case kAutoOldBlueShoot:
+		case kAutoStraightGear:
 			m_stage = kDeploy;
 			break;
 		}
 		break;
 
 	case kShoot:
+		DriverStation::ReportError("shooting");
+		switch(autoselected)
+		{
+		case kAutoBoilerShootGear:
+			m_visiontarget->TargetShooter();
+			if(m_timer->HasPeriodPassed(3.0)
+			{
+				m_stage = kIdle;
+			}
+			break;
+
+		case kAutoOldRightGear:
+		case kAutoOldLeftGear:
+		case kAutoOldRedShoot:
+		case kAutoOldBlueShoot:
+		case kAutoStraightGear:
+			m_stage = kDeploy;
+			break;
+		}
 		break;
 
 	case kDeploy:
 		DriverStation::ReportError("deploy");
-		switch (autoselected) {
-		case kAutoLeftGear:
-		case kAutoRightGear:
-		case kAutoStraight:
+		switch (autoselected)
+		{
+		case kAutoBoilerShootGear:
+		case kAutoOldLeftGear:
+		case kAutoOldRightGear:
+		case kAutoOldRedShoot:
+		case kAutoOldBlueShoot:
+		case kAutoStraightGear:
 			m_picker->Deploy();
 			m_stage = kIdle;
 			break;
-
-		case kAutoRedShoot:
-		case kAutoBlueShoot:
-			m_shooter->SetShootRPM(860);
-			m_shooter->StartShooter();
-			m_picker->Deploy();
-			m_timer->Reset();
-			m_timer->Start();
-			m_stage = kStage4;
-			break;
 		}
-
 		break;
 	}
 }
