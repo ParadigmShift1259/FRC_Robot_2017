@@ -205,10 +205,14 @@ void Autonomous::Loop(Auto autoselected)
 			{
 			case DriverStation::Alliance::kRed:
 				next = TurnDegree(90);
+				if (next)
+					m_picker->Deploy();
 				break;
 			
 			case DriverStation::Alliance::kBlue:
 				next = TurnDegree(-90);
+				if (next)
+					m_picker->Deploy();
 				break;
 
 			default:
@@ -232,10 +236,14 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kAutoOldBlueShoot:
 			next = TurnDegree(-90);
+			if (next)
+				m_picker->Deploy();
 			break;
 
 		case kAutoOldRedShoot:
 			next = TurnDegree(90);
+			if (next)
+				m_picker->Deploy();
 			break;
 
 		}
@@ -370,6 +378,7 @@ void Autonomous::Loop(Auto autoselected)
 					break;
 			
 				default:
+					next = false;
 					m_stage = kDeploy;
 					break;
 				}
@@ -390,6 +399,7 @@ void Autonomous::Loop(Auto autoselected)
 					break;
 			
 				default:
+					next = false;
 					m_stage = kDeploy;
 					break;
 				}
@@ -408,6 +418,7 @@ void Autonomous::Loop(Auto autoselected)
 				break;
 		
 			default:
+				next = false;
 				m_stage = kDeploy;
 				break;
 			}
@@ -425,6 +436,7 @@ void Autonomous::Loop(Auto autoselected)
 				break;
 		
 			default:
+				next = false;
 				m_stage = kDeploy;
 				break;
 			}
@@ -438,9 +450,12 @@ void Autonomous::Loop(Auto autoselected)
 			next = TurnDegree(65);
 			break;
 
+		case kAutoBoilerGear:
+		case kAutoFeedGear:
 		case kAutoOldRightGear:
 		case kAutoOldLeftGear:
 		case kAutoStraightGear:
+			next = false;
 			m_stage = kDeploy;
 			break;
 		}
@@ -464,12 +479,14 @@ void Autonomous::Loop(Auto autoselected)
 		case kAutoOldRedShoot:
 		case kAutoOldBlueShoot:
 			m_visiontarget->TargetShooter();
-			if(m_timer->HasPeriodPassed(1.0)
+			if(m_timer->HasPeriodPassed(3.0)
 			{
 				m_stage = kIdle;
 			}
 			break;
 
+		case kAutoBoilerGear:
+		case kAutoFeedGear:
 		case kAutoOldRightGear:
 		case kAutoOldLeftGear:
 		case kAutoStraightGear:
