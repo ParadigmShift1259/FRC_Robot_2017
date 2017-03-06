@@ -10,7 +10,7 @@
 
 
 // autonomous modes
-enum Auto { kAutoLeftGear, kAutoRightGear, kAutoRedShoot, kAutoBlueShoot, kAutoStraight };
+enum Auto { kAutoBoilerGear, kAutoBoilerShootGear, kAutoFeedGear, kAutoFeedShootGear, kAutoOldBlueShoot, kAutoOldLeftGear, kAutoOldRedShoot, kAutoOldRightGear, kAutoShootOnly, kAutoStraightGear, kAutoStraightShootGear };
 
 
 //OperatorInputs

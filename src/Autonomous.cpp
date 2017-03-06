@@ -111,7 +111,7 @@ void Autonomous::Loop(Auto autoselected)
 	SmartDashboard::PutNumber("AU1_leftvolts", leftvolts);
 	SmartDashboard::PutNumber("AU2_rightvolts", rightvolts);
 	SmartDashboard::PutNumber("AU9_auto", autoselected);
-
+	bool next = false;
 	switch (m_stage)
 	{
 	case kIdle:
@@ -135,27 +135,26 @@ void Autonomous::Loop(Auto autoselected)
 		{
 		case kAutoBoilerGear:
 		case kAutoBoilerShootGear:
+		case kAutoFeedGear:
+		case kAutoFeedShootGear:
 		case kAutoOldLeftGear:
 		case kAutoOldRightGear:
-			if (GoStraight(56.0/12.0, -1))
-				m_stage = kStage2;
+			next = GoStraight(56.0/12.0, -1);
 			break;
 
+		case kAutoShootOnly:
 		case kAutoOldRedShoot:
 		case kAutoOldBlueShoot:
-			if (GoStraight(7.04, -1))
-				m_stage = kStage2;
+			next = GoStraight(84.5/12.0, -1)
 			break;
 
 		case kAutoStraightGear:
-			m_visiontarget->TargetGear();
-			if (GoStraight(39.75/12.0, -1))
-			{
-				m_stage = kStage2;
-			}
+			next = GoStraight(39.75/12.0, -1)
 			break;
 
 		}
+		if(next)
+			m_stage = kStage2;
 		break;
 
 	case kStage2:
@@ -167,44 +166,75 @@ void Autonomous::Loop(Auto autoselected)
 			switch (m_driverstation->GetAlliance())
 			{
 			case DriverStation::Alliance::kRed:
-				if (TurnDegree(60))
-					m_stage = kStage3;
+				next = TurnDegree(60);
 				break;
 			
-			case Driverstation::Alliance::kBlue:
-				if (TurnDegree(-60))
-					m_stage = kStage3;
+			case DriverStation::Alliance::kBlue:
+				next = TurnDegree(-60);
 				break;
 
 			default:
-				m_stage = kStage3;
+				next = true;
 				break;
 			}
 			
+		case kAutoFeedGear:
+		case kAutoFeedShootGear:
+			switch (m_driverstation->GetAlliance())
+			{
+			case DriverStation::Alliance::kRed:
+				next = TurnDegree(-60);
+				break;
+			
+			case DriverStation::Alliance::kBlue:
+				next = TurnDegree(60);
+				break;
+
+			default:
+				next = true;
+				break;
+			}
+		
+		case kAutoShootOnly:
+			switch (m_driverstation->GetAlliance())
+			{
+			case DriverStation::Alliance::kRed:
+				next = TurnDegree(90);
+				break;
+			
+			case DriverStation::Alliance::kBlue:
+				next = TurnDegree(-90);
+				break;
+
+			default:
+				next = true;
+				break;
+			}
+			
+		case kAutoStraightGear:
+		case kAutoStraightShootGear:
+			next = true;
+			break;
+
 		case kAutoOldLeftGear:
-			if (TurnDegree(-60))
-				m_stage = kStage3;
+			next = TurnDegree(-60);
 			break;
 
 		case kAutoOldRightGear:
-			if (TurnDegree(60))
-				m_stage = kStage3;
+			next = TurnDegree(60);
 			break;
 
 		case kAutoOldBlueShoot:
-			if (TurnDegree(-90))
-				m_stage = kStage3;
+			next = TurnDegree(-90);
 			break;
 
 		case kAutoOldRedShoot:
-			if (TurnDegree(90))
-				m_stage = kStage3;
+			next = TurnDegree(90);
 			break;
 
-		case kAutoStraightGear:
-			m_stage = kStage3;
-			break;
 		}
+		if(next)
+			m_stage = kStage3;
 		break;
 
 	case kStage3:
