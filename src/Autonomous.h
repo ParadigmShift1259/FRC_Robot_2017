@@ -22,7 +22,7 @@
 class Autonomous
 {
 public:
-	enum Stage { kIdle, kStart, kStage1, kStage2, kStage3, kStage4, kStage5, kShoot, kDeploy };
+	enum Stage { kIdle, kStart, kDrive1, kTurn1, kDrive2, kPrepShoot, kTurnShoot, kShoot, kDeploy };
 
 	Autonomous(DriverStation *driverstation, Drivetrain *drivetrain, DriveAngle *driveangle, VisionTarget* visiontarget, Picker *picker, OperatorInputs *operatorinputs, Shooter *shooter);
 	~Autonomous();
