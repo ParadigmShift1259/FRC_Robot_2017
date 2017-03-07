@@ -16,6 +16,9 @@ VisionTarget::VisionTarget(std::shared_ptr<NetworkTable> newTable,
 	m_targetinggear = false;
 	m_targetingshooter = false;
 	m_inputs = oi;
+	SmartDashboard::PutNumber("SH99_BaseArea",976.71);
+	SmartDashboard::PutNumber("SH99_BaseRPM",514.18);
+	SmartDashboard::PutNumber("SH99_ScaleAreaRPM",19.639);
 }
 
 void VisionTarget::Init() {
@@ -113,9 +116,14 @@ void VisionTarget::TargetShooter() {
  * Calculated transfer function from experimental data
  */
 double VisionTarget::ConvAreaToRPM(double area) {
-	double rpm = 3634.854683 + (-26.16295573 * area)
+	double basearea = SmartDashboard::GetNumber("SH99_BaseArea",976.71);
+	double baserpm = SmartDashboard::GetNumber("SH99_BaseRPM",514.18);
+	double scale = SmartDashboard::GetNumber("SH99_ScaleAreaRPM",19.639);
+
+	double rpm = baserpm + scale*sqrt(basearea - area);
+	/*double rpm = 3634.854683 + (-26.16295573 * area)
 			+ (0.097678298 * pow(area, 2)) + (-0.000177295 * pow(area, 3))
-			+ (1.55298E-07 * pow(area, 4)) + (-5.26577E-11 * pow(area, 5));
+			+ (1.55298E-07 * pow(area, 4)) + (-5.26577E-11 * pow(area, 5));*/
 	return rpm;
 }
 
