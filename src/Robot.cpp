@@ -9,15 +9,34 @@
 
 #include "Robot.h"
 #include <string>
+#include <map>
 
-
-const string strAutoDefault = "Left Gear";
+const string strAutoDefault = "Boiler Shoot+Gear";
+const string strAutoBoilerGear = "Boiler Gear Only";
+const string strAutoBoilerShootGear = "Boiler Shoot+Gear";
+const string strAutoFeedGear = "Feeder Station Gear Only";
+const string strAutoFeedShootGear = "Feeder Station Shoot+Gear";
+const string strAutoShootOnly = "Boiler Shoot Only";
+const string strAutoStraightGear = "Middle Gear Only";
+const string strAutoStraightShootGear = "Middle Shoot+Gear";
 const string strAutoLeftGear = "Left Gear";
 const string strAutoRightGear = "Right Gear";
 const string strAutoRedShoot = "Red Shoot";
 const string strAutoBlueShoot = "Blue Shoot";
-const string strAutoStraight = "Straight";
 
+const map<string, Auto> mapAuto = {
+	{strAutoBoilerGear, kAutoBoilerGear},
+	{strAutoBoilerShootGear, kAutoBoilerShootGear},
+	{strAutoFeedGear, kAutoFeedGear},
+	{strAutoFeedShootGear, kAutoFeedShootGear},
+	{strAutoShootOnly, kAutoShootOnly},
+	{strAutoStraightGear, kAutoStraightGear},
+	{strAutoStraightShootGear, kAutoStraightShootGear},
+	{strAutoLeftGear, kAutoOldLeftGear},
+	{strAutoRightGear, kAutoOldRightGear},
+	{strAutoRedShoot, kAutoOldRedShoot},
+	{strAutoBlueShoot, kAutoOldBlueShoot}
+};
 
 void Robot::RobotInit()
 {
@@ -28,11 +47,17 @@ void Robot::RobotInit()
 	// live window inits
 	m_lw = LiveWindow::GetInstance();
 	m_chooser.AddDefault(strAutoDefault, strAutoDefault);
-	m_chooser.AddObject(strAutoLeftGear, strAutoLeftGear);
+	m_chooser.AddObject(strAutoBoilerGear, strAutoBoilerGear);
+	m_chooser.AddObject(strAutoBoilerShootGear, strAutoBoilerShootGear);
+	m_chooser.AddObject(strAutoFeedGear, strAutoFeedGear);
+	m_chooser.AddObject(strAutoFeedShootGear, strAutoFeedShootGear);
+	m_chooser.AddObject(strAutoShootOnly, strAutoShootOnly);
+	m_chooser.AddObject(strAutoStraightGear, strAutoStraightGear);
+	m_chooser.AddObject(strAutoStraightShootGear, strAutoStraightShootGear);
+/*	m_chooser.AddObject(strAutoLeftGear, strAutoLeftGear);
 	m_chooser.AddObject(strAutoRightGear, strAutoRightGear);
 	m_chooser.AddObject(strAutoRedShoot, strAutoRedShoot);
-	m_chooser.AddObject(strAutoBlueShoot, strAutoBlueShoot);
-	m_chooser.AddObject(strAutoStraight, strAutoStraight);
+	m_chooser.AddObject(strAutoBlueShoot, strAutoBlueShoot);*/
 	SmartDashboard::PutData("Auto Selector", &m_chooser);
 
 
@@ -49,64 +74,6 @@ void Robot::RobotInit()
 	m_visiontarget = new VisionTarget(m_netTable, m_driveangle, m_inputs);
 	m_autonomous = new Autonomous(&m_ds, m_drivetrain, m_driveangle, m_visiontarget, m_picker, m_inputs, m_shooter);
 }
-
-
-/*void Robot::AutonomousInit()
-{
-	DriverStation::ReportError("Test Init");
-//	m_autoselected = kAutoLeftGear;
-//	//m_autoselected = Chooser2Auto(m_chooserselected);
-//	m_compressor->Start();
-	m_drivetrain->Init();
-	m_driveangle->Init(true);
-//	m_driveangle->Init();
-//	m_autonomous->Init();
-//	m_climber->Init();
-//	m_picker->Init();
-	m_flipper->Init();
-	m_visiontarget->Init();
-	test = baLow;
-	m_driveangle->SetD(0.2);
-}
-
-
-void Robot::AutonomousPeriodic()
-{
-	if (!m_drivetrain->getIsHighGear())
-		m_drivetrain->Shift();
-
-	switch (test)
-	{
-		case foHigh:
-			m_driveangle->SetRelativeAngle(30);
-				test = foLow;
-			break;
-		case foLow:
-			if(m_driveangle->IsOnTarget())
-			{
-				m_driveangle->SetRelativeAngle(90);
-				test = baHigh;
-			}
-			break;
-		case baHigh:
-			if(m_driveangle->IsOnTarget())
-			{
-				m_driveangle->SetRelativeAngle(-100);
-				test = baLow;
-			}
-			break;
-		case baLow:
-			if(m_driveangle->IsOnTarget())
-			{
-				m_driveangle->SetRelativeAngle(-90);
-				test = done;
-			}
-			break;
-
-		default:
-			break;
-	}
-}*/
 
 /*
  * This autonomous (along with the chooser code above) shows how to select between different autonomous modes
@@ -126,7 +93,7 @@ void Robot::AutonomousInit()
 	//m_autoselected = kAutoBlueShoot;
 	//m_autoselected = kAutoStraight;
 	//m_autoselected = Chooser2Auto(m_chooserselected);
-	m_autoselected = Chooser2Auto(m_chooser.GetSelected());
+	m_autoselected = mapAuto.at(m_chooser.GetSelected());
 	m_compressor->Start();
 	m_drivetrain->Init();
 	m_driveangle->Init(true);
@@ -204,7 +171,7 @@ void Robot::DisabledInit()
 }
 
 
-Auto Robot::Chooser2Auto(string selected)
+/*Auto Robot::Chooser2Auto(string selected)
 {
 	if (selected == strAutoLeftGear)
 		return kAutoLeftGear;
@@ -217,7 +184,7 @@ Auto Robot::Chooser2Auto(string selected)
 	if (selected == strAutoStraight)
 		return kAutoStraight;
 	return kAutoLeftGear;
-}
+}*/
 
 
 START_ROBOT_CLASS(Robot)
