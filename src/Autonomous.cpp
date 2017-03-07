@@ -147,12 +147,12 @@ void Autonomous::Loop(Auto autoselected)
 		case kAutoShootOnly:
 		case kAutoOldRedShoot:
 		case kAutoOldBlueShoot:
-			next = GoStraight(84.5/12.0, -1)
+			next = GoStraight(84.5/12.0, -1);
 			break;
 
 		case kAutoStraightGear:
 		case kAutoStraightShootGear:
-			next = GoStraight(39.75/12.0, -1)
+			next = GoStraight(39.75/12.0, -1);
 			break;
 
 		}
@@ -318,7 +318,7 @@ void Autonomous::Loop(Auto autoselected)
 				break;
 
 			case kAutoFeedShootGear:
-				if (m_timer->HasPeriodPassed(3.0))
+				if (m_timer->HasPeriodPassed(1.0))
 				{
 					if (GoStraight(24.0/12.0, 1.0))
 					{
@@ -365,7 +365,7 @@ void Autonomous::Loop(Auto autoselected)
 		switch(autoselected)
 		{
 		case kAutoBoilerShootGear:
-			if(m_timer->HasPeriodPassed(3.0)
+			if(m_timer->HasPeriodPassed(1.0))
 			{
 				switch (m_driverstation->GetAlliance())
 				{
@@ -386,7 +386,7 @@ void Autonomous::Loop(Auto autoselected)
 			break;
 
 		case kAutoStraightShootGear:
-			if(m_timer->HasPeriodPassed(3.0)
+			if(m_timer->HasPeriodPassed(1.0))
 			{
 				switch (m_driverstation->GetAlliance())
 				{
@@ -479,7 +479,7 @@ void Autonomous::Loop(Auto autoselected)
 		case kAutoOldRedShoot:
 		case kAutoOldBlueShoot:
 			m_visiontarget->TargetShooter();
-			if(m_timer->HasPeriodPassed(3.0)
+			if(m_timer->HasPeriodPassed(3.0))
 			{
 				m_stage = kIdle;
 			}
