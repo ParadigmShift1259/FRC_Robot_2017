@@ -17,7 +17,7 @@
 #include "const.h"
 #include "Picker.h"
 #include "Shooter.h"
-
+#include "Timer.h"
 
 class Autonomous
 {
@@ -40,6 +40,7 @@ protected:
 	OperatorInputs *m_inputs;
 	Shooter *m_shooter;
 	Stage m_stage;
+	Timer *m_timer;
 	bool m_turning;
 	double m_leftposition;
 	double m_rightposition;

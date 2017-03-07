@@ -102,15 +102,18 @@ void Shooter::Stop()
 void Shooter::SetShootRPM(double rpm)
 {
 	m_shootrpm = rpm;
-	m_shootermotor->Set(m_shootrpm * SHOOTER_DIRECTION);
+	//m_shootermotor->Set(m_shootrpm * SHOOTER_DIRECTION);
 	SmartDashboard::PutNumber("SH00_Target", m_shootrpm);
 }
 
-void Shooter::StartShooting()
+void Shooter::StartShooter()
 {
 	m_shooting = true;
 }
 
+void Shooter::StartAuger() {
+	m_shoot = true;
+}
 
 void Shooter::Loop()
 {

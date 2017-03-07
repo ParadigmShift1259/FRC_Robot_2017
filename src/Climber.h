@@ -38,6 +38,7 @@ protected:
 	CANTalon *m_climbmotor;
 	Timer m_timer;
 	PowerDistributionPanel *m_PDP;
+	bool timerStarted = false;
 };
 
 
