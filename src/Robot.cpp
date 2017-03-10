@@ -50,10 +50,10 @@ void Robot::RobotInit()
 	m_chooser.AddObject(strAutoBoilerGear, strAutoBoilerGear);
 	m_chooser.AddObject(strAutoBoilerShootGear, strAutoBoilerShootGear);
 	m_chooser.AddObject(strAutoFeedGear, strAutoFeedGear);
-	m_chooser.AddObject(strAutoFeedShootGear, strAutoFeedShootGear);
-	m_chooser.AddObject(strAutoShootOnly, strAutoShootOnly);
+	//m_chooser.AddObject(strAutoFeedShootGear, strAutoFeedShootGear);
+	//m_chooser.AddObject(strAutoShootOnly, strAutoShootOnly);
 	m_chooser.AddObject(strAutoStraightGear, strAutoStraightGear);
-	m_chooser.AddObject(strAutoStraightShootGear, strAutoStraightShootGear);
+	//m_chooser.AddObject(strAutoStraightShootGear, strAutoStraightShootGear);
 /*	m_chooser.AddObject(strAutoLeftGear, strAutoLeftGear);
 	m_chooser.AddObject(strAutoRightGear, strAutoRightGear);
 	m_chooser.AddObject(strAutoRedShoot, strAutoRedShoot);
