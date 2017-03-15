@@ -55,6 +55,8 @@ void Camera::VisionThread()
 			// skip the rest of the current iteration
 			continue;
 		}
+		//cv::Mat matflip = mat.clone();
+		//cv::flip(matflip,mat,0);
 
 		// Put a rectangle on the image
 		//rectangle(mat, cv::Point(100, 100), cv::Point(400, 400),

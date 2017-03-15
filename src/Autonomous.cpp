@@ -152,7 +152,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kAutoStraightGear:
 		case kAutoStraightShootGear:
-			next = GoStraight(39.75/12.0, -1);
+			next = GoStraight(47/12.0, -1);
 			break;
 
 		}
@@ -292,12 +292,12 @@ void Autonomous::Loop(Auto autoselected)
 			break;
 
 		case kAutoStraightGear:
-			if (GoStraight(39.75/12.0, -0.6))
+			if (GoStraight(47/12.0, -0.6))
 				m_stage = kDeploy;
 			break;
 
 		case kAutoStraightShootGear:
-			if (GoStraight(39.75/12.0, -0.6))
+			if (GoStraight(47/12.0, -0.6))
 				m_stage = kPrepShoot;
 			break;
 		}
@@ -308,7 +308,7 @@ void Autonomous::Loop(Auto autoselected)
 		switch(autoselected)
 		{
 			case kAutoBoilerShootGear:
-				m_shooter->SetShootRPM(860);
+				m_shooter->SetShootRPM(1000);
 				next = true;
 				break;
 
@@ -370,7 +370,7 @@ void Autonomous::Loop(Auto autoselected)
 				switch (m_driverstation->GetAlliance())
 				{
 				case DriverStation::Alliance::kRed:
-					next = TurnDegree(-9.79);
+					next = TurnDegree(-8.63);
 					break;
 
 				case DriverStation::Alliance::kBlue:
@@ -464,7 +464,7 @@ void Autonomous::Loop(Auto autoselected)
 			m_shooter->StartAuger();
 			m_timer->Reset();
 			m_timer->Start();
-			m_stage = kShoot;
+			m_stage = kIdle;
 		}
 		break;
 

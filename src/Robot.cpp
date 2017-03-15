@@ -11,7 +11,7 @@
 #include <string>
 #include <map>
 
-const string strAutoDefault = "Boiler Shoot+Gear";
+const string strAutoDefault = "Feeder Station Gear Only";
 const string strAutoBoilerGear = "Boiler Gear Only";
 const string strAutoBoilerShootGear = "Boiler Shoot+Gear";
 const string strAutoFeedGear = "Feeder Station Gear Only";
@@ -118,7 +118,7 @@ void Robot::TeleopInit()
 	m_compressor->Start();
 	m_drivetrain->Init();
 	m_climber->Init();
-	m_picker->Init();
+	//m_picker->Init();
 	m_shooter->Init();
 	m_flipper->Init();
 }
@@ -165,7 +165,7 @@ void Robot::DisabledInit()
 	m_driveangle->Stop();
 	m_autonomous->Stop();
 	m_climber->Stop();
-	m_picker->Stop();
+	//m_picker->Stop();
 	m_shooter->Stop();
 	m_visiontarget->Stop();
 }

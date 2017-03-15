@@ -23,6 +23,8 @@ Picker::Picker(OperatorInputs *operatorinputs)
 	m_solenoid->Set(false);
 	m_running = false;
 	m_ramping = 0;
+	m_motor->SetControlMode(CANSpeedController::ControlMode::kPercentVbus);
+	m_motor->Set(0);
 }
 
 
@@ -35,7 +37,7 @@ Picker::~Picker()
 
 void Picker::Init()
 {
-	m_motor->SetControlMode(CANSpeedController::ControlMode::kPercentVbus);
+	//m_motor->SetControlMode(CANSpeedController::ControlMode::kPercentVbus);
 	m_motor->Set(0);
 	m_running = false;
 	//Note, do NOT set the solenoid to false here. That will cause an issue where the picker rises up mid match
