@@ -51,14 +51,16 @@ void Picker::Loop()
 	SmartDashboard::PutNumber("P1_PickerState", m_running);
 
 	//m_solenoid->Set(false);
-	if (changePickerDirection && m_solenoid->Get())
+	/*if (changePickerDirection && m_solenoid->Get())
 		m_running = !m_running;
 	else
 	if (!m_solenoid->Get())
-		m_running = false;
+		m_running = false;*/
 
 	if (deploy)
 		m_solenoid->Set(true);
+	if(changePickerDirection)
+		Stop();
 
 	if (m_running)
 	{
@@ -66,7 +68,7 @@ void Picker::Loop()
 			m_ramping += 0.1;
 		else
 			m_ramping = 1;
-		m_motor->Set(m_ramping*-0.5);
+		m_motor->Set(m_ramping*-0.7);
 	}
 	else
 	{
@@ -76,7 +78,7 @@ void Picker::Loop()
 			m_ramping = -1;
 		if (!m_solenoid->Get())
 			m_ramping = 0;
-		m_motor->Set(m_ramping*-0.5);
+		m_motor->Set(m_ramping*-0.7);
 	}
 
 }

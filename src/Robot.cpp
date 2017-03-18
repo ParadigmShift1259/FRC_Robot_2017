@@ -43,7 +43,7 @@ void Robot::RobotInit()
 	NetworkTable::GlobalDeleteAll();
 
 	m_netTable = NetworkTable::GetTable("OpenCV");
-	m_netTable2 = NetworkTable::GetTable("OpenCV2");
+	//m_netTable2 = NetworkTable::GetTable("OpenCV2");
 	// live window inits
 	m_lw = LiveWindow::GetInstance();
 	m_chooser.AddDefault(strAutoDefault, strAutoDefault);
@@ -68,10 +68,10 @@ void Robot::RobotInit()
 	m_compressor = new Compressor(PCM_COMPRESSOR_SOLENOID);
 	m_picker = new Picker(m_inputs);
 	m_camera = new Camera();
-	m_shooter = new Shooter(m_inputs);
 	m_climber = new Climber(m_inputs, m_shooter, m_picker);
 	m_flipper = new Flipper(&m_ds, m_inputs);
 	m_visiontarget = new VisionTarget(m_netTable, m_driveangle, m_inputs);
+	m_shooter = new Shooter(m_visiontarget, m_inputs);
 	m_autonomous = new Autonomous(&m_ds, m_drivetrain, m_driveangle, m_visiontarget, m_picker, m_inputs, m_shooter);
 }
 
@@ -101,6 +101,7 @@ void Robot::AutonomousInit()
 	m_climber->Init();
 	m_picker->Init();
 	m_shooter->Init();
+	m_drivetrain->setRamp(1.5);
 }
 
 
@@ -121,6 +122,7 @@ void Robot::TeleopInit()
 	//m_picker->Init();
 	m_shooter->Init();
 	m_flipper->Init();
+	m_drivetrain->setRamp(4);
 }
 
 

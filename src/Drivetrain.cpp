@@ -90,6 +90,7 @@ Drivetrain::Drivetrain(OperatorInputs *inputs, DriverStation *ds)
 
 	m_timerencoder = new Timer();
 	m_timerramp = new Timer();
+	m_rampmax = RAMPING_RATE_MAX;
 }
 
 
@@ -275,7 +276,7 @@ void Drivetrain::Drive(double x, double y, bool ramp)
 	{
 		double battery = m_driverstation->GetInstance().GetBatteryVoltage();
 		double rampmin = RAMPING_RATE_MIN / battery;
-		double rampmax = RAMPING_RATE_MAX / battery;
+		double rampmax = m_rampmax / battery;
 		SmartDashboard::PutNumber("DT10_battery", battery);
 		m_previousx = x;	//rampInput(previousX, joyStickX, rampmin, rampmax);
 		m_previousy = Ramp(m_previousy, yd, rampmin, rampmax);

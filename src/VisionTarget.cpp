@@ -5,6 +5,7 @@
  */
 
 #include "VisionTarget.h"
+#include <string>
 
 VisionTarget::VisionTarget(std::shared_ptr<NetworkTable> newTable,
 		DriveAngle * newAngle, OperatorInputs *oi) {
@@ -19,6 +20,9 @@ VisionTarget::VisionTarget(std::shared_ptr<NetworkTable> newTable,
 	SmartDashboard::PutNumber("SH99_BaseArea",976.71);
 	SmartDashboard::PutNumber("SH99_BaseRPM",514.18);
 	SmartDashboard::PutNumber("SH99_ScaleAreaRPM",19.639);
+	SmartDashboard::PutNumber("VT99_ShootXAdj", 0);
+	SmartDashboard::PutNumber("VT99_ShootScale", 18.0);
+	SmartDashboard::PutBoolean("VT98_ShootVision",false);
 }
 
 void VisionTarget::Init() {
@@ -51,7 +55,8 @@ void VisionTarget::Loop() {
 			m_driveangle->EnableAnglePID();
 			m_driveangle->SetToCurrentAngle();
 		}
-	} else if (m_inputs->xBoxAButton()) {
+	} else if (m_inputs->xBoxRightTrigger()||m_inputs->xBoxAButton()||m_inputs->xBoxYButton()||m_inputs->xBoxXButton()) {
+		DriverStation::ReportError("Xbox A Button");
 		m_targetinggear = false;
 		m_driveangle->Stop();
 		m_targetingshooter = !m_targetingshooter;
@@ -77,10 +82,12 @@ void VisionTarget::Loop() {
 	}
 
 	if (m_targetingshooter) {
+		DriverStation::ReportError("TargetShooter");
 		m_driveangle->Drive(m_inputs->xBoxLeftY(), true);
 		TargetShooter();
 		//5SmartDashboard::PutNumber("SH00_Target", ConvAreaToRPM(m_nettable->GetNumber("shooter/area",500)));
 	} else {
+		SmartDashboard::PutBoolean("VT98_ShootVision",false);
 		m_shootercounter = m_nettable->GetNumber("shooter/counter", 0);
 	}
 }
@@ -104,10 +111,15 @@ void VisionTarget::TargetGear() {
 }
 
 void VisionTarget::TargetShooter() {
+	double shootxadj = SmartDashboard::GetNumber("VT99_ShootXAdj", 0);
+	double shootscale = SmartDashboard::GetNumber("VT99_ShootScale", 18.0);
+	DriverStation::ReportError("m_sc: "+to_string(m_shootercounter));
+	DriverStation::ReportError("nt_sc: "+to_string(m_nettable->GetNumber("shooter/counter", 0)));
 	if (m_nettable->GetNumber("shooter/counter", 0) != m_shootercounter) {
-		m_gearcounter = m_nettable->GetNumber("shooter/counter", 0);
+		SmartDashboard::PutBoolean("VT98_ShootVision",true);
+		m_shootercounter = m_nettable->GetNumber("shooter/counter", 0);
 		// todo change the subtract value, it's the angle info, the divisor is how fast it turns (making it larger is slower)
-		double m_xDegree = ((m_nettable->GetNumber("shooter/xPos", 0) - 0) / 10);
+		double m_xDegree = ((m_nettable->GetNumber("shooter/xPos", 0) - shootxadj) / shootscale);
 		m_driveangle->SetVisionAngle((-m_xDegree));
 	}
 }
@@ -116,19 +128,27 @@ void VisionTarget::TargetShooter() {
  * Calculated transfer function from experimental data
  */
 double VisionTarget::ConvAreaToRPM(double area) {
-	double basearea = SmartDashboard::GetNumber("SH99_BaseArea",976.71);
-	double baserpm = SmartDashboard::GetNumber("SH99_BaseRPM",514.18);
-	double scale = SmartDashboard::GetNumber("SH99_ScaleAreaRPM",19.639);
+	static double rpm = 885;
+	double basearea = SmartDashboard::GetNumber("SH99_BaseArea",-244.3);
+	double baserpm = SmartDashboard::GetNumber("SH99_BaseRPM",1064);
+	double scale = SmartDashboard::GetNumber("SH99_ScaleAreaRPM",-9.076);
 
-	double rpm = baserpm + scale*sqrt(basearea - area);
+	if ((300 < area) && (area < 1100))
+		rpm = baserpm + scale*sqrt(area+basearea);
 	/*double rpm = 3634.854683 + (-26.16295573 * area)
 			+ (0.097678298 * pow(area, 2)) + (-0.000177295 * pow(area, 3))
 			+ (1.55298E-07 * pow(area, 4)) + (-5.26577E-11 * pow(area, 5));*/
 	return rpm;
 }
 
+double VisionTarget::GetVisionRPM()
+{
+	return ConvAreaToRPM(m_nettable->GetNumber("shooter/area",500));
+}
+
 void VisionTarget::Stop() {
-	m_targetinggear = 0;
+	m_targetingshooter = false;
+	m_targetinggear = false;
 	m_driveangle->Stop();
 }
 

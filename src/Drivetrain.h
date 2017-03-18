@@ -47,6 +47,7 @@ public:
 	bool getIsLeftFaster() {return m_isleftfaster;}
 	CANTalon *LeftTalon() {return m_lefttalonlead;}
 	CANTalon *RightTalon() {return m_righttalonlead;}
+	void setRamp(double newValue) {m_rampmax = newValue;}
 
 	//double getRightEncoderPulses() {return m_rightencoder->GetRaw();}
 	//double getLeftEncoderPulses() {return m_leftencoder->GetRaw();}
@@ -87,6 +88,7 @@ protected:
 	double m_leftposition;
 	double m_rightposition;
 	double m_coasting;
+	double m_rampmax;
 
 	double m_invertleft;
 	double m_invertright;

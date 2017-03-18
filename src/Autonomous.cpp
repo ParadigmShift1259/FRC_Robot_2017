@@ -292,7 +292,8 @@ void Autonomous::Loop(Auto autoselected)
 			break;
 
 		case kAutoStraightGear:
-			if (GoStraight(47/12.0, -0.6))
+			m_visiontarget->TargetGear();
+			if (GoStraight(49/12.0, -0.45))
 				m_stage = kDeploy;
 			break;
 
@@ -313,7 +314,7 @@ void Autonomous::Loop(Auto autoselected)
 				break;
 
 			case kAutoStraightShootGear:
-				m_shooter->SetShootRPM(1030);
+				//m_shooter->SetShootRPM(1030);
 				next = true;
 				break;
 
@@ -461,7 +462,6 @@ void Autonomous::Loop(Auto autoselected)
 		}
 		if (next)
 		{
-			m_shooter->StartAuger();
 			m_timer->Reset();
 			m_timer->Start();
 			m_stage = kIdle;
@@ -479,8 +479,9 @@ void Autonomous::Loop(Auto autoselected)
 		case kAutoOldRedShoot:
 		case kAutoOldBlueShoot:
 			m_visiontarget->TargetShooter();
-			if(m_timer->HasPeriodPassed(3.0))
+			if(m_timer->HasPeriodPassed(1.0))
 			{
+				m_shooter->StartAuger();
 				m_stage = kIdle;
 			}
 			break;

@@ -73,7 +73,7 @@ enum Auto { kAutoBoilerGear, kAutoBoilerShootGear, kAutoFeedGear, kAutoFeedShoot
 // Ramping
 #define RAMPING_RATE_PERIOD 0.10
 #define RAMPING_RATE_MIN 0.6
-#define RAMPING_RATE_MAX 1.5
+#define RAMPING_RATE_MAX 4
 #define X_SCALING 0.5
 #define Y_SCALING 1.0
 #define LEFT_MOTOR_SCALING 1
@@ -116,16 +116,16 @@ enum Auto { kAutoBoilerGear, kAutoBoilerShootGear, kAutoFeedGear, kAutoFeedShoot
 #define CAN_FEED_MOTOR 5
 #define CAN_SHOOTER_P 0.055
 #define CAN_SHOOTER_I 0.0005
-#define CAN_SHOOTER_D 1.0
+#define CAN_SHOOTER_D 1.5
 #define CAN_SHOOTER_F 0.027
 #define CAN_SHOOTER_ENCODER_TICKS 4096
 #define SD_SHOOTER_SLIDER_DEFAULT 2.5
 #define SHOOTER_SLIDER_TO_RPM -600.0
 #define SHOOTER_RADIUS 0.0508
 #define SHOOTER_LOW_RPM 300
-#define SHOOTER_SHOOT_RPM 936
+#define SHOOTER_SHOOT_RPM 885
 #define SHOOTER_DIRECTION 1
-#define SHOOTER_ERROR_RPM 4.5
+#define SHOOTER_ERROR_RPM 15
 
 //Feeder
 #define FEEDER_DIRECTION -1

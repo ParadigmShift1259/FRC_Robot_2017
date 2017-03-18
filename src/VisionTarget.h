@@ -21,6 +21,8 @@ public:
 	void Stop();
 	void TargetGear();
 	void TargetShooter();
+	bool GetTargetShooter() {return m_targetingshooter;}
+	double GetVisionRPM();
 	virtual ~VisionTarget();
 private:
 	double ConvAreaToRPM(double area);

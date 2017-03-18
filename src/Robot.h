@@ -52,7 +52,7 @@ private:
 	Shooter *m_shooter;
 	Flipper *m_flipper;
 	std::shared_ptr<NetworkTable> m_netTable;
-	std::shared_ptr<NetworkTable> m_netTable2;
+	//std::shared_ptr<NetworkTable> m_netTable2;
 
 	VisionTarget *m_visiontarget;
 
