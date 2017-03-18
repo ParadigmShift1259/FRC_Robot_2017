@@ -53,7 +53,7 @@ void Robot::RobotInit()
 	//m_chooser.AddObject(strAutoFeedShootGear, strAutoFeedShootGear);
 	//m_chooser.AddObject(strAutoShootOnly, strAutoShootOnly);
 	m_chooser.AddObject(strAutoStraightGear, strAutoStraightGear);
-	//m_chooser.AddObject(strAutoStraightShootGear, strAutoStraightShootGear);
+	m_chooser.AddObject(strAutoStraightShootGear, strAutoStraightShootGear);
 /*	m_chooser.AddObject(strAutoLeftGear, strAutoLeftGear);
 	m_chooser.AddObject(strAutoRightGear, strAutoRightGear);
 	m_chooser.AddObject(strAutoRedShoot, strAutoRedShoot);
@@ -109,6 +109,7 @@ void Robot::AutonomousPeriodic()
 {
 	m_autonomous->Loop(m_autoselected);
 	m_shooter->Loop();
+	m_picker->Loop();
 	//m_visiontarget->Loop();
 }
 

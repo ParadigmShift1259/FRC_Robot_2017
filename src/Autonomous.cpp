@@ -63,7 +63,7 @@ bool Autonomous::GoStraight(double feet, double power)
 	double distancetotarget = abs(distancepos) - (abs((leftposition - rightposition) / 2));
 	//double k = 1.0;
 	if (distancetotarget <= (0.5 * abs(distancepos)))
-		power = 0.15 * (power/abs(power));
+		power = 0.25 * (power/abs(power));
 
 	if (distancetotarget <= 0)
 	{
@@ -141,7 +141,7 @@ void Autonomous::Loop(Auto autoselected)
 		case kAutoFeedShootGear:
 		case kAutoOldLeftGear:
 		case kAutoOldRightGear:
-			next = GoStraight(56.0/12.0, -1);
+			next = GoStraight(50.0/12.0, -1);
 			break;
 
 		case kAutoShootOnly:
@@ -257,13 +257,13 @@ void Autonomous::Loop(Auto autoselected)
 		{
 		case kAutoBoilerShootGear:
 			m_visiontarget->TargetGear();
-			if (GoStraight(70.6/12.0, -0.6))
+			if (GoStraight(63/12.0, -0.45))
 				m_stage = kPrepShoot;
 			break;
 		
 		case kAutoFeedShootGear:
 			m_visiontarget->TargetGear();
-			if (GoStraight(70.6/12.0, -0.6))
+			if (GoStraight(72/12.0, -0.45))
 			{
 				m_timer->Reset();
 				m_timer->Start();
@@ -276,7 +276,7 @@ void Autonomous::Loop(Auto autoselected)
 		case kAutoOldLeftGear:
 		case kAutoOldRightGear:
 			m_visiontarget->TargetGear();
-			if (GoStraight(70.6/12.0, -0.6))
+			if (GoStraight(72/12.0, -0.45))
 				m_stage = kDeploy;
 			break;
 
@@ -298,7 +298,8 @@ void Autonomous::Loop(Auto autoselected)
 			break;
 
 		case kAutoStraightShootGear:
-			if (GoStraight(47/12.0, -0.6))
+			m_visiontarget->TargetGear();
+			if (GoStraight(40/12.0, -0.45))//SHOULD BE 49, CHANGE THIS $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 				m_stage = kPrepShoot;
 			break;
 		}
@@ -309,37 +310,13 @@ void Autonomous::Loop(Auto autoselected)
 		switch(autoselected)
 		{
 			case kAutoBoilerShootGear:
-				m_shooter->SetShootRPM(1000);
-				next = true;
-				break;
-
 			case kAutoStraightShootGear:
-				//m_shooter->SetShootRPM(1030);
-				next = true;
-				break;
-
 			case kAutoFeedShootGear:
-				if (m_timer->HasPeriodPassed(1.0))
-				{
-					if (GoStraight(24.0/12.0, 1.0))
-					{
-						m_shooter->SetShootRPM(1200);
-						next = true;
-					}
-				}
-				break;
-
 			case kAutoShootOnly:
 			case kAutoOldRedShoot:
 			case kAutoOldBlueShoot:
-				if (m_timer->HasPeriodPassed(1.0))
-				{
-					if (GoStraight(10.0/12.0, -1.0))
-					{
-						m_shooter->SetShootRPM(740);
-						next = true;
-					}
-				}
+				//m_shooter->SetShootRPM(1000);
+				next = true;
 				break;
 			
 			case kAutoBoilerGear:
@@ -353,11 +330,29 @@ void Autonomous::Loop(Auto autoselected)
 
 		}
 		if (next) {
+			m_turning = false;
+			m_driveangle->Stop();
+			m_drivetrain->Drive(0, 0);
+			m_drivetrain->LeftTalon()->SetPosition(0);
+			m_drivetrain->RightTalon()->SetPosition(0);
+			Wait(0.25); //replace this
+			m_driveangle->EnableAnglePID();
 			m_shooter->StartShooter();
 			m_picker->Deploy();
 			m_timer->Reset();
 			m_timer->Start();
-			m_stage = kTurnShoot;
+			m_visiontarget->SetTargetShooter(true);
+			m_stage = kDriveShoot;
+		}
+		break;
+
+	case kDriveShoot:
+		if(m_timer->HasPeriodPassed(1.0))
+		{
+			if (GoStraight(-10/12, 1))
+					{
+					m_stage = kTurnShoot;
+					}
 		}
 		break;
 
@@ -366,12 +361,11 @@ void Autonomous::Loop(Auto autoselected)
 		switch(autoselected)
 		{
 		case kAutoBoilerShootGear:
-			if(m_timer->HasPeriodPassed(1.0))
-			{
+
 				switch (m_driverstation->GetAlliance())
 				{
 				case DriverStation::Alliance::kRed:
-					next = TurnDegree(-8.63);
+					next = TurnDegree(-18.63);
 					break;
 
 				case DriverStation::Alliance::kBlue:
@@ -383,7 +377,7 @@ void Autonomous::Loop(Auto autoselected)
 					m_stage = kDeploy;
 					break;
 				}
-			}
+
 			break;
 
 		case kAutoStraightShootGear:
@@ -464,7 +458,7 @@ void Autonomous::Loop(Auto autoselected)
 		{
 			m_timer->Reset();
 			m_timer->Start();
-			m_stage = kIdle;
+			m_stage = kShoot;
 		}
 		break;
 
@@ -482,7 +476,7 @@ void Autonomous::Loop(Auto autoselected)
 			if(m_timer->HasPeriodPassed(1.0))
 			{
 				m_shooter->StartAuger();
-				m_stage = kIdle;
+				//m_shooter->Loop();
 			}
 			break;
 

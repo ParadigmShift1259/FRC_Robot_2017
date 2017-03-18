@@ -37,6 +37,7 @@ Shooter::Shooter(VisionTarget *visiontarget, OperatorInputs *operatorinputs)
 	m_5prevshootrpm = 0;
 	m_6prevshootrpm = 0;
 	m_shooting = false;
+	SmartDashboard::PutNumber("SH75_VisionDelta",0);
 }
 
 
@@ -132,7 +133,7 @@ void Shooter::Loop()
 		visiondeltarpm = m_visiontarget->GetVisionRPM() - SHOOTER_SHOOT_RPM;
 	else
 		visiondeltarpm = 0;
-
+	SmartDashboard::PutNumber("SH75_VisionDelta",m_visiontarget->GetVisionRPM());
 	m_shootermotor->SetP(m_P);
 	m_shootermotor->SetI(m_I);
 	m_shootermotor->SetD(m_D);

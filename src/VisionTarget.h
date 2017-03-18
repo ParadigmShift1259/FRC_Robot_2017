@@ -22,8 +22,10 @@ public:
 	void TargetGear();
 	void TargetShooter();
 	bool GetTargetShooter() {return m_targetingshooter;}
+	void SetTargetShooter(bool targetshooter) {m_targetingshooter = targetshooter;}
 	double GetVisionRPM();
 	virtual ~VisionTarget();
+
 private:
 	double ConvAreaToRPM(double area);
 	int m_gearcounter;
