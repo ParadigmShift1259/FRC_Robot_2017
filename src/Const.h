@@ -125,7 +125,7 @@ enum Auto { kAutoBoilerGear, kAutoBoilerShootGear, kAutoFeedGear, kAutoFeedShoot
 #define SHOOTER_LOW_RPM 300
 #define SHOOTER_SHOOT_RPM 885
 #define SHOOTER_DIRECTION 1
-#define SHOOTER_ERROR_RPM 15
+#define SHOOTER_ERROR_RPM 20
 
 //Feeder
 #define FEEDER_DIRECTION -1

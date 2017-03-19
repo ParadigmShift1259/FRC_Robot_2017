@@ -75,7 +75,7 @@ void Shooter::Init()
 	m_shootermotor->SetPID(m_P, m_I, m_D, m_F);
 	m_shootermotor->SetSensorDirection(true);
 	m_shootermotor->ConfigEncoderCodesPerRev(CAN_SHOOTER_ENCODER_TICKS);
-	m_shootermotor->SetIzone(1200);
+	m_shootermotor->SetIzone(2000);
 	m_shootermotor->ClearIaccum();
 	m_shootermotor->Enable();
 	m_shootermotor->Set(m_lowrpm);
@@ -119,6 +119,7 @@ void Shooter::StartShooter()
 
 void Shooter::StartAuger() {
 	m_shoot = true;
+	m_feedmotor->Set(m_feedvoltage * FEEDER_DIRECTION);
 }
 
 void Shooter::Loop()
@@ -130,7 +131,7 @@ void Shooter::Loop()
 	m_shootrpm = SmartDashboard::GetNumber("SH00_Target", m_shootrpm);
 	static double visiondeltarpm;
 	if (m_visiontarget->GetTargetShooter())
-		visiondeltarpm = m_visiontarget->GetVisionRPM() - SHOOTER_SHOOT_RPM;
+		visiondeltarpm = m_visiontarget->GetVisionRPM() - m_shootrpm;
 	else
 		visiondeltarpm = 0;
 	SmartDashboard::PutNumber("SH75_VisionDelta",m_visiontarget->GetVisionRPM());

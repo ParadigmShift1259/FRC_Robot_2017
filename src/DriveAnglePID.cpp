@@ -9,21 +9,21 @@
 #include <math.h>
 
 
-DriveAnglePID::DriveAnglePID(Drivetrain *drive) : PIDSubsystem("DriveAngle", 0.15 , 0.001, 0.06)
+DriveAnglePID::DriveAnglePID(Drivetrain *drive) : PIDSubsystem("DriveAngle", 0.075 , 0.008, 0.03)
 {
-	m_P = 0.15;
-	m_I = 0.001;
+	m_P = 0.075;
+	m_I = 0.007;
 	m_D = 0.03;
 	m_drivetrain = drive;
 	isInitialized = false;
 	isActive = false;
 	m_y = 0;
 	m_ramp = false;
-	SetAbsoluteTolerance(2);
+	SetAbsoluteTolerance(1);
 	SmartDashboard::PutNumber("DP00_P", m_P);
 	SmartDashboard::PutNumber("DP00_I", m_I);
 	SmartDashboard::PutNumber("DP00_D", m_D);
-	SetOutputRange(-0.55,0.55);
+	SetOutputRange(-0.7,0.7);
 }
 
 
@@ -98,6 +98,7 @@ void DriveAnglePID::SetRelativeSetpoint(double newSetPoint) {
 void DriveAnglePID::UsePIDOutput(double output)
 {
 	SmartDashboard::PutNumber("DP01_output", output);
+	SmartDashboard::PutBoolean("DP01_IS_ACTIVE",isActive);
 	if (isActive)
 	{
 		//output = std::abs(output) > 0.25 ? output : 0.25 * output / std::abs(output);

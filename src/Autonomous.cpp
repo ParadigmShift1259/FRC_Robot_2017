@@ -257,13 +257,13 @@ void Autonomous::Loop(Auto autoselected)
 		{
 		case kAutoBoilerShootGear:
 			m_visiontarget->TargetGear();
-			if (GoStraight(63/12.0, -0.45))
+			if (GoStraight(74/12.0, -0.45))
 				m_stage = kPrepShoot;
 			break;
 		
 		case kAutoFeedShootGear:
 			m_visiontarget->TargetGear();
-			if (GoStraight(72/12.0, -0.45))
+			if (GoStraight(74/12.0, -0.45))
 			{
 				m_timer->Reset();
 				m_timer->Start();
@@ -276,7 +276,7 @@ void Autonomous::Loop(Auto autoselected)
 		case kAutoOldLeftGear:
 		case kAutoOldRightGear:
 			m_visiontarget->TargetGear();
-			if (GoStraight(72/12.0, -0.45))
+			if (GoStraight(74/12.0, -0.45))
 				m_stage = kDeploy;
 			break;
 
@@ -293,7 +293,7 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kAutoStraightGear:
 			m_visiontarget->TargetGear();
-			if (GoStraight(49/12.0, -0.45))
+			if (GoStraight(43/12.0, -0.45))
 				m_stage = kDeploy;
 			break;
 
@@ -341,20 +341,40 @@ void Autonomous::Loop(Auto autoselected)
 			m_picker->Deploy();
 			m_timer->Reset();
 			m_timer->Start();
-			m_visiontarget->SetTargetShooter(true);
 			m_stage = kDriveShoot;
 		}
 		break;
 
 	case kDriveShoot:
-		if(m_timer->HasPeriodPassed(1.0))
+		switch (autoselected)
 		{
-			if (GoStraight(-10/12, 1))
+			case kAutoBoilerShootGear:
+
+				if(m_timer->HasPeriodPassed(1.0))
+				{
+					if (GoStraight(-10/12, 1))
 					{
-					m_stage = kTurnShoot;
+							m_stage = kTurnShoot;
 					}
+				}
+			break;
+
+			case kAutoStraightShootGear:
+
+				if(m_timer->HasPeriodPassed(1.0))
+				{
+					if (GoStraight(-12/12, 1))
+					{
+						m_stage = kTurnShoot;
+					}
+				}
+				break;
+
+			default:
+				m_stage = kTurnShoot;
 		}
 		break;
+
 
 	case kTurnShoot:
 		DriverStation::ReportError("TurnShoot");
@@ -369,7 +389,7 @@ void Autonomous::Loop(Auto autoselected)
 					break;
 
 				case DriverStation::Alliance::kBlue:
-					next = TurnDegree(13.74);
+					next = TurnDegree(18.63);
 					break;
 			
 				default:
@@ -381,16 +401,15 @@ void Autonomous::Loop(Auto autoselected)
 			break;
 
 		case kAutoStraightShootGear:
-			if(m_timer->HasPeriodPassed(1.0))
-			{
+
 				switch (m_driverstation->GetAlliance())
 				{
 				case DriverStation::Alliance::kRed:
-					next = TurnDegree(69.11);
+					next = TurnDegree(80);
 					break;
 
 				case DriverStation::Alliance::kBlue:
-					next = TurnDegree(-66.39);
+					next = TurnDegree(-80);
 					break;
 			
 				default:
@@ -398,7 +417,6 @@ void Autonomous::Loop(Auto autoselected)
 					m_stage = kDeploy;
 					break;
 				}
-			}
 			break;
 
 		case kAutoFeedShootGear:
@@ -456,6 +474,7 @@ void Autonomous::Loop(Auto autoselected)
 		}
 		if (next)
 		{
+			m_visiontarget->SetTargetShooter(true);
 			m_timer->Reset();
 			m_timer->Start();
 			m_stage = kShoot;

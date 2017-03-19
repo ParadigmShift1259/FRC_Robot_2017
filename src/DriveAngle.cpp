@@ -71,9 +71,9 @@ bool DriveAngle::IsOnTarget()
 
 void DriveAngle::Init(bool enable)
 {
-	m_driveAnglePID->SetP(0.15);
-	m_driveAnglePID->SetI(0.001);
-	m_driveAnglePID->SetD(0.06);
+	m_driveAnglePID->SetP(0.425);
+	m_driveAnglePID->SetI(0.0062);
+	m_driveAnglePID->SetD(0.03);
 	SmartDashboard::PutNumber("DB/Slider 3", m_angle);
 	m_driveAnglePID->SetSetpoint(0);
 	if (enable)

@@ -21,7 +21,7 @@ VisionTarget::VisionTarget(std::shared_ptr<NetworkTable> newTable,
 	SmartDashboard::PutNumber("SH99_BaseArea",-244.3);
 	SmartDashboard::PutNumber("SH99_BaseRPM",1050);
 	SmartDashboard::PutNumber("SH99_ScaleAreaRPM",-9.076);
-	SmartDashboard::PutNumber("VT99_ShootXAdj", -54);
+	SmartDashboard::PutNumber("VT99_ShootXAdj", -50);
 	SmartDashboard::PutNumber("VT99_ShootScale", 18.0);
 	SmartDashboard::PutBoolean("VT98_ShootVision",false);
 }
@@ -113,7 +113,7 @@ void VisionTarget::TargetGear() {
 }
 
 void VisionTarget::TargetShooter() {
-	double shootxadj = SmartDashboard::GetNumber("VT99_ShootXAdj", -54);
+	double shootxadj = SmartDashboard::GetNumber("VT99_ShootXAdj", -50);
 	double shootscale = SmartDashboard::GetNumber("VT99_ShootScale", 18.0);
 	DriverStation::ReportError("m_sc: "+to_string(m_shootercounter));
 	DriverStation::ReportError("nt_sc: "+to_string(m_nettable->GetNumber("shooter/counter", 0)));
