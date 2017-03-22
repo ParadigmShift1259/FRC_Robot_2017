@@ -77,7 +77,7 @@ void Shooter::Init()
 	m_shootermotor->ConfigEncoderCodesPerRev(CAN_SHOOTER_ENCODER_TICKS);
 	m_shootermotor->SetIzone(2000);
 	m_shootermotor->ClearIaccum();
-	m_shootermotor->Enable();
+	//m_shootermotor->Enable();
 	m_shootermotor->Set(m_lowrpm);
 	if (SHOOTER_DIRECTION ==1) {
 		m_shootermotor->ConfigPeakOutputVoltage(+12.0,0.0);
@@ -98,7 +98,7 @@ void Shooter::Init()
 void Shooter::Stop()
 {
 	m_feedmotor->Set(0);
-	m_shootermotor->Disable();
+	//m_shootermotor->Disable();
 	m_shoot = false;
 	m_timer.Stop();
 	m_timer.Reset();

@@ -21,7 +21,7 @@ VisionTarget::VisionTarget(std::shared_ptr<NetworkTable> newTable,
 	SmartDashboard::PutNumber("SH99_BaseArea",-244.3);
 	SmartDashboard::PutNumber("SH99_BaseRPM",1050);
 	SmartDashboard::PutNumber("SH99_ScaleAreaRPM",-9.076);
-	SmartDashboard::PutNumber("VT99_ShootXAdj", -50);
+	SmartDashboard::PutNumber("VT99_ShootXAdj", -20);
 	SmartDashboard::PutNumber("VT99_ShootScale", 18.0);
 	SmartDashboard::PutBoolean("VT98_ShootVision",false);
 }
