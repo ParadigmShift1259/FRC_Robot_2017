@@ -58,8 +58,8 @@ void Climber::Loop()
 		}
 		if(m_timer.HasPeriodPassed(1.0))
 		{
-			m_shooter->Stop();
-			m_picker->Stop();
+			//m_shooter->Stop();
+			//m_picker->Stop();
 		}
 	}
 	else
