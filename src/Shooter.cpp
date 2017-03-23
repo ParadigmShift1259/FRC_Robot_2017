@@ -36,7 +36,7 @@ Shooter::Shooter(VisionTarget *visiontarget, OperatorInputs *operatorinputs)
 	m_4prevshootrpm = 0;
 	m_5prevshootrpm = 0;
 	m_6prevshootrpm = 0;
-	m_shooting = false;
+	m_rampup = false;
 	SmartDashboard::PutNumber("SH75_VisionDelta",0);
 }
 
@@ -91,18 +91,20 @@ void Shooter::Init()
 	m_feedmotor->Set(0);
 
 	SmartDashboard::PutString("SH99_FeedStatus","");
-	m_shooting = false;
+	m_rampup = false;
 }
 
 
 void Shooter::Stop()
 {
 	m_feedmotor->Set(0);
-	//m_shootermotor->Disable();
+	m_shootermotor->Set(0);
+	m_ramprpm = 0;
 	m_shoot = false;
 	m_timer.Stop();
 	m_timer.Reset();
-	m_shooting = false;
+	m_rampdown = false;
+	m_rampup = false;
 }
 
 void Shooter::SetShootRPM(double rpm)
@@ -114,7 +116,7 @@ void Shooter::SetShootRPM(double rpm)
 
 void Shooter::StartShooter()
 {
-	m_shooting = true;
+	m_rampup = true;
 }
 
 void Shooter::StartAuger() {
@@ -160,46 +162,57 @@ void Shooter::Loop()
 	SmartDashboard::PutNumber("SH05_Is_Shooting", m_shoot);
 	SmartDashboard::PutNumber("SH06_Error",m_shootermotor->GetClosedLoopError());
 
+	double shootertargetrpm = m_shootrpm + visiondeltarpm;
+
 	if (shooterbutton)
 	{
 		m_shoot = !m_shoot;
 		if (m_shoot)
 		{
-			m_shootermotor->Set(m_shootrpm * SHOOTER_DIRECTION);
 			m_rampdown = false;
+			m_rampup = true;
 		}
 		else
 		{
 			//m_shootermotor->Set(m_lowrpm * SHOOTER_DIRECTION);
 			m_rampdown = true;
-			m_ramprpm = m_shootrpm;
+			m_rampup = false;
 		}
 	}
-	else if (m_shooting)
+
+	if (m_rampup)
 	{
-		m_shootermotor->Set((m_shootrpm + visiondeltarpm) * SHOOTER_DIRECTION);
-		m_rampdown = false;
+		m_ramprpm += 100;
+		if (m_ramprpm > shootertargetrpm)
+		{
+			m_ramprpm = shootertargetrpm;
+			m_rampup = false;
+		}
 	}
 
 	if (shooterrpmup)
 	{
 		if (m_shoot)
 		{
-			m_shootermotor->Set((++m_shootrpm + visiondeltarpm) * SHOOTER_DIRECTION);
+			//m_shootermotor->Set((++m_shootrpm + visiondeltarpm) * SHOOTER_DIRECTION);
+			m_ramprpm = ++m_shootrpm + visiondeltarpm;
 			SmartDashboard::PutNumber("SH00_Target", m_shootrpm);
 		}
 		else
-			m_shootermotor->Set(++m_lowrpm * SHOOTER_DIRECTION);
+			m_ramprpm = ++m_lowrpm * SHOOTER_DIRECTION;
+			//m_shootermotor->Set(++m_lowrpm * SHOOTER_DIRECTION);
 	}
 	if (shooterrpmdown)
 	{
 		if (m_shoot)
 		{
-			m_shootermotor->Set((--m_shootrpm + visiondeltarpm) * SHOOTER_DIRECTION);
+			//m_shootermotor->Set((--m_shootrpm + visiondeltarpm) * SHOOTER_DIRECTION);
+			m_ramprpm = --m_shootrpm + visiondeltarpm;
 			SmartDashboard::PutNumber("SH00_Target", m_shootrpm);
 		}
 		else
-			m_shootermotor->Set(--m_lowrpm * SHOOTER_DIRECTION);
+			m_ramprpm = --m_lowrpm * SHOOTER_DIRECTION;
+			//m_shootermotor->Set(--m_lowrpm * SHOOTER_DIRECTION);
 	}
 	switch (m_feedmotor->IsSensorPresent(CANTalon::FeedbackDevice::QuadEncoder))
 	{
@@ -219,13 +232,13 @@ void Shooter::Loop()
 	if (m_shoot)
 	{
 		//error 1, feedmotor speed is constantly reset to -6.5 volts
-		if (!feedjammed && (abs(shootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM))
-				        /*&& (abs(m_prevshootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM))
-				        && (abs(m_2prevshootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM))
-				        && (abs(m_3prevshootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM))
-				        && (abs(m_4prevshootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM))
-				        && (abs(m_5prevshootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM))
-				        && (abs(m_6prevshootrpm - m_shootrpm) < (SHOOTER_ERROR_RPM))*/)
+		if (!feedjammed && (abs(shootrpm        - shootertargetrpm) < (SHOOTER_ERROR_RPM))
+		              /*&& (abs(m_prevshootrpm  - shootertargetrpm) < (SHOOTER_ERROR_RPM))
+			            && (abs(m_2prevshootrpm - shootertargetrpm) < (SHOOTER_ERROR_RPM))
+			            && (abs(m_3prevshootrpm - shootertargetrpm) < (SHOOTER_ERROR_RPM))
+			            && (abs(m_4prevshootrpm - shootertargetrpm) < (SHOOTER_ERROR_RPM))
+			            && (abs(m_5prevshootrpm - shootertargetrpm) < (SHOOTER_ERROR_RPM))
+			            && (abs(m_6prevshootrpm - shootertargetrpm) < (SHOOTER_ERROR_RPM))*/)
 		{
 			if (feedrpmup)
 				m_feedvoltage += 0.01;
@@ -235,10 +248,9 @@ void Shooter::Loop()
 
 			m_feedmotor->Set(m_feedvoltage * FEEDER_DIRECTION);
 		}
-		/*else
-			m_feedmotor->Set(0);*/
-		bool jamtest = false;//(m_feedmotor->IsSensorPresent(CANTalon::FeedbackDevice::QuadEncoder) == CANTalon::FeedbackDeviceStatus::FeedbackStatusUnknown) ?
-				//(abs(feedrpm) < 5) : false;
+
+		bool jamtest = false;
+
 		if (!feedjammed && (abs(m_feedmotor->Get()) > 0) && jamtest)
 		{
 			feedjammed = true;
@@ -268,14 +280,14 @@ void Shooter::Loop()
 		if (m_rampdown)
 		{
 			m_ramprpm -= 5;
-			if (m_ramprpm < SHOOTER_LOW_RPM)
+			if (m_ramprpm < m_lowrpm)
 			{
-				m_ramprpm = SHOOTER_LOW_RPM;
+				m_ramprpm = m_lowrpm;
 				m_rampdown = false;
 			}
-			m_shootermotor->Set(m_ramprpm * SHOOTER_DIRECTION);
 		}
 	}
+	m_shootermotor->Set(m_ramprpm * SHOOTER_DIRECTION);
 
 	m_6prevshootrpm = m_5prevshootrpm;
 	m_5prevshootrpm = m_4prevshootrpm;
