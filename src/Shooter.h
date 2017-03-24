@@ -32,10 +32,7 @@ protected:
 	double m_feedvoltage;
 	double m_lowrpm;
 	double m_shootrpm;
-	double m_ramprpm;
-	bool m_shoot;
-	bool m_rampdown;
-	bool m_rampup;
+	double m_ramprpm;bool m_shoot;bool m_rampdown;
 	Timer m_timer;
 	double m_P;
 	double m_I;
@@ -47,6 +44,7 @@ protected:
 	double m_4prevshootrpm;
 	double m_5prevshootrpm;
 	double m_6prevshootrpm;
+	bool m_shooting;
 };
 
 #endif /* SRC_SHOOTER_H_ */

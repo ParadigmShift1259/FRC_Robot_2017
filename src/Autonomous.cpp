@@ -257,13 +257,13 @@ void Autonomous::Loop(Auto autoselected)
 		{
 		case kAutoBoilerShootGear:
 			m_visiontarget->TargetGear();
-			if (GoStraight(74/12.0, -0.45))
+			if (GoStraight(77/12.0, -0.4))
 				m_stage = kPrepShoot;
 			break;
 		
 		case kAutoFeedShootGear:
 			m_visiontarget->TargetGear();
-			if (GoStraight(74/12.0, -0.45))
+			if (GoStraight(77/12.0, -0.4))
 			{
 				m_timer->Reset();
 				m_timer->Start();
@@ -276,7 +276,7 @@ void Autonomous::Loop(Auto autoselected)
 		case kAutoOldLeftGear:
 		case kAutoOldRightGear:
 			m_visiontarget->TargetGear();
-			if (GoStraight(74/12.0, -0.45))
+			if (GoStraight(77/12.0, -0.4))
 				m_stage = kDeploy;
 			break;
 
@@ -293,13 +293,13 @@ void Autonomous::Loop(Auto autoselected)
 
 		case kAutoStraightGear:
 			m_visiontarget->TargetGear();
-			if (GoStraight(43/12.0, -0.45))
+			if (GoStraight(46/12.0, -0.4))
 				m_stage = kDeploy;
 			break;
 
 		case kAutoStraightShootGear:
 			m_visiontarget->TargetGear();
-			if (GoStraight(40/12.0, -0.45))//SHOULD BE 49, CHANGE THIS $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+			if (GoStraight(40/12.0, -0.4))//SHOULD BE 49, CHANGE THIS $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 				m_stage = kPrepShoot;
 			break;
 		}

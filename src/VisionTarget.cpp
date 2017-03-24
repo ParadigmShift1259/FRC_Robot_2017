@@ -21,7 +21,7 @@ VisionTarget::VisionTarget(std::shared_ptr<NetworkTable> newTable,
 	SmartDashboard::PutNumber("SH99_BaseArea",-244.3);
 	SmartDashboard::PutNumber("SH99_BaseRPM",1050);
 	SmartDashboard::PutNumber("SH99_ScaleAreaRPM",-9.076);
-	SmartDashboard::PutNumber("VT99_ShootXAdj", -20);
+	SmartDashboard::PutNumber("VT99_ShootXAdj", 50);
 	SmartDashboard::PutNumber("VT99_ShootScale", 18.0);
 	SmartDashboard::PutBoolean("VT98_ShootVision",false);
 }
@@ -98,9 +98,9 @@ void VisionTarget::TargetGear() {
 	if (m_nettable->GetNumber("gear/counter", 0) != m_gearcounter) {
 		m_gearcounter = m_nettable->GetNumber("gear/counter", 0);
 		// todo change the subtract value, it's the angle info, the divisor is how fast it turns (making it larger is slower)
-		double m_xDegree = ((m_nettable->GetNumber("gear/xPos", 0) - 17.0) / 18.0);
+		double m_xDegree = ((m_nettable->GetNumber("gear/xPos", 0) - 50.0) / 18.0);
 		// the multiplier is how sensitive arcing is
-		int areaDegree = (m_nettable->GetNumber("gear/areaDifference", 0) * 49);
+		int areaDegree = (m_nettable->GetNumber("gear/areaDifference", 0) * 35);
 		// capping of the arcing, change higher to arc more at maximum
 		areaDegree =
 				(abs(areaDegree) > 5) ? (areaDegree > 0 ? 5 : -5) : areaDegree;

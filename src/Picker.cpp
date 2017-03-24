@@ -46,7 +46,7 @@ void Picker::Init()
 
 void Picker::Loop()
 {
-	bool changePickerDirection = m_inputs->xBoxStartButton(OperatorInputs::ToggleChoice::kToggle, 1);
+	bool changePickerDirection = m_inputs->xBoxLeftTrigger(OperatorInputs::ToggleChoice::kToggle, 1);
 	bool deploy = m_inputs->xBoxBackButton(OperatorInputs::ToggleChoice::kToggle, 1);
 	SmartDashboard::PutNumber("P1_PickerState", m_running);
 
