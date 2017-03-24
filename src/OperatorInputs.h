@@ -43,6 +43,7 @@ public:
 	bool xBoxDPadDown(ToggleChoice choice = kToggle, unsigned int i = 0);
 	bool xBoxDPadLeft(ToggleChoice choice = kToggle, unsigned int i = 0);
 	bool xBoxR3(ToggleChoice choice = kToggle, unsigned int i = 0);
+	bool xBoxL3(ToggleChoice choice = kToggle, unsigned int i = 0);
 	// joystick
 	double joystickX();
 	double joystickY();

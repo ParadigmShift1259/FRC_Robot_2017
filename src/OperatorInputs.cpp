@@ -67,12 +67,13 @@ double OperatorInputs::xBoxRightY(unsigned int i)
 
 bool OperatorInputs::xBoxAButton(ToggleChoice choice, unsigned int i)
 {
+	string name = "xBoxAButton"+to_string(i);
 	if (i < m_xbox.size())
 	{
 		bool button = m_xbox[i]->GetRawButton(A_BUTTON);
 
 		if (choice == kToggle)
-			return toggle("xBoxAButton", button);
+			return toggle(name, button);
 		if (choice == kHold)
 			return button;
 	}
@@ -82,12 +83,13 @@ bool OperatorInputs::xBoxAButton(ToggleChoice choice, unsigned int i)
 
 bool OperatorInputs::xBoxBButton(ToggleChoice choice, unsigned int i)
 {
+	string name = "xBoxBButton"+to_string(i);
 	if (i < m_xbox.size())
 	{
 		bool button = m_xbox[i]->GetRawButton(B_BUTTON);
 
 		if (choice == kToggle)
-			return toggle("xBoxBButton", button);
+			return toggle(name, button);
 		if (choice == kHold)
 			return button;
 	}
@@ -97,12 +99,13 @@ bool OperatorInputs::xBoxBButton(ToggleChoice choice, unsigned int i)
 
 bool OperatorInputs::xBoxXButton(ToggleChoice choice, unsigned int i)
 {
+	string name = "xBoxXButton"+to_string(i);
 	if (i < m_xbox.size())
 	{
 		bool button = m_xbox[i]->GetRawButton(X_BUTTON);
 
 		if (choice == kToggle)
-			return toggle("xBoxXButton", button);
+			return toggle(name, button);
 		if (choice == kHold)
 			return button;
 	}
@@ -112,12 +115,13 @@ bool OperatorInputs::xBoxXButton(ToggleChoice choice, unsigned int i)
 
 bool OperatorInputs::xBoxYButton(ToggleChoice choice, unsigned int i)
 {
+	string name = "xBoxYButton"+to_string(i);
 	if (i < m_xbox.size())
 	{
 		bool button = m_xbox[i]->GetRawButton(Y_BUTTON);
 
 		if (choice == kToggle)
-			return toggle("xBoxYButton", button);
+			return toggle(name, button);
 		if (choice == kHold)
 			return button;
 	}
@@ -127,12 +131,13 @@ bool OperatorInputs::xBoxYButton(ToggleChoice choice, unsigned int i)
 
 bool OperatorInputs::xBoxLeftBumper(ToggleChoice choice, unsigned int i)
 {
+	string name = "xBoxLeftBumper"+to_string(i);
 	if (i < m_xbox.size())
 	{
 		bool button = m_xbox[i]->GetRawButton(LEFT_BUMPER);
 
 		if (choice == kToggle)
-			return toggle("xBoxLeftBumper", button);
+			return toggle(name, button);
 		if (choice == kHold)
 			return button;
 	}
@@ -142,12 +147,13 @@ bool OperatorInputs::xBoxLeftBumper(ToggleChoice choice, unsigned int i)
 
 bool OperatorInputs::xBoxRightBumper(ToggleChoice choice, unsigned int i)
 {
+	string name = "xBoxRightBumper"+to_string(i);
 	if (i < m_xbox.size())
 	{
 		bool button = m_xbox[i]->GetRawButton(RIGHT_BUMPER);
 
 		if (choice == kToggle)
-			return toggle("xBoxRightBumper", button);
+			return toggle(name, button);
 		if (choice == kHold)
 			return button;
 	}
@@ -157,12 +163,13 @@ bool OperatorInputs::xBoxRightBumper(ToggleChoice choice, unsigned int i)
 
 bool OperatorInputs::xBoxLeftTrigger(ToggleChoice choice, unsigned int i)
 {
+	string name = "xBoxLeftTrigger"+to_string(i);
 	if (i < m_xbox.size())
 	{
 		double axis = m_xbox[i]->GetRawAxis(XBOX_LEFT_TRIGGER_AXIS);
 
 		if (choice == kToggle)
-			return toggle("xBoxLeftTrigger", (LEFT_TRIGGER_MIN <= axis) && (axis <= LEFT_TRIGGER_MAX));
+			return toggle(name, (LEFT_TRIGGER_MIN <= axis) && (axis <= LEFT_TRIGGER_MAX));
 		if (choice == kHold)
 			return ((LEFT_TRIGGER_MIN <= axis) && (axis <= LEFT_TRIGGER_MAX));
 	}
@@ -172,12 +179,13 @@ bool OperatorInputs::xBoxLeftTrigger(ToggleChoice choice, unsigned int i)
 
 bool OperatorInputs::xBoxRightTrigger(ToggleChoice choice, unsigned int i)
 {
+	string name = "xBoxRightTrigger"+to_string(i);
 	if (i < m_xbox.size())
 	{
 		double axis = m_xbox[i]->GetRawAxis(XBOX_RIGHT_TRIGGER_AXIS);
 
 		if (choice == kToggle)
-			return toggle("xBoxRightTrigger", (RIGHT_TRIGGER_MIN <= axis && axis <= RIGHT_TRIGGER_MAX));
+			return toggle(name, (RIGHT_TRIGGER_MIN <= axis && axis <= RIGHT_TRIGGER_MAX));
 		if (choice == kHold)
 			return (RIGHT_TRIGGER_MIN <= axis && axis <= RIGHT_TRIGGER_MAX);
 	}
@@ -187,12 +195,13 @@ bool OperatorInputs::xBoxRightTrigger(ToggleChoice choice, unsigned int i)
 
 bool OperatorInputs::xBoxStartButton(ToggleChoice choice, unsigned int i)
 {
+	string name = "xBoxStartButton"+to_string(i);
 	if (i < m_xbox.size())
 	{
 		bool button = m_xbox[i]->GetRawButton(START_BUTTON);
 
 		if (choice == kToggle)
-			return toggle("xBoxStartButton", button);
+			return toggle(name, button);
 		if (choice == kHold)
 			return button;
 	}
@@ -202,12 +211,13 @@ bool OperatorInputs::xBoxStartButton(ToggleChoice choice, unsigned int i)
 
 bool OperatorInputs::xBoxBackButton(ToggleChoice choice, unsigned int i)
 {
+	string name = "xBoxBackButton"+to_string(i);
 	if (i < m_xbox.size())
 	{
 		bool button = m_xbox[i]->GetRawButton(BACK_BUTTON);
 
 		if (choice == kToggle)
-			return toggle("xBoxBackButton", button);
+			return toggle(name, button);
 		if (choice == kHold)
 			return button;
 	}
@@ -217,12 +227,13 @@ bool OperatorInputs::xBoxBackButton(ToggleChoice choice, unsigned int i)
 
 bool OperatorInputs::xBoxDPadUp(ToggleChoice choice, unsigned int i)
 {
+	string name = "xBoxDPadUp"+to_string(i);
 	if (i < m_xbox.size())
 	{
 		bool button = (m_xbox[i]->GetPOV() == 0);
 
 		if (choice == kToggle)
-			return toggle("xBoxDPadUp", button);
+			return toggle(name, button);
 		if (choice == kHold)
 			return button;
 	}
@@ -232,12 +243,13 @@ bool OperatorInputs::xBoxDPadUp(ToggleChoice choice, unsigned int i)
 
 bool OperatorInputs::xBoxDPadRight(ToggleChoice choice, unsigned int i)
 {
+	string name = "xBoxDPadRight"+to_string(i);
 	if (i < m_xbox.size())
 	{
 		bool button = (m_xbox[i]->GetPOV() == 90);
 
 		if (choice == kToggle)
-			return toggle("xBoxDPadLeft", button);
+			return toggle(name, button);
 		if (choice == kHold)
 			return button;
 	}
@@ -247,12 +259,13 @@ bool OperatorInputs::xBoxDPadRight(ToggleChoice choice, unsigned int i)
 
 bool OperatorInputs::xBoxDPadDown(ToggleChoice choice, unsigned int i)
 {
+	string name = "xBoxDPadDown"+to_string(i);
 	if (i < m_xbox.size())
 	{
 	bool button = (m_xbox[i]->GetPOV() == 180);
 
 	if (choice == kToggle)
-		return toggle("xBoxDPadDown", button);
+		return toggle(name, button);
 	if (choice == kHold)
 		return button;
 	}
@@ -262,12 +275,13 @@ bool OperatorInputs::xBoxDPadDown(ToggleChoice choice, unsigned int i)
 
 bool OperatorInputs::xBoxDPadLeft(ToggleChoice choice, unsigned int i)
 {
+	string name = "xBoxDPadLeft"+to_string(i);
 	if (i < m_xbox.size())
 	{
 		bool button = (m_xbox[i]->GetPOV() == 270);
 
 		if (choice == kToggle)
-			return toggle("xBoxDPadRight", button);
+			return toggle(name, button);
 		if (choice == kHold)
 			return button;
 	}
@@ -277,12 +291,29 @@ bool OperatorInputs::xBoxDPadLeft(ToggleChoice choice, unsigned int i)
 
 bool OperatorInputs::xBoxR3(ToggleChoice choice, unsigned int i)
 {
+	string name = "xBoxR3"+to_string(i);
 	if (i < m_xbox.size())
 	{
 		bool button = m_xbox[i]->GetRawButton(10);
 
 		if (choice == kToggle)
-			return toggle("xBoxR3", button);
+			return toggle(name, button);
+		if (choice == kHold)
+			return button;
+	}
+	return false;
+}
+
+
+bool OperatorInputs::xBoxL3(ToggleChoice choice, unsigned int i)
+{
+	string name = "xBoxL3"+to_string(i);
+	if (i < m_xbox.size())
+	{
+		bool button = m_xbox[i]->GetRawButton(11);
+
+		if (choice == kToggle)
+			return toggle(name, button);
 		if (choice == kHold)
 			return button;
 	}
