@@ -15,6 +15,8 @@
 #include <SpeedController.h>
 #include <timer.h>
 #include <cantalon.h>
+#include <iostream>
+#include <fstream>
 
 
 class Drivetrain
@@ -61,6 +63,11 @@ public:
 	bool m_isdownshifting;
 	bool m_lowspeedmode;
 	bool m_shift;
+
+	Timer *dataTimer;
+	fstream leftMotorFile;
+	fstream rightMotorFile;
+	void outputData();
 
 protected:
 	OperatorInputs *m_inputs;

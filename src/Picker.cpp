@@ -25,6 +25,7 @@ Picker::Picker(OperatorInputs *operatorinputs)
 	m_ramping = 0;
 	m_motor->SetControlMode(CANSpeedController::ControlMode::kPercentVbus);
 	m_motor->Set(0);
+	motorOnOff = false;
 }
 
 
@@ -50,6 +51,19 @@ void Picker::Loop()
 	bool deploy = m_inputs->xBoxBackButton(OperatorInputs::ToggleChoice::kToggle, 1);
 	SmartDashboard::PutNumber("P1_PickerState", m_running);
 
+	if (m_inputs->xBoxLeftBumper(OperatorInputs::ToggleChoice::kToggle,1))
+	{
+		if(!motorOnOff)
+		{
+			m_motor->Set(0);
+			motorOnOff = true;
+		}
+		else
+		{
+			m_motor->Set(m_ramping*-0.7);
+			motorOnOff = false;
+		}
+	}
 	//m_solenoid->Set(false);
 	/*if (changePickerDirection && m_solenoid->Get())
 		m_running = !m_running;

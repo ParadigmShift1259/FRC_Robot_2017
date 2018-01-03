@@ -37,7 +37,7 @@ void Flipper::Loop()
 	SmartDashboard::PutBoolean("FL01_IsTest",m_driverstation->IsTest());
 	SmartDashboard::PutBoolean("FL02_FlippedUp",m_flippedup);
 	SmartDashboard::PutBoolean("FL03_Solenoid",m_solenoid->Get());
-	if (m_driverstation->IsTest())
+	if (false)
 	{
 		 bool flipupbutton = m_inputs->xBoxAButton(OperatorInputs::ToggleChoice::kToggle, 1);
 

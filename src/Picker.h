@@ -36,6 +36,7 @@ protected:
 	bool m_running;
 	double m_ramping;
 	Solenoid *m_solenoid;
+	bool motorOnOff;
 };
 
 

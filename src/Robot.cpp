@@ -141,22 +141,36 @@ void Robot::TeleopPeriodic()
 void Robot::TestInit()
 {
 	DriverStation::ReportError("Test Init");
-//	m_autoselected = kAutoLeftGear;
-//	//m_autoselected = Chooser2Auto(m_chooserselected);
-//	m_compressor->Start();
+//
+////	m_autoselected = kAutoLeftGear;
+////	//m_autoselected = Chooser2Auto(m_chooserselected);
+////	m_compressor->Start();
+//	m_drivetrain->Init();
+////	m_driveangle->Init();
+////	m_autonomous->Init();
+////	m_climber->Init();
+////	m_picker->Init();
+//	m_flipper->Init();
+//	m_visiontarget->Init();
+//	test = foHigh;
+	m_compressor->Start();
 	m_drivetrain->Init();
-//	m_driveangle->Init();
-//	m_autonomous->Init();
-//	m_climber->Init();
-//	m_picker->Init();
+	m_climber->Init();
+	//m_picker->Init();
+	//m_shooter->Init();
 	m_flipper->Init();
-	m_visiontarget->Init();
-	test = foHigh;
+	m_drivetrain->setRamp(4);
+
 }
 
 
 void Robot::TestPeriodic()
 {
+	m_climber->Loop();
+	m_visiontarget->Loop();
+	m_picker->Loop();
+	//m_shooter->Loop();
+	m_flipper->Loop();
 }
 
 

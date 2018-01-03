@@ -13,6 +13,7 @@
 #include <CanTalon.h>
 #include <Encoder.h>
 #include <cmath>
+#include <String>
 
 
 using namespace std;
@@ -91,6 +92,8 @@ Drivetrain::Drivetrain(OperatorInputs *inputs, DriverStation *ds)
 	m_timerencoder = new Timer();
 	m_timerramp = new Timer();
 	m_rampmax = RAMPING_RATE_MAX;
+
+	dataTimer = new Timer();
 }
 
 
@@ -169,6 +172,28 @@ void Drivetrain::Init()
 	m_shift = false;
 	m_direction = DT_DEFAULT_DIRECTION;
 	SmartDashboard::PutString("DT10_Direction", "Gear Forward");
+
+	leftMotorFile.open("leftmotor.txt");
+	rightMotorFile.open("rightmotor.txt");
+
+	if (leftMotorFile.is_open())
+	{
+		leftMotorFile << "***\n\n";
+	}
+	else
+	{
+		DriverStation::ReportError("Left Not Open");
+	}
+	if (rightMotorFile.is_open())
+	{
+		rightMotorFile << "***\n\n";
+	}
+	else
+	{
+		DriverStation::ReportError("Right Not Open");
+	}
+	dataTimer->Reset();
+	dataTimer->Start();
 }
 
 
@@ -246,6 +271,10 @@ void Drivetrain::Stop()
 {
 	m_ishighgear = true;
 	m_shifter->Set(FLIP_HIGH_GEAR ^ m_ishighgear);
+	rightMotorFile << "\n";
+	leftMotorFile << "\n";
+	rightMotorFile.close();
+	leftMotorFile.close();
 }
 
 
@@ -470,3 +499,30 @@ void Drivetrain::CheckEncoderTimer()
 	}
 }
 
+void Drivetrain::outputData()
+{
+	if (leftMotorFile.is_open())
+	{
+		leftMotorFile << dataTimer->Get() << ",";
+		leftMotorFile << LeftTalon()->GetPosition() << ",";
+		leftMotorFile << LeftTalon()->GetSpeed() << ",";
+		leftMotorFile << m_driverstation->GetInstance().GetBatteryVoltage() << ",";
+		leftMotorFile << LeftTalon()->Get() << "\n";
+	}
+	else
+	{
+		DriverStation::ReportError("Left Not Open");
+	}
+	if (rightMotorFile.is_open())
+	{
+		rightMotorFile << dataTimer->Get() << ",";
+		rightMotorFile << RightTalon()->GetPosition() << ",";
+		rightMotorFile << RightTalon()->GetSpeed() << ",";
+		rightMotorFile << m_driverstation->GetInstance().GetBatteryVoltage() << ",";
+		rightMotorFile << RightTalon()->Get() << "\n";
+	}
+	else
+	{
+		DriverStation::ReportError("Right Not Open");
+	}
+}
