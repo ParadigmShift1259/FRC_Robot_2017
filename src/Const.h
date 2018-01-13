@@ -55,7 +55,7 @@ enum Auto { kAutoBoilerGear, kAutoBoilerShootGear, kAutoFeedGear, kAutoFeedShoot
 
 // Drivetrain
 #define DT_DEFAULT_DIRECTION 1.0
-#define WHEEL_CIRCUMFERENCE 4
+#define WHEEL_CIRCUMFERENCE 6
 #define WHEEL_BASE 28.825
 // Inverts
 #define INVERT_LEFT -1.0
